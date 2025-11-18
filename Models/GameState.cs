@@ -8,14 +8,13 @@ namespace Headquartz.Models
 {
     public class GameState
     {
-        public Company Company { get; set; } = new Company();
-        public Market Market { get; set; } = new Market();
         public DateTime SimTime { get; set; } = DateTime.UtcNow;
-    }
 
-
-    public class Market
-    {
-        public decimal DemandFactor { get; set; } = 1.0m; // affects sales
+        // Core Systems
+        public Company Company { get; set; } = new();
+        public Market Market { get; set; } = new();
+        public Inventory Inventory { get; set; } = new();
+        public HumanResource HumanResource { get; set; } = new();
+        public Finance Finance { get; set; } = new();
     }
 }

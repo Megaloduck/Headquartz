@@ -14,28 +14,20 @@ namespace Headquartz
             builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
+            .ConfigureSyncfusionToolkit()
             .ConfigureFonts(fonts => { });
 
 
             // singleton game state
             builder.Services.AddSingleton<GameState>();
 
-
             // engine
-            builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>(sp =>
-            {
-                var gs = sp.GetRequiredService<GameState>();
-                return new SimulationEngine(gs) { TickRate = TimeSpan.FromSeconds(1) };
-            });
-
-
+            builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>();
             builder.Services.AddSingleton<ISaveService, JsonSaveService>();
 
-
-            // viewmodels & views
+            // PageModels & Pages
             builder.Services.AddSingleton<MainPageModel>();
             builder.Services.AddSingleton<MainPage>();
-
 
             return builder.Build();
         }

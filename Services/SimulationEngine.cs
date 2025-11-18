@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Headquartz.Models;
 using Headquartz.Modules;
-using Headquartz.Models;
+using Microsoft.Maui.Dispatching;
+using System;
+using System.Reflection;
+using System.Threading;
 
 namespace Headquartz.Services
 {
@@ -15,53 +13,54 @@ namespace Headquartz.Services
         private Timer? _timer;
         private readonly object _lock = new();
 
-
         public event Action<GameState>? OnTicked;
+
         public TimeSpan TickRate { get; set; } = TimeSpan.FromSeconds(1);
         public bool IsRunning { get; private set; }
-
 
         public SimulationEngine(GameState state)
         {
             _state = state;
         }
 
-
         public void Start()
         {
             if (IsRunning) return;
-            _timer = new Timer(TimerCallback, null, TimeSpan.Zero, TickRate);
+
+            _timer = new Timer(Tick, null, TimeSpan.Zero, TickRate);
             IsRunning = true;
         }
-
 
         public void Stop()
         {
             if (!IsRunning) return;
+
             _timer?.Change(Timeout.Infinite, Timeout.Infinite);
             _timer?.Dispose();
             _timer = null;
+
             IsRunning = false;
         }
 
-
-        private void TimerCallback(object? state)
+        private void Tick(object? _)
         {
             lock (_lock)
             {
-                // advance simulation time
-                _state.SimTime = _state.SimTime.AddSeconds(TickRate.TotalSeconds);
+                // Advance simulation time
+                _state.SimTime = _state.SimTime.Add(TickRate);
 
-
-                // tick modules
+                // Update modules
                 MarketModule.Update(_state);
+                InventoryModule.Update(_state);
+                HumanResourceModule.Update(_state);
+                FinanceModule.Update(_state);
 
 
-                // other modules: ProcurementModule.Update(_state) ...
-
-
-                // notify subscribers (UI)
-                OnTicked?.Invoke(_state);
+                // Notify UI on UI thread
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    OnTicked?.Invoke(_state);
+                });
             }
         }
 

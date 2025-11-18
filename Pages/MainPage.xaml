@@ -12,13 +12,13 @@
              Title="{Binding Today}">
 
    <VerticalStackLayout Padding="12" Spacing="10">
-<Label Text="MonsoonSim - Local Simulation" FontAttributes="Bold" FontSize="20"/>
-<HorizontalStackLayout Spacing="12">
-<Label Text="Sim Time:" />
-<Label Text="{Binding SimTime}" />
-<Label Text="Cash:" />
-<Label Text="{Binding Cash}" />
-</HorizontalStackLayout>
+       <Label Text="MonsoonSim - Local Simulation" FontAttributes="Bold" FontSize="20"/>
+       <HorizontalStackLayout Spacing="12">
+           <Label Text="Sim Time:" />
+           <Label Text="{Binding SimTime}" />
+           <Label Text="Cash:" />
+           <Label Text="{Binding Cash}" />
+        </HorizontalStackLayout>
 
 
 

@@ -9,30 +9,26 @@ namespace Headquartz.Modules
 {
     public static class MarketModule
     {
-        // simple random-based demand fluctuation
-        private static Random _rnd = new();
-
+        private static readonly Random _rand = new();
 
         public static void Update(GameState state)
         {
-            // jitter demand factor +/- 5%
-            var change = (decimal)(_rnd.NextDouble() * 0.1 - 0.05);
-            state.Market.DemandFactor = Math.Max(0.1m, state.Market.DemandFactor * (1 + change));
-
-
-            // simulate simple sales: for each product, sell floor(DemandFactor * some base)
-            foreach (var p in state.Company.Products)
+            foreach (var product in state.Market.Products)
             {
-                var baseDemand = 1 + (int)(state.Market.DemandFactor * 2);
-                var sold = Math.Min(p.Inventory, baseDemand);
-                p.Inventory -= sold;
-                var revenue = sold * p.Price;
-                state.Company.Cash += revenue;
+                // Price elasticity
+                double elasticity = Math.Max(0.2,
+                    1 - ((product.SellingPrice - product.BasePrice) / product.BasePrice));
+
+                // Random market fluctuation (±10%)
+                double randomFactor = 1 + (_rand.NextDouble() * 0.2 - 0.1);
+
+                // Demand score
+                state.Market.CurrentDemand =
+                    state.Market.BaseDemand * elasticity * randomFactor;
+
+                // Must not go negative
+                state.Market.CurrentDemand = Math.Max(0, state.Market.CurrentDemand);
             }
-
-
-            // pay salaries every 60 ticks (if TickRate=1s, equals every minute)
-            // for brevity, omitted — implement later in HRModule.
         }
     }
 }
