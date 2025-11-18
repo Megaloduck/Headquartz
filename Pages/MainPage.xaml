@@ -8,22 +8,36 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Headquartz.Pages.MainPage"
              x:DataType="pageModels:MainPageModel"
-             x:Name="OverviewPage"
-             Title="{Binding Today}">
+              Title="Headquartz">
 
-   <VerticalStackLayout Padding="12" Spacing="10">
-       <Label Text="MonsoonSim - Local Simulation" FontAttributes="Bold" FontSize="20"/>
-       <HorizontalStackLayout Spacing="12">
-           <Label Text="Sim Time:" />
-           <Label Text="{Binding SimTime}" />
-           <Label Text="Cash:" />
-           <Label Text="{Binding Cash}" />
+    <VerticalStackLayout Padding="20" Spacing="18">
+
+        <Label Text="Headquartz Business Simulator" FontSize="24" HorizontalOptions="Center" />
+
+        <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto, Auto" >
+
+            <Label Text="Sim Time:" Grid.Row="0" Grid.Column="0" />
+            <Label Text="{Binding SimTime}" Grid.Row="0" Grid.Column="1" />
+
+            <Label Text="Cash:" Grid.Row="1" Grid.Column="0" />
+            <Label Text="{Binding Cash}" Grid.Row="1" Grid.Column="1" />
+
+            <Label Text="Demand:" Grid.Row="2" Grid.Column="0" />
+            <Label Text="{Binding CurrentDemand}" Grid.Row="2" Grid.Column="1" />
+
+            <Label Text="Total Stock:" Grid.Row="3" Grid.Column="0" />
+            <Label Text="{Binding TotalStock}" Grid.Row="3" Grid.Column="1" />
+
+        </Grid>
+
+        <HorizontalStackLayout Spacing="10">
+            <Button Text="Start" Command="{Binding StartSimulationCommand}" />
+            <Button Text="Stop" Command="{Binding StopSimulationCommand}" />
+            <Button Text="Save" Command="{Binding SaveGameCommand}" />
+            <Button Text="Load" Command="{Binding LoadGameCommand}" />
         </HorizontalStackLayout>
 
+        <!-- Additional UI for charts, modules, detail pages can go here -->
 
-
-
-
-<!-- Add data grids, charts later -->
-</VerticalStackLayout>
+    </VerticalStackLayout>
 </ContentPage>
