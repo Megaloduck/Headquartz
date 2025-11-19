@@ -19,7 +19,7 @@ namespace Headquartz.Models
         public Finance Finance { get; set; } = new();
 
 
-        public class Inventory
+        public class InventoryState
         {
             public List<Product> Products { get; set; } = new()
             {
