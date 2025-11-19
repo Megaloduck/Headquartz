@@ -9,16 +9,8 @@
     Title="Headquartz">
 
     <!-- MAIN DASHBOARD -->
-    <FlyoutItem
-        Title="Dashboard"
-        Icon="{StaticResource IconDashboard}"
-        Route="dashboard">
-
-        <ShellContent
-            Title="Dashboard"
-            ContentTemplate="{DataTemplate pages:MainPage}"
-            Route="mainpage" />
-
+    <FlyoutItem Title="Dashboard" Icon="icon_dashboard.png">
+        <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate pages:DashboardPage}" />
     </FlyoutItem>
 
 

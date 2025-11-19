@@ -5,6 +5,33 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:shimmer="clr-namespace:Syncfusion.Maui.Toolkit.Shimmer;assembly=Syncfusion.Maui.Toolkit">
 
+    <!-- Card style -->
+    <Style x:Key="CardStyle" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{StaticResource Panel}" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="HasShadow" Value="False" />
+        <Setter Property="Margin" Value="8" />
+    </Style>
+
+    <!-- Small label -->
+    <Style x:Key="SmallLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextColor" Value="{StaticResource Muted}" />
+    </Style>
+
+    <!-- Large number -->
+    <Style x:Key="BigNumber" TargetType="Label">
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="TextColor" Value="{StaticResource CardText}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+
+
+
+
+
+
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
     </Style>

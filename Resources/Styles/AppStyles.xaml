@@ -276,8 +276,7 @@
 
     <Style TargetType="BoxView" x:Key="ShimmerCustomViewStyle">
         <Setter Property="BackgroundColor" Value="Gray" />
-        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-        <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+
     </Style>
   
     <Style TargetType="pullToRefresh:SfPullToRefresh">
