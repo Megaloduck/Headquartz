@@ -14,6 +14,7 @@ namespace Headquartz.Services
         private readonly object _lock = new();
 
         public event Action<GameState>? OnTicked;
+        public GameState State => _state;
 
         public TimeSpan TickRate { get; set; } = TimeSpan.FromSeconds(1);
         public bool IsRunning { get; private set; }

@@ -12,29 +12,41 @@ namespace Headquartz
         {
             var builder = MauiApp.CreateBuilder();
             builder
-            .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
-            .ConfigureSyncfusionToolkit()
-            .ConfigureFonts(fonts => { });
+                .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
+                .ConfigureSyncfusionToolkit()
+                .ConfigureFonts(fonts => { });
 
-
-            // singleton game state
+            // Singleton game state
             builder.Services.AddSingleton<GameState>();
 
-            // engine
+            // Services
             builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>();
             builder.Services.AddSingleton<ISaveService, JsonSaveService>();
+            builder.Services.AddSingleton<RoleService>();
 
             // PageModels & Pages
             builder.Services.AddSingleton<MainPageModel>();
             builder.Services.AddSingleton<MainPage>();
+
+            builder.Services.AddTransient<DashboardPageModel>();
+            builder.Services.AddTransient<DashboardPage>();
+
             builder.Services.AddTransient<MarketPageModel>();
             builder.Services.AddTransient<MarketPage>();
-            builder.Services.AddSingleton<InventoryPageModel>();
-            builder.Services.AddSingleton<InventoryPage>();
 
+            builder.Services.AddTransient<InventoryPageModel>();
+            builder.Services.AddTransient<InventoryPage>();
 
-            return builder.Build();
+            builder.Services.AddTransient<FinancePage>();
+            builder.Services.AddTransient<HumanResourcePage>();
+
+            // Seed data
+            var app = builder.Build();
+            var state = app.Services.GetRequiredService<GameState>();
+            SeedService.Seed(state);
+
+            return app;
         }
     }
 }

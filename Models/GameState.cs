@@ -17,7 +17,7 @@ namespace Headquartz.Models
         public Market Market { get; set; } = new();
         public HumanResource HumanResource { get; set; } = new();
         public Finance Finance { get; set; } = new();
-
+        public Inventory Inventory { get; set; } = new();
 
         public class InventoryState
         {

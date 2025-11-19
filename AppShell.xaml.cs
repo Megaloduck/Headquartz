@@ -12,10 +12,23 @@ namespace Headquartz
     {
         private readonly RoleService _roleService;
 
-        public AppShell(RoleService roleService)
+        public AppShell()
         {
             InitializeComponent();
-            _roleService = roleService;
+
+            // Get service from DI
+            _roleService = Handler?.MauiContext?.Services.GetService<RoleService>()
+                          ?? new RoleService();
+
+            // Set a default role
+            _roleService.SetRole(new RolePermissions
+            {
+                Role = PlayerRole.CEO,
+                CanSeeFinance = true,
+                CanManageHR = true,
+                CanSeeMarket = true,
+                CanManageInventory = true
+            });
 
             BuildMenu();
         }
@@ -70,5 +83,4 @@ namespace Headquartz
             }
         }
     }
-
 }

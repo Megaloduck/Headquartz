@@ -13,12 +13,17 @@ namespace Headquartz.Models
         public double BasePrice { get; set; }
         public double SellingPrice { get; set; }
         public int Stock { get; set; }
+        public int Quantity { get; set; } // For inventory tracking
         public int ProductionRate { get; set; }
+
+        // Parameterless constructor for serialization
+        public Product() { }
+
         public Product(string name, double basePrice)
         {
             Name = name;
             BasePrice = basePrice;
             SellingPrice = basePrice;
         }
-    }   
+    }
 }

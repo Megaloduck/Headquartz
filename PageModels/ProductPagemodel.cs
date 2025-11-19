@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Headquartz.Models;
+using Headquartz.Modules;
 
 namespace Headquartz.PageModels
 {
-    internal class ProductPagemodel : BasePageModel
+    public class ProductPageModel : BasePageModel
     {
         private readonly Product _model;
 

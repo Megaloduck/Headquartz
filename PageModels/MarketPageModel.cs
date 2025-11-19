@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Headquartz.Models;
+using Headquartz.Modules;
 using Headquartz.Services;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Headquartz.PageModels
         private readonly ISimulationEngine _engine;
 
         public int Demand => _state.Market.Demand;
-        public float Price => _state.Market.Price;
+        public double Price => _state.Market.Price;
         public string TrendDescription => _state.Market.TrendDescription;
 
         private string _forecast = "No forecast yet";

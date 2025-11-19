@@ -11,8 +11,9 @@ namespace Headquartz.Services
     {
         bool IsRunning { get; }
         TimeSpan TickRate { get; set; }
+        GameState State { get; } // Add this
         void Start();
         void Stop();
-        event Action<GameState>? OnTicked; // viewmodels can subscribe
+        event Action<GameState>? OnTicked;
     }
 }
