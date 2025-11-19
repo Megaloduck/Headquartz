@@ -9,26 +9,32 @@ namespace Headquartz.Modules
 {
     public static class MarketModule
     {
-        private static readonly Random _rand = new();
+        static Random _rnd = new();
 
         public static void Update(GameState state)
         {
-            foreach (var product in state.Market.Products)
+            state.Market.Demand = Math.Clamp(
+                state.Market.Demand + _rnd.Next(-3, 6),
+                0,
+                100);
+
+            state.Market.Price = Math.Clamp(
+                state.Market.Price + (_rnd.NextSingle() - 0.5f),
+                1f,
+                100f);
+
+            state.Market.TrendDescription = state.Market.Price switch
             {
-                // Price elasticity
-                double elasticity = Math.Max(0.2,
-                    1 - ((product.SellingPrice - product.BasePrice) / product.BasePrice));
+                < 20 => "🔥 Prices Falling",
+                < 50 => "➡ Stable Market",
+                _ => "📈 Prices Rising"
+            };
+        }
 
-                // Random market fluctuation (±10%)
-                double randomFactor = 1 + (_rand.NextDouble() * 0.2 - 0.1);
-
-                // Demand score
-                state.Market.CurrentDemand =
-                    state.Market.BaseDemand * elasticity * randomFactor;
-
-                // Must not go negative
-                state.Market.CurrentDemand = Math.Max(0, state.Market.CurrentDemand);
-            }
+        public static string GenerateForecast(GameState state)
+        {
+            return $"In 3 days, demand is expected to be ≈ {state.Market.Demand + _rnd.Next(-10, 10)}.";
         }
     }
+
 }

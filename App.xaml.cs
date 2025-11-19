@@ -1,4 +1,5 @@
-﻿namespace Headquartz
+﻿
+namespace Headquartz
 {
     public partial class App : Application
     {

@@ -28,6 +28,11 @@ namespace Headquartz
             // PageModels & Pages
             builder.Services.AddSingleton<MainPageModel>();
             builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddTransient<MarketPageModel>();
+            builder.Services.AddTransient<MarketPage>();
+            builder.Services.AddSingleton<InventoryPageModel>();
+            builder.Services.AddSingleton<InventoryPage>();
+
 
             return builder.Build();
         }
