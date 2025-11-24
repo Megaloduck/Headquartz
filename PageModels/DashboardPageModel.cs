@@ -52,6 +52,10 @@ namespace Headquartz.PageModels
         public string Initials { get; }
         public string Title { get; }
         public string Subtitle { get; }
+        public string Icon { get; set; }
+        public string Description { get; set; }
+        public string TimeAgo { get; set; }
+        public string ActionIcon { get; set; }
 
         public ActivityItem(string initials, string title, string subtitle)
         {

@@ -9,8 +9,8 @@ namespace Headquartz.Services
 {
     public class RoleService
     {
-        public RolePermissions CurrentRole { get; private set; }
-        
+        public RolePermissions CurrentRole { get; private set; } = new RolePermissions();
+
         public void SetRole(RolePermissions role)
         {
             CurrentRole = role;

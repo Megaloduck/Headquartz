@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
-using Headquartz.Models; 
+using Headquartz.Models;
 using Headquartz.Services;
+using Headquartz.Pages;
+using Headquartz.PageModels;
 
 namespace Headquartz
 {
@@ -17,32 +19,43 @@ namespace Headquartz
                 .ConfigureSyncfusionToolkit()
                 .ConfigureFonts(fonts => { });
 
-            // Singleton game state
+#if DEBUG
+            builder.Logging.AddDebug();
+#endif
+
+            // Core Game State - Singleton
             builder.Services.AddSingleton<GameState>();
 
-            // Services
+            // Core Services - Singletons
             builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>();
             builder.Services.AddSingleton<ISaveService, JsonSaveService>();
-            builder.Services.AddSingleton<RoleService>();
+            builder.Services.AddSingleton<RoleService>(); // ✅ IMPORTANT: Must be registered
 
-            // PageModels & Pages
-            builder.Services.AddSingleton<MainPageModel>();
-            builder.Services.AddSingleton<MainPage>();
-
+            // Dashboard
             builder.Services.AddTransient<DashboardPageModel>();
             builder.Services.AddTransient<DashboardPage>();
 
+            // Main Page
+            builder.Services.AddSingleton<MainPageModel>();
+            builder.Services.AddSingleton<MainPage>();
+
+            // Market
             builder.Services.AddTransient<MarketPageModel>();
             builder.Services.AddTransient<MarketPage>();
 
+            // Inventory
             builder.Services.AddTransient<InventoryPageModel>();
             builder.Services.AddTransient<InventoryPage>();
 
+            // Finance
             builder.Services.AddTransient<FinancePage>();
+
+            // Human Resources
             builder.Services.AddTransient<HumanResourcePage>();
 
-            // Seed data
             var app = builder.Build();
+
+            // Seed initial game data
             var state = app.Services.GetRequiredService<GameState>();
             SeedService.Seed(state);
 

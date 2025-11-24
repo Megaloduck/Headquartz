@@ -8,10 +8,11 @@ namespace Headquartz.Models
 {
     public class RolePermissions
     {
-        public PlayerRole Role { get; set; }
+        public string Name { get; set; } = "Guest";
         public bool CanSeeFinance { get; set; }
         public bool CanManageHR { get; set; }
         public bool CanSeeMarket { get; set; }
         public bool CanManageInventory { get; set; }
+        public bool CanManageReports { get; set; }
     }
 }
