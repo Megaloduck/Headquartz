@@ -42,7 +42,7 @@
     <!-- Sidebar Item Text -->
     <Style x:Key="SidebarItemText" TargetType="Label">
         <Setter Property="FontSize" Value="15"/>
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}"/>
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}"/>
         <Setter Property="FontAttributes" Value="None"/>
     </Style>
 
