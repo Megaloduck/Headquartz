@@ -10,7 +10,8 @@ namespace Headquartz.Models
     {
         CEO,
         MarketManager,
-        InventoryManager,
+        WarehouseManager,
+        SalesManager,
         HRManager,
         FinanceManager,
         ProductionManager,

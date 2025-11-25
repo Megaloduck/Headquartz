@@ -66,7 +66,7 @@
                 <VerticalStackLayout Spacing="2">
 
                     <!-- Main Navigation Section -->
-                    <Label Text="Main Menu" 
+                    <Label Text="MAIN" 
                            Style="{StaticResource SidebarSectionHeader}"/>
 
                     <!-- Dashboard -->
@@ -118,11 +118,11 @@
                            Style="{StaticResource SidebarSectionHeader}"
                            Margin="12,16,12,4"/>
 
-                    <!-- Inventory -->
+                    <!-- Warehouse -->
                     <Border Style="{StaticResource SidebarItemStyle}"
                             x:Name="InventoryItem">
                         <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateToInventoryCommand}"/>
+                            <TapGestureRecognizer Command="{Binding NavigateToWarehouseCommand}"/>
                         </Border.GestureRecognizers>
                         <HorizontalStackLayout Spacing="12" Padding="12,12">
                             <Border BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource DarkBackground}}"
@@ -139,6 +139,33 @@
                                 <Label Text="Warehouse" 
                                        Style="{StaticResource SidebarItemText}"/>
                                 <Label Text="Stock management" 
+                                       FontSize="10"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Sales -->
+                    <Border Style="{StaticResource SidebarItemStyle}"
+                            x:Name="SalesItem">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToSalesCommand}"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="12" Padding="12,12">
+                            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource DarkBackground}}"
+                                    WidthRequest="32"
+                                    HeightRequest="32"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 6">
+                                <Label Text="🛒" 
+                                       FontSize="16" 
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Spacing="0" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
+                                <Label Text="Sales" 
+                                       Style="{StaticResource SidebarItemText}"/>
+                                <Label Text="Orders and Customers" 
                                        FontSize="10"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
                             </VerticalStackLayout>
@@ -166,6 +193,60 @@
                                 <Label Text="Market" 
                                        Style="{StaticResource SidebarItemText}"/>
                                 <Label Text="Demand and Pricing" 
+                                       FontSize="10"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Production -->
+                    <Border Style="{StaticResource SidebarItemStyle}"
+                            x:Name="ProductionItem">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToProductionCommand}"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="12" Padding="12,12">
+                            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource DarkBackground}}"
+                                    WidthRequest="32"
+                                    HeightRequest="32"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 6">
+                                <Label Text="⚙️" 
+                                       FontSize="16" 
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Spacing="0" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
+                                <Label Text="Production" 
+                                       Style="{StaticResource SidebarItemText}"/>
+                                <Label Text="Manufacturing ops" 
+                                       FontSize="10"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Logistics -->
+                    <Border Style="{StaticResource SidebarItemStyle}"
+                            x:Name="LogisticsItem">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToLogisticsCommand}"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="12" Padding="12,12">
+                            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource DarkBackground}}"
+                                    WidthRequest="32"
+                                    HeightRequest="32"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 6">
+                                <Label Text="🚚" 
+                                       FontSize="16" 
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Spacing="0" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
+                                <Label Text="Logistics" 
+                                       Style="{StaticResource SidebarItemText}"/>
+                                <Label Text="Shipping and Delivery" 
                                        FontSize="10"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
                             </VerticalStackLayout>
@@ -225,11 +306,63 @@
                             </VerticalStackLayout>
                         </HorizontalStackLayout>
                     </Border>
-                    
-                    <!-- Modules Section -->
-                    <Label Text="System" 
+
+                    <!-- System Section -->
+                    <Label Text="SYSTEM" 
                            Style="{StaticResource SidebarSectionHeader}"
                            Margin="12,16,12,4"/>
+
+                    <!-- Users -->
+                    <Border Style="{StaticResource SidebarItemStyle}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToUsersCommand}"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="12" Padding="12,12">
+                            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource DarkBackground}}"
+                                    WidthRequest="32"
+                                    HeightRequest="32"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 6">
+                                <Label Text="👨‍💼" 
+                                       FontSize="16" 
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Spacing="0" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
+                                <Label Text="Users" 
+                                       Style="{StaticResource SidebarItemText}"/>
+                                <Label Text="User management" 
+                                       FontSize="10"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Settings -->
+                    <Border Style="{StaticResource SidebarItemStyle}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToSettingsCommand}"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="12" Padding="12,12">
+                            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource DarkBackground}}"
+                                    WidthRequest="32"
+                                    HeightRequest="32"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 6">
+                                <Label Text="⚙️" 
+                                       FontSize="16" 
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Spacing="0" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
+                                <Label Text="Settings" 
+                                       Style="{StaticResource SidebarItemText}"/>
+                                <Label Text="System configuration" 
+                                       FontSize="10"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
 
                 </VerticalStackLayout>
             </ScrollView>
@@ -237,7 +370,6 @@
             <!-- Compact Footer -->
             <Border Grid.Row="2" 
                     Padding="12"
-             
                     StrokeThickness="0"
                     BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource BorderColor}}">
                 <VerticalStackLayout Spacing="8">
@@ -293,7 +425,7 @@
         <ShellContent ContentTemplate="{DataTemplate pages:MainPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Warehouse" Route="inventory" x:Name="InventoryFlyoutItem">
+    <FlyoutItem Title="Warehouse" Route="warehouse" x:Name="WarehouseFlyoutItem">
         <ShellContent ContentTemplate="{DataTemplate pages:WarehousePage}" />
     </FlyoutItem>
 

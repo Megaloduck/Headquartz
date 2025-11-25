@@ -1,12 +1,7 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using Headquartz.Models;
-using Headquartz.Pages;
-using Headquartz.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Font = Microsoft.Maui.Font;
 
 namespace Headquartz
 {
@@ -30,13 +25,22 @@ namespace Headquartz
             }
         }
 
-        // Navigation Commands
+        // Navigation Commands - Main
         public RelayCommand NavigateToDashboardCommand { get; }
         public RelayCommand NavigateToMainCommand { get; }
-        public RelayCommand NavigateToInventoryCommand { get; }
+
+        // Navigation Commands - Modules
+        public RelayCommand NavigateToWarehouseCommand { get; }
+        public RelayCommand NavigateToSalesCommand { get; }
         public RelayCommand NavigateToMarketCommand { get; }
+        public RelayCommand NavigateToProductionCommand { get; }
+        public RelayCommand NavigateToLogisticsCommand { get; }
         public RelayCommand NavigateToFinanceCommand { get; }
         public RelayCommand NavigateToHRCommand { get; }
+
+        // Navigation Commands - System
+        public RelayCommand NavigateToUsersCommand { get; }
+        public RelayCommand NavigateToSettingsCommand { get; }
 
         public AppShell(RoleService roleService)
         {
@@ -61,32 +65,29 @@ namespace Headquartz
                 CanSeeFinance = true,
                 CanManageHR = true,
                 CanSeeMarket = true,
-                CanManageInventory = true
+                CanManageWarehouse = true
             });
 
-            // Initialize navigation commands
+            // Initialize navigation commands - Main
             NavigateToDashboardCommand = new RelayCommand(async () => await NavigateToAsync("//dashboard"));
             NavigateToMainCommand = new RelayCommand(async () => await NavigateToAsync("//main"));
-            NavigateToInventoryCommand = new RelayCommand(async () => await NavigateToAsync("//inventory"));
+
+            // Initialize navigation commands - Modules
+            NavigateToWarehouseCommand = new RelayCommand(async () => await NavigateToAsync("//warehouse"));
+            NavigateToSalesCommand = new RelayCommand(async () => await ShowComingSoonAsync("Sales"));
             NavigateToMarketCommand = new RelayCommand(async () => await NavigateToAsync("//market"));
+            NavigateToProductionCommand = new RelayCommand(async () => await ShowComingSoonAsync("Production"));
+            NavigateToLogisticsCommand = new RelayCommand(async () => await ShowComingSoonAsync("Logistics"));
             NavigateToFinanceCommand = new RelayCommand(async () => await NavigateToAsync("//finance"));
             NavigateToHRCommand = new RelayCommand(async () => await NavigateToAsync("//hr"));
 
-            RegisterRoutes();
+            // Initialize navigation commands - System
+            NavigateToUsersCommand = new RelayCommand(async () => await ShowComingSoonAsync("Users"));
+            NavigateToSettingsCommand = new RelayCommand(async () => await ShowComingSoonAsync("Settings"));
+
             UpdateSidebarVisibility();
 
             BindingContext = this;
-        }
-
-        private void RegisterRoutes()
-        {
-            // Register all routes
-            Routing.RegisterRoute("dashboard", typeof(DashboardPage));
-            Routing.RegisterRoute("main", typeof(MainPage));
-            Routing.RegisterRoute("warehouse", typeof(WarehousePage));
-            Routing.RegisterRoute("market", typeof(MarketPage));
-            Routing.RegisterRoute("finance", typeof(FinancePage));
-            Routing.RegisterRoute("hr", typeof(HumanResourcePage));
         }
 
         private async Task NavigateToAsync(string route)
@@ -101,13 +102,21 @@ namespace Headquartz
             }
         }
 
+        private async Task ShowComingSoonAsync(string moduleName)
+        {
+            await Application.Current.MainPage.DisplayAlert(
+                "Coming Soon",
+                $"The {moduleName} module is under development and will be available soon.",
+                "OK");
+        }
+
         private void UpdateSidebarVisibility()
         {
             var role = _roleService.CurrentRole;
 
-            // Update visibility based on role permissions
-            if (InventoryItem != null)
-                InventoryItem.IsVisible = role.CanManageInventory;
+            // Update visibility in sidebar
+            if (WarehouseItem != null)
+                WarehouseItem.IsVisible = role.CanManageInventory;
 
             if (MarketItem != null)
                 MarketItem.IsVisible = role.CanSeeMarket;
@@ -117,6 +126,22 @@ namespace Headquartz
 
             if (HRItem != null)
                 HRItem.IsVisible = role.CanManageHR;
+
+            // Sales, Production, Logistics are always visible (or add permissions)
+            // Users and Settings are always visible for admins
+
+            // Update visibility in FlyoutItems (for navigation to work)
+            if (WarehouseFlyoutItem != null)
+                WarehouseFlyoutItem.IsVisible = role.CanManageWarehouse;
+
+            if (MarketFlyoutItem != null)
+                MarketFlyoutItem.IsVisible = role.CanSeeMarket;
+
+            if (FinanceFlyoutItem != null)
+                FinanceFlyoutItem.IsVisible = role.CanSeeFinance;
+
+            if (HRFlyoutItem != null)
+                HRFlyoutItem.IsVisible = role.CanManageHR;
 
             OnPropertyChanged(nameof(RoleName));
         }
