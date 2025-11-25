@@ -66,7 +66,7 @@
                 <VerticalStackLayout Spacing="2">
 
                     <!-- Main Navigation Section -->
-                    <Label Text="MAIN" 
+                    <Label Text="Main Menu" 
                            Style="{StaticResource SidebarSectionHeader}"/>
 
                     <!-- Dashboard -->
@@ -136,7 +136,7 @@
                                        VerticalOptions="Center"/>
                             </Border>
                             <VerticalStackLayout Spacing="0" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
-                                <Label Text="Inventory" 
+                                <Label Text="Warehouse" 
                                        Style="{StaticResource SidebarItemText}"/>
                                 <Label Text="Stock management" 
                                        FontSize="10"
@@ -225,6 +225,11 @@
                             </VerticalStackLayout>
                         </HorizontalStackLayout>
                     </Border>
+                    
+                    <!-- Modules Section -->
+                    <Label Text="System" 
+                           Style="{StaticResource SidebarSectionHeader}"
+                           Margin="12,16,12,4"/>
 
                 </VerticalStackLayout>
             </ScrollView>

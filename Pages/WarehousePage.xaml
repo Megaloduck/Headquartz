@@ -11,7 +11,7 @@
             <!-- Page Header -->
             <HorizontalStackLayout Spacing="0" HorizontalOptions="FillAndExpand" Margin="0,0,0,8">
                 <VerticalStackLayout HorizontalOptions="StartAndExpand">
-                    <Label Text="Inventory" Style="{StaticResource PageTitle}" />
+                    <Label Text="Warehouse" Style="{StaticResource PageTitle}" />
                     <Label Text="Manage your product stock levels" Style="{StaticResource PageSubtitle}" />
                 </VerticalStackLayout>
                 <Button Text="+ Add Product" Style="{StaticResource PrimaryButton}" VerticalOptions="Center" />
