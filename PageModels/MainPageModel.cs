@@ -95,7 +95,7 @@ namespace Headquartz.PageModels
             SimTime = state.SimTime.ToString("HH:mm:ss");
             Cash = state.Finance.Cash.ToString("F2");
             CurrentDemand = state.Market.CurrentDemand;
-            TotalStock = state.Inventory.Products?.Sum(p => p.Stock) ?? 0;
+            TotalStock = state.Warehouse.Products?.Sum(p => p.Stock) ?? 0;
         }
 
         private void UpdateBindings()
@@ -103,7 +103,7 @@ namespace Headquartz.PageModels
             SimTime = _state.SimTime.ToString("HH:mm:ss");
             Cash = _state.Finance.Cash.ToString("F2");
             CurrentDemand = _state.Market.CurrentDemand;
-            TotalStock = _state.Inventory.Products?.Sum(p => p.Stock) ?? 0;
+            TotalStock = _state.Warehouse.Products?.Sum(p => p.Stock) ?? 0;
         }
 
         private string FileNameForSave()

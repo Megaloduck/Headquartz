@@ -15,8 +15,8 @@ namespace Headquartz.PageModels
         private readonly GameState _state;
         private readonly ISimulationEngine _engine;
 
-        public string TotalProducts => _state.Inventory.Products.Count.ToString();
-        public string LowStockText => $"{_state.Inventory.Products.Count(p => p.Quantity < 10)} low stock";
+        public string TotalProducts => _state.Warehouse.Products.Count.ToString();
+        public string LowStockText => $"{_state.Warehouse.Products.Count(p => p.Quantity < 10)} low stock";
 
         public string MonthlyRevenue => _state.Finance.Cash.ToString("C0");
         public string MonthlyRevenueChange => "+8.2% from last month";

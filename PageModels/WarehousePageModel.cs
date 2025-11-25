@@ -26,7 +26,7 @@ namespace Headquartz.PageModels
             _engine = engine;
 
             Products = new ObservableCollection<ProductPageModel>(
-                _state.Inventory.Products.Select(p => new ProductPageModel(p)));
+                _state.Warehouse.Products.Select(p => new ProductPageModel(p)));
 
             RestockCommand = new Command<string>(Restock);
 
@@ -36,7 +36,7 @@ namespace Headquartz.PageModels
 
         private void Restock(string productName)
         {
-            var p = _state.Inventory.Products.First(x => x.Name == productName);
+            var p = _state.Warehouse.Products.First(x => x.Name == productName);
             p.Quantity += 10;
             Refresh();
         }

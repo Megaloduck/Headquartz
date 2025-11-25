@@ -116,7 +116,7 @@ namespace Headquartz
 
             // Update visibility in sidebar
             if (WarehouseItem != null)
-                WarehouseItem.IsVisible = role.CanManageInventory;
+                WarehouseItem.IsVisible = role.CanManageWarehouse;
 
             if (MarketItem != null)
                 MarketItem.IsVisible = role.CanSeeMarket;

@@ -12,7 +12,7 @@ namespace Headquartz.Models
         public bool CanSeeFinance { get; set; }
         public bool CanManageHR { get; set; }
         public bool CanSeeMarket { get; set; }
-        public bool CanManageInventory { get; set; }
+        public bool CanManageWarehouse { get; set; }
         public bool CanManageReports { get; set; }
     }
 }

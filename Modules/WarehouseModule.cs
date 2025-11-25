@@ -13,7 +13,7 @@ namespace Headquartz.Modules
 
         public static void Update(GameState state)
         {
-            foreach (var p in state.Inventory.Products)
+            foreach (var p in state.Warehouse.Products)
             {
                 // products get consumed randomly
                 int used = _rnd.Next(0, 3); // 0–2

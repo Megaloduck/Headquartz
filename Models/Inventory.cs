@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Headquartz.Models
 {
-    public class Inventory
+    public class Warehouse
     {
         public List<Product> Products { get; set; } = new();
 
