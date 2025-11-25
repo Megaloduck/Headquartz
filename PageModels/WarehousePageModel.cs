@@ -11,7 +11,7 @@ using Headquartz.PageModels;
 
 namespace Headquartz.PageModels
 {
-    public class InventoryPageModel : BasePageModel
+    public class WarehousePageModel : BasePageModel
     {
         private readonly GameState _state;
         private readonly ISimulationEngine _engine;
@@ -20,7 +20,7 @@ namespace Headquartz.PageModels
 
         public ICommand RestockCommand { get; }
 
-        public InventoryPageModel(GameState state, ISimulationEngine engine)
+        public WarehousePageModel(GameState state, ISimulationEngine engine)
         {
             _state = state;
             _engine = engine;

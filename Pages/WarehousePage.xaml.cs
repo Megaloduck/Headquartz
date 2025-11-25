@@ -1,8 +1,8 @@
 namespace Headquartz.Pages;
 
-public partial class InventoryPage : ContentPage
+public partial class WarehousePage : ContentPage
 {
-    public InventoryPage(InventoryPageModel vm)
+    public WarehousePage(WarehousePageModel vm)
     {
         InitializeComponent();
         BindingContext = vm;

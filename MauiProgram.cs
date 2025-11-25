@@ -43,9 +43,9 @@ namespace Headquartz
             builder.Services.AddTransient<MarketPageModel>();
             builder.Services.AddTransient<MarketPage>();
 
-            // Inventory
-            builder.Services.AddTransient<InventoryPageModel>();
-            builder.Services.AddTransient<InventoryPage>();
+            // Warehouse
+            builder.Services.AddTransient<WarehousePageModel>();
+            builder.Services.AddTransient<WarehousePage>();
 
             // Finance
             builder.Services.AddTransient<FinancePage>();

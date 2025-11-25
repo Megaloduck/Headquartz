@@ -83,7 +83,7 @@ namespace Headquartz
             // Register all routes
             Routing.RegisterRoute("dashboard", typeof(DashboardPage));
             Routing.RegisterRoute("main", typeof(MainPage));
-            Routing.RegisterRoute("inventory", typeof(InventoryPage));
+            Routing.RegisterRoute("warehouse", typeof(WarehousePage));
             Routing.RegisterRoute("market", typeof(MarketPage));
             Routing.RegisterRoute("finance", typeof(FinancePage));
             Routing.RegisterRoute("hr", typeof(HumanResourcePage));

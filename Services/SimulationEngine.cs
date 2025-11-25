@@ -52,7 +52,7 @@ namespace Headquartz.Services
 
                 // Update modules
                 MarketModule.Update(_state);
-                InventoryModule.Update(_state);
+                WarehouseModule.Update(_state);
                 HumanResourceModule.Update(_state);
                 FinanceModule.Update(_state);
 

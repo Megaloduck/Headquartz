@@ -7,7 +7,7 @@ using Headquartz.Models;
 
 namespace Headquartz.Modules
 {
-    public static class InventoryModule
+    public static class WarehouseModule
     {
         private static readonly Random _rnd = new();
 

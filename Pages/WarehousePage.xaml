@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Headquartz.Pages.InventoryPage"
+             x:Class="Headquartz.Pages.WarehousePage"
              x:Name="PageRoot"
-             Title="InventoryPage">
+             Title="WarehousePage">
 
     <ScrollView>
         <VerticalStackLayout Padding="{StaticResource LayoutPadding}" Spacing="0">
