@@ -90,12 +90,12 @@
 
                                 <!-- Month Labels -->
                                 <HorizontalStackLayout Spacing="40" Padding="52,0" HorizontalOptions="Center" VerticalOptions="End" Margin="0,0,0,4">
-                                    <Label Text="Jan" TextColor="{DynamicResource SecondaryText}}" FontSize="12" />
-                                    <Label Text="Feb" TextColor="{DynamicResource SecondaryText}}" FontSize="12" />
-                                    <Label Text="Mar" TextColor="{DynamicResource SecondaryText}}" FontSize="12" />
-                                    <Label Text="Apr" TextColor="{DynamicResource SecondaryText}}" FontSize="12" />
-                                    <Label Text="May" TextColor="{DynamicResource SecondaryText}}" FontSize="12" />
-                                    <Label Text="Jun" TextColor="{DynamicResource SecondaryText}}" FontSize="12" />
+                                    <Label Text="Jan" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
+                                    <Label Text="Feb" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
+                                    <Label Text="Mar" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
+                                    <Label Text="Apr" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
+                                    <Label Text="May" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
+                                    <Label Text="Jun" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
                                 </HorizontalStackLayout>
                             </Grid>
                         </Border>

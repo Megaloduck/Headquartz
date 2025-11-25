@@ -6,6 +6,63 @@
     xmlns:shimmer="clr-namespace:Syncfusion.Maui.Toolkit.Shimmer;assembly=Syncfusion.Maui.Toolkit">
 
     <!-- ============================================ -->
+    <!-- SIDEBAR STYLES -->
+    <!-- ============================================ -->
+
+    <!-- Sidebar Item Border -->
+    <Style x:Key="SidebarItemStyle" TargetType="Border">
+        <Setter Property="StrokeShape" Value="RoundRectangle 8"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="StrokeThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="0,2"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="Background" Value="Transparent"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource DarkBackground}}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!-- Sidebar Item Text -->
+    <Style x:Key="SidebarItemText" TargetType="Label">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}"/>
+        <Setter Property="FontAttributes" Value="None"/>
+    </Style>
+
+    <!-- Sidebar Item Text Active -->
+    <Style x:Key="SidebarItemTextActive" TargetType="Label">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+    </Style>
+
+    <!-- Sidebar Section Header -->
+    <Style x:Key="SidebarSectionHeader" TargetType="Label">
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}"/>
+        <Setter Property="Margin" Value="12,12,12,4"/>
+        <Setter Property="TextTransform" Value="Uppercase"/>
+    </Style>
+
+    <!-- ============================================ -->
     <!-- DASHBOARD STYLES (NEW) -->
     <!-- ============================================ -->
 

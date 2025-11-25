@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using Font = Microsoft.Maui.Font;
+using CommunityToolkit.Mvvm.Input;
 using Headquartz.Models;
 using Headquartz.Pages;
 using Headquartz.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Font = Microsoft.Maui.Font;
 
 namespace Headquartz
 {
@@ -28,6 +29,14 @@ namespace Headquartz
                 }
             }
         }
+
+        // Navigation Commands
+        public RelayCommand NavigateToDashboardCommand { get; }
+        public RelayCommand NavigateToMainCommand { get; }
+        public RelayCommand NavigateToInventoryCommand { get; }
+        public RelayCommand NavigateToMarketCommand { get; }
+        public RelayCommand NavigateToFinanceCommand { get; }
+        public RelayCommand NavigateToHRCommand { get; }
 
         public AppShell(RoleService roleService)
         {
@@ -55,125 +64,59 @@ namespace Headquartz
                 CanManageInventory = true
             });
 
-            BuildMenu();
+            // Initialize navigation commands
+            NavigateToDashboardCommand = new RelayCommand(async () => await NavigateToAsync("//dashboard"));
+            NavigateToMainCommand = new RelayCommand(async () => await NavigateToAsync("//main"));
+            NavigateToInventoryCommand = new RelayCommand(async () => await NavigateToAsync("//inventory"));
+            NavigateToMarketCommand = new RelayCommand(async () => await NavigateToAsync("//market"));
+            NavigateToFinanceCommand = new RelayCommand(async () => await NavigateToAsync("//finance"));
+            NavigateToHRCommand = new RelayCommand(async () => await NavigateToAsync("//hr"));
+
+            RegisterRoutes();
+            UpdateSidebarVisibility();
 
             BindingContext = this;
         }
 
-        private void BuildMenu()
+        private void RegisterRoutes()
+        {
+            // Register all routes
+            Routing.RegisterRoute("dashboard", typeof(DashboardPage));
+            Routing.RegisterRoute("main", typeof(MainPage));
+            Routing.RegisterRoute("inventory", typeof(InventoryPage));
+            Routing.RegisterRoute("market", typeof(MarketPage));
+            Routing.RegisterRoute("finance", typeof(FinancePage));
+            Routing.RegisterRoute("hr", typeof(HumanResourcePage));
+        }
+
+        private async Task NavigateToAsync(string route)
+        {
+            try
+            {
+                await Shell.Current.GoToAsync(route);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Navigation error: {ex.Message}");
+            }
+        }
+
+        private void UpdateSidebarVisibility()
         {
             var role = _roleService.CurrentRole;
 
-            // Clear existing items
-            Items.Clear();
+            // Update visibility based on role permissions
+            if (InventoryItem != null)
+                InventoryItem.IsVisible = role.CanManageInventory;
 
-            // Dashboard (everyone has access)
-            Items.Add(new FlyoutItem
-            {
-                Title = "Dashboard",
-                Route = "dashboard",
-                Icon = "📊",
-                Items =
-                {
-                    new ShellContent
-                    {
-                        ContentTemplate = new DataTemplate(typeof(DashboardPage)),
-                        Route = "dashboardpage"
-                    }
-                }
-            });
+            if (MarketItem != null)
+                MarketItem.IsVisible = role.CanSeeMarket;
 
-            // Main Page
-            Items.Add(new FlyoutItem
-            {
-                Title = "Overview",
-                Route = "main",
-                Icon = "🏠",
-                Items =
-                {
-                    new ShellContent
-                    {
-                        ContentTemplate = new DataTemplate(typeof(MainPage)),
-                        Route = "mainpage"
-                    }
-                }
-            });
+            if (FinanceItem != null)
+                FinanceItem.IsVisible = role.CanSeeFinance;
 
-            // Inventory (if role permits)
-            if (role.CanManageInventory)
-            {
-                Items.Add(new FlyoutItem
-                {
-                    Title = "Inventory",
-                    Route = "inventory",
-                    Icon = "📦",
-                    Items =
-                    {
-                        new ShellContent
-                        {
-                            ContentTemplate = new DataTemplate(typeof(InventoryPage)),
-                            Route = "inventorypage"
-                        }
-                    }
-                });
-            }
-
-            // Market (if role permits)
-            if (role.CanSeeMarket)
-            {
-                Items.Add(new FlyoutItem
-                {
-                    Title = "Market",
-                    Route = "market",
-                    Icon = "📊",
-                    Items =
-                    {
-                        new ShellContent
-                        {
-                            ContentTemplate = new DataTemplate(typeof(MarketPage)),
-                            Route = "marketpage"
-                        }
-                    }
-                });
-            }
-
-            // Finance (if role permits)
-            if (role.CanSeeFinance)
-            {
-                Items.Add(new FlyoutItem
-                {
-                    Title = "Finance",
-                    Route = "finance",
-                    Icon = "💰",
-                    Items =
-                    {
-                        new ShellContent
-                        {
-                            ContentTemplate = new DataTemplate(typeof(FinancePage)),
-                            Route = "financepage"
-                        }
-                    }
-                });
-            }
-
-            // Human Resources (if role permits)
-            if (role.CanManageHR)
-            {
-                Items.Add(new FlyoutItem
-                {
-                    Title = "Human Resources",
-                    Route = "hr",
-                    Icon = "👥",
-                    Items =
-                    {
-                        new ShellContent
-                        {
-                            ContentTemplate = new DataTemplate(typeof(HumanResourcePage)),
-                            Route = "hrpage"
-                        }
-                    }
-                });
-            }
+            if (HRItem != null)
+                HRItem.IsVisible = role.CanManageHR;
 
             OnPropertyChanged(nameof(RoleName));
         }
@@ -191,7 +134,7 @@ namespace Headquartz
         public void SwitchRole(RolePermissions newRole)
         {
             _roleService.SetRole(newRole);
-            BuildMenu();
+            UpdateSidebarVisibility();
         }
     }
 }

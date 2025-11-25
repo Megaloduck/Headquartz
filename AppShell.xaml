@@ -4,101 +4,211 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:Headquartz.Pages"
-    Shell.FlyoutBehavior="Flyout"
-    Shell.FlyoutBackgroundColor="{AppThemeBinding Light={StaticResource LightSecondaryBackground}, Dark={StaticResource DarkSecondaryBackground}}"
+    Shell.FlyoutBehavior="Locked"
     Shell.FlyoutWidth="280"
+    Shell.NavBarIsVisible="False"
     Title="Headquartz">
 
-    <!-- Custom Flyout Header -->
-    <Shell.FlyoutHeader>
-        <Grid BackgroundColor="{StaticResource Primary}" Padding="24" HeightRequest="140">
-            <VerticalStackLayout VerticalOptions="Center" Spacing="8">
-                <Label Text="📊 ERP Simulator" FontSize="24" FontAttributes="Bold" TextColor="White" />
-                <Label Text="Enterprise System" FontSize="14" TextColor="White" Opacity="0.8" />
-                <Label Text="{Binding RoleName}" FontSize="13" TextColor="White" Opacity="0.9" Margin="0,8,0,0" />
-            </VerticalStackLayout>
-        </Grid>
-    </Shell.FlyoutHeader>
+    <!-- Custom Sidebar Template -->
+    <Shell.FlyoutContent>
+        <Grid RowDefinitions="Auto,*,Auto"
+              BackgroundColor="{DynamicResource BorderColor}">
 
-    <!-- Main Menu Section -->
-    <FlyoutItem Title="Dashboard" Icon="{StaticResource IconDashboard}" Route="dashboard">
+            <!-- Sidebar Header -->
+            <Border Grid.Row="0" 
+                    BackgroundColor="{DynamicResource Primary}" 
+                    Padding="24,20"
+                    StrokeThickness="0">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="📊" 
+                           FontSize="32" 
+                           HorizontalOptions="Center"/>
+                    <Label Text="ERP Simulator" 
+                           FontSize="20" 
+                           FontAttributes="Bold" 
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    <Label Text="{Binding RoleName}" 
+                           FontSize="13" 
+                           TextColor="White" 
+                           Opacity="0.9"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Navigation Menu -->
+            <ScrollView Grid.Row="1" Padding="12,16">
+                <VerticalStackLayout Spacing="4">
+
+                    <!-- Dashboard -->
+                    <Border Style="{DynamicResource SidebarItemStyle}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToDashboardCommand}"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="12" Padding="12,10">
+                            <Label Text="📊" FontSize="20" VerticalOptions="Center"/>
+                            <Label Text="Dashboard" 
+                                   Style="{DynamicResource SidebarItemText}"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Overview -->
+                    <Border Style="{DynamicResource SidebarItemStyle}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToMainCommand}"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="12" Padding="12,10">
+                            <Label Text="🏠" FontSize="20" VerticalOptions="Center"/>
+                            <Label Text="Overview" 
+                                   Style="{DynamicResource SidebarItemText}"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Divider -->
+                    <BoxView HeightRequest="1" 
+                             Color="{DynamicResource BorderColor}"
+                             Margin="12,8"/>
+
+                    <!-- Modules Section Label -->
+                    <Label Text="MODULES" 
+                           FontSize="11" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource SecondaryTextColor}"
+                           Margin="12,8,12,4"/>
+
+                    <!-- Inventory -->
+                    <Border Style="{DynamicResource SidebarItemStyle}"
+                            x:Name="InventoryItem">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToInventoryCommand}"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="12" Padding="12,10">
+                            <Label Text="📦" FontSize="20" VerticalOptions="Center"/>
+                            <Label Text="Inventory" 
+                                   Style="{DynamicResource SidebarItemText}"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Market -->
+                    <Border Style="{DynamicResource SidebarItemStyle}"
+                            x:Name="MarketItem">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToMarketCommand}"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="12" Padding="12,10">
+                            <Label Text="📈" FontSize="20" VerticalOptions="Center"/>
+                            <Label Text="Market" 
+                                   Style="{DynamicResource SidebarItemText}"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Finance -->
+                    <Border Style="{DynamicResource SidebarItemStyle}"
+                            x:Name="FinanceItem">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToFinanceCommand}"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="12" Padding="12,10">
+                            <Label Text="💰" FontSize="20" VerticalOptions="Center"/>
+                            <Label Text="Finance" 
+                                   Style="{DynamicResource SidebarItemText}"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Human Resources -->
+                    <Border Style="{DynamicResource SidebarItemStyle}"
+                            x:Name="HRItem">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToHRCommand}"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="12" Padding="12,10">
+                            <Label Text="👥" FontSize="20" VerticalOptions="Center"/>
+                            <Label Text="Human Resources" 
+                                   Style="{DynamicResource SidebarItemText}"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- Sidebar Footer -->
+            <Border Grid.Row="2" 
+                    Padding="16,12"
+                    BackgroundColor="Transparent"
+                    StrokeThickness="0">
+                <VerticalStackLayout Spacing="12">
+
+                    <!-- Divider -->
+                    <BoxView HeightRequest="1" 
+                             Color="{DynamicResource BorderColor}"/>
+
+                    <!-- Theme Toggle -->
+                    <Border Background="{DynamicResource SidebarBackgroundColor}"
+                            Padding="12,8"
+                            StrokeShape="RoundRectangle 8"
+                            StrokeThickness="0">
+                        <HorizontalStackLayout Spacing="12" HorizontalOptions="FillAndExpand">
+                            <Label Text="{Binding IsDarkMode}" 
+                                   FontSize="18"
+                                   VerticalOptions="Center" />
+                            <Label Text="Theme" 
+                                   FontSize="13" 
+                                   TextColor="{DynamicResource SecondaryTextColor}" 
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="StartAndExpand"/>
+                            <Switch IsToggled="{Binding IsDarkMode}" 
+                                    OnColor="{DynamicResource Primary}" 
+                                    ThumbColor="White"
+                                    VerticalOptions="Center"
+                                    Scale="0.8"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Version Info -->
+                    <VerticalStackLayout Spacing="2" Padding="4,0">
+                        <Label Text="Multi-user LAN Ready" 
+                               FontSize="11" 
+                               TextColor="{DynamicResource Success}"
+                               FontAttributes="Bold"/>
+                        <Label Text="v1.0.0 • Enterprise Edition" 
+                               FontSize="10" 
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+        </Grid>
+    </Shell.FlyoutContent>
+
+    <!-- Main Shell Items with proper routes -->
+    <FlyoutItem Title="Dashboard" Route="dashboard">
         <ShellContent ContentTemplate="{DataTemplate pages:DashboardPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Overview" Icon="{StaticResource IconMeta}" Route="main">
+    <FlyoutItem Title="Overview" Route="main">
         <ShellContent ContentTemplate="{DataTemplate pages:MainPage}" />
     </FlyoutItem>
 
-    <!-- These will be dynamically shown/hidden based on role -->
-    <FlyoutItem Title="Inventory" 
-                Icon="{StaticResource IconProjects}" 
-                Route="inventory" 
-                x:Name="InventoryMenuItem">
+    <FlyoutItem Title="Inventory" Route="inventory" x:Name="InventoryFlyoutItem">
         <ShellContent ContentTemplate="{DataTemplate pages:InventoryPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Market" 
-                Icon="{StaticResource IconRibbon}" 
-                Route="market" 
-                x:Name="MarketMenuItem">
+    <FlyoutItem Title="Market" Route="market" x:Name="MarketFlyoutItem">
         <ShellContent ContentTemplate="{DataTemplate pages:MarketPage}" />
     </FlyoutItem>
 
-    <!-- Uncomment when Finance page is ready -->
-    <!--
-    <FlyoutItem Title="Finance" 
-                Route="finance" 
-                x:Name="FinanceMenuItem">
+    <FlyoutItem Title="Finance" Route="finance" x:Name="FinanceFlyoutItem">
         <ShellContent ContentTemplate="{DataTemplate pages:FinancePage}" />
     </FlyoutItem>
-    -->
 
-    <!-- Uncomment when HR page is ready -->
-    <!--
-    <FlyoutItem Title="Human Resources" 
-                Route="hr" 
-                x:Name="HRMenuItem">
+    <FlyoutItem Title="Human Resources" Route="hr" x:Name="HRFlyoutItem">
         <ShellContent ContentTemplate="{DataTemplate pages:HumanResourcePage}" />
     </FlyoutItem>
-    -->
-
-    <!-- System Section -->
-    <MenuFlyoutSeparator />
-
-    <MenuItem Text="Settings" IconImageSource="{StaticResource IconMeta}" />
-
-    <!-- Footer -->
-    <Shell.FlyoutFooter>
-        <Border Background="Transparent" Padding="24,16" StrokeThickness="0">
-            <VerticalStackLayout Spacing="12">
-
-                <!-- Theme Toggle -->
-                <HorizontalStackLayout Spacing="8" HorizontalOptions="Start">
-                    <Label Text="Theme:" 
-                           FontSize="13" 
-                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" 
-                           VerticalOptions="Center" />
-                    <Switch IsToggled="{Binding IsDarkMode}" 
-                            OnColor="{StaticResource Primary}" 
-                            ThumbColor="White" 
-                            VerticalOptions="Center" />
-                    <Label Text="Dark" 
-                           FontSize="13" 
-                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" 
-                           VerticalOptions="Center" />
-                </HorizontalStackLayout>
-
-                <!-- Version Info -->
-                <VerticalStackLayout Spacing="4">
-                    <Label Text="Multi-user LAN Ready" 
-                           FontSize="12" 
-                           TextColor="{StaticResource Success}" />
-                    <Label Text="v1.0.0" 
-                           FontSize="11" 
-                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}" />
-                </VerticalStackLayout>
-            </VerticalStackLayout>
-        </Border>
-    </Shell.FlyoutFooter>
 
 </Shell>
