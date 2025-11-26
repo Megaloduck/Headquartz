@@ -11,6 +11,7 @@ namespace Headquartz.Pages
         private readonly RoleService _roleService;
         private readonly ThemeService _themeService;
         private readonly IServiceProvider _services;
+        private string _currentPage = "";
 
         public string RoleName => _roleService.CurrentRole?.Name ?? "Guest";
 
@@ -56,24 +57,24 @@ namespace Headquartz.Pages
                 }
             };
 
-            // Initialize commands
-            NavigateToDashboardCommand = new RelayCommand(() => LoadPage(() =>
-                _services.GetRequiredService<DashboardPage>()));
+            // Initialize commands with page names for tracking
+            NavigateToDashboardCommand = new RelayCommand(() =>
+                LoadPage("Dashboard", () => _services.GetRequiredService<DashboardPage>()));
 
-            NavigateToOverviewCommand = new RelayCommand(() => LoadPage(() =>
-                _services.GetRequiredService<OverviewPage>()));
+            NavigateToOverviewCommand = new RelayCommand(() =>
+                LoadPage("Overview", () => _services.GetRequiredService<OverviewPage>()));
 
-            NavigateToWarehouseCommand = new RelayCommand(() => LoadPage(() =>
-                _services.GetRequiredService<WarehousePage>()));
+            NavigateToWarehouseCommand = new RelayCommand(() =>
+                LoadPage("Warehouse", () => _services.GetRequiredService<WarehousePage>()));
 
-            NavigateToMarketCommand = new RelayCommand(() => LoadPage(() =>
-                _services.GetRequiredService<MarketPage>()));
+            NavigateToMarketCommand = new RelayCommand(() =>
+                LoadPage("Market", () => _services.GetRequiredService<MarketPage>()));
 
-            NavigateToFinanceCommand = new RelayCommand(() => LoadPage(() =>
-                _services.GetRequiredService<FinancePage>()));
+            NavigateToFinanceCommand = new RelayCommand(() =>
+                LoadPage("Finance", () => _services.GetRequiredService<FinancePage>()));
 
-            NavigateToHRCommand = new RelayCommand(() => LoadPage(() =>
-                _services.GetRequiredService<HumanResourcePage>()));
+            NavigateToHRCommand = new RelayCommand(() =>
+                LoadPage("HR", () => _services.GetRequiredService<HumanResourcePage>()));
 
             NavigateToSalesCommand = new RelayCommand(() => ShowComingSoon("Sales"));
             NavigateToProductionCommand = new RelayCommand(() => ShowComingSoon("Production"));
@@ -84,29 +85,54 @@ namespace Headquartz.Pages
             BindingContext = this;
 
             // Load dashboard by default
-            LoadPage(() => _services.GetRequiredService<DashboardPage>());
+            LoadPage("Dashboard", () => _services.GetRequiredService<DashboardPage>());
         }
 
-        private void LoadPage(Func<ContentPage> pageFactory)
+        private void LoadPage(string pageName, Func<ContentPage> pageFactory)
         {
             try
             {
-                // Clear current content
+                // Always clear the current content first
                 ContentArea.Content = null;
 
-                // Create the page
-                var page = pageFactory();
+                // Force a small delay to ensure cleanup
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    try
+                    {
+                        // Create a fresh page instance
+                        var page = pageFactory();
 
-                // Extract the page content
-                var pageContent = page.Content;
-                page.Content = null; // Remove from page to avoid conflicts
+                        // Get the content
+                        var pageContent = page.Content;
 
-                // Load into content area
-                ContentArea.Content = pageContent;
+                        if (pageContent != null)
+                        {
+                            // Remove from page to avoid parent conflicts
+                            page.Content = null;
+
+                            // Set the new content
+                            ContentArea.Content = pageContent;
+
+                            _currentPage = pageName;
+
+                            System.Diagnostics.Debug.WriteLine($"Loaded page: {pageName}");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Page {pageName} has no content");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error in MainThread: {ex.Message}");
+                        DisplayAlert("Error", $"Failed to load {pageName}: {ex.Message}", "OK");
+                    }
+                });
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error loading page: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error loading page {pageName}: {ex.Message}");
                 DisplayAlert("Error", $"Failed to load page: {ex.Message}", "OK");
             }
         }
