@@ -7,13 +7,13 @@ using System.Runtime.CompilerServices;
 
 namespace Headquartz.PageModels
 {
-    public partial class MainPageModel : ObservableObject
+    public partial class OverviewPageModel : ObservableObject
     {
         private readonly ISimulationEngine _engine;
         private readonly GameState _state;
         private readonly ISaveService _saveService;
 
-        public MainPageModel(ISimulationEngine engine, GameState state, ISaveService saveService)
+        public OverviewPageModel (ISimulationEngine engine, GameState state, ISaveService saveService)
         {
             _engine = engine;
             _state = state;

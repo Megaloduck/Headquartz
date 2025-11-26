@@ -72,7 +72,7 @@
                                 <TapGestureRecognizer Command="{Binding NavigateToDashboardCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
-                                <Border Style="{StaticResource MenuIconBadgeActive}">
+                                <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="📊" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <Label Text="Dashboard" Style="{StaticResource SidebarItemText}" VerticalOptions="Center"/>
@@ -84,7 +84,7 @@
                                 <TapGestureRecognizer Command="{Binding NavigateToOverviewCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
-                                <Border Style="{StaticResource MenuIconBadge}">
+                                <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="🏠" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <Label Text="Overview" Style="{StaticResource SidebarItemText}" VerticalOptions="Center"/>
@@ -99,7 +99,7 @@
                                 <TapGestureRecognizer Command="{Binding NavigateToWarehouseCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
-                                <Border Style="{StaticResource MenuIconBadge}">
+                                <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="📦" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
@@ -114,7 +114,7 @@
                                 <TapGestureRecognizer Command="{Binding NavigateToSalesCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
-                                <Border Style="{StaticResource MenuIconBadge}">
+                                <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="🛒" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
@@ -129,7 +129,7 @@
                                 <TapGestureRecognizer Command="{Binding NavigateToMarketCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
-                                <Border Style="{StaticResource MenuIconBadge}">
+                                <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="📈" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
@@ -144,7 +144,7 @@
                                 <TapGestureRecognizer Command="{Binding NavigateToProductionCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
-                                <Border Style="{StaticResource MenuIconBadge}">
+                                <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="⚙️" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
@@ -159,7 +159,7 @@
                                 <TapGestureRecognizer Command="{Binding NavigateToLogisticsCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
-                                <Border Style="{StaticResource MenuIconBadge}">
+                                <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="🚚" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
@@ -174,7 +174,7 @@
                                 <TapGestureRecognizer Command="{Binding NavigateToFinanceCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
-                                <Border Style="{StaticResource MenuIconBadge}">
+                                <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="💰" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
@@ -189,7 +189,7 @@
                                 <TapGestureRecognizer Command="{Binding NavigateToHRCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
-                                <Border Style="{StaticResource MenuIconBadge}">
+                                <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="👥" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
@@ -207,7 +207,7 @@
                                 <TapGestureRecognizer Command="{Binding NavigateToUsersCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
-                                <Border Style="{StaticResource MenuIconBadge}">
+                                <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="👨‍💼" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
@@ -222,7 +222,7 @@
                                 <TapGestureRecognizer Command="{Binding NavigateToSettingsCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
-                                <Border Style="{StaticResource MenuIconBadge}">
+                                <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="⚙️" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
@@ -242,7 +242,7 @@
 
                         <Border Background="Transparent" Padding="8" StrokeShape="RoundRectangle 6" StrokeThickness="0">
                             <HorizontalStackLayout Spacing="10">
-                                <Label Text="{Binding IsDarkMode, Converter={StaticResource ThemeIconConverter}}" FontSize="16" VerticalOptions="Center" />
+                                <Label Text="{Binding IsDarkMode}" FontSize="16" VerticalOptions="Center" />
                                 <Label Text="Dark Mode" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
                                 <Switch IsToggled="{Binding IsDarkMode}" OnColor="{StaticResource Primary}" ThumbColor="White" VerticalOptions="Center" Scale="0.7"/>
                             </HorizontalStackLayout>

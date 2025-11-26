@@ -3,9 +3,9 @@ using Headquartz.PageModels;
 
 namespace Headquartz.Pages
 {
-    public partial class MainPage : ContentPage
+    public partial class OverviewPage : ContentPage
     {
-        public MainPage(MainPageModel PageModel)
+        public OverviewPage(OverviewPageModel PageModel)
         {
             InitializeComponent();
             BindingContext = PageModel;

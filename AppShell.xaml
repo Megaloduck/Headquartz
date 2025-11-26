@@ -422,7 +422,7 @@
     </FlyoutItem>
 
     <FlyoutItem Title="Overview" Route="main">
-        <ShellContent ContentTemplate="{DataTemplate pages:MainPage}" />
+        <ShellContent ContentTemplate="{DataTemplate pages:OverviewPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Warehouse" Route="warehouse" x:Name="WarehouseFlyoutItem">

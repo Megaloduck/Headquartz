@@ -37,8 +37,8 @@ namespace Headquartz
             builder.Services.AddTransient<DashboardPage>();
 
             // Main Page
-            builder.Services.AddSingleton<MainPageModel>();
-            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<OverviewPageModel>();
+            builder.Services.AddSingleton<OverviewPage>();
 
             // Market
             builder.Services.AddTransient<MarketPageModel>();

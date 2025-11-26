@@ -9,7 +9,8 @@
         HeightRequest="{OnIdiom 300, Phone=200}"
         Margin="0, 12"
         Style="{StaticResource CardStyle}"
-        x:DataType="pageModels:MainPageModel">
+        x:DataType="pageModels:OverviewPageModel">
+    
     <shimmer:SfShimmer
         BackgroundColor="Transparent"
         VerticalOptions="FillAndExpand"

@@ -14,14 +14,20 @@ namespace Headquartz
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            // Get RoleService from the DI container
-            var roleService = Handler?.MauiContext?.Services.GetRequiredService<RoleService>();
+            // Get services from the DI container
+            var services = Handler?.MauiContext?.Services;
 
-            // Store services for later access
-            Headquartz.Pages.MauiProgram.Services = Handler?.MauiContext?.Services;
+            if (services == null)
+            {
+                throw new InvalidOperationException("Services not available");
+            }
 
-            // Use MainLayout instead of AppShell
-            return new Window(new SidebarPage(roleService));
+            var roleService = services.GetRequiredService<RoleService>();
+
+            // Create SidebarPage with required dependencies
+            var sidebarPage = new SidebarPage(roleService, services);
+
+            return new Window(sidebarPage);
         }
     }
 }
