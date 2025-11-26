@@ -2,22 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.SidebarPage"
-             BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}">
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-    <Grid ColumnDefinitions="260,*">
+    <Grid ColumnDefinitions="250,*">
 
         <!-- Left Sidebar - Fixed -->
         <Border Grid.Column="0"
-                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource DarkSecondaryBackground}}"
-                StrokeThickness="1"
-                Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource BorderColor}}">
-
+                BackgroundColor="{DynamicResource SidebarBackgroundColor}"
+                Padding="0"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 0,15,0,15">
+            
             <Grid RowDefinitions="Auto,*,Auto">
 
                 <!-- Sidebar Header -->
                 <Border Grid.Row="0" 
-                        Padding="20,24,20,20"
-                        StrokeThickness="0">
+                        Padding="20,10,20,0">
+
+
                     <VerticalStackLayout Spacing="4">
                         <HorizontalStackLayout Spacing="12" HorizontalOptions="Start">
                             <Border BackgroundColor="{StaticResource Primary}"
@@ -236,11 +238,11 @@
                 </ScrollView>
 
                 <!-- Sidebar Footer -->
-                <Border Grid.Row="2" Padding="12" StrokeThickness="0">
-                    <VerticalStackLayout Spacing="8">
+                <Border Grid.Row="2" StrokeThickness="0">
+                    <VerticalStackLayout Spacing="5">
                         <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource BorderColor}}"/>
 
-                        <Border Background="Transparent" Padding="8" StrokeShape="RoundRectangle 6" StrokeThickness="0">
+                        <Border Background="Transparent" Padding="0">
                             <HorizontalStackLayout Spacing="10">
                                 <Label Text="{Binding IsDarkMode}" FontSize="16" VerticalOptions="Center" />
                                 <Label Text="Dark Mode" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
@@ -248,9 +250,9 @@
                             </HorizontalStackLayout>
                         </Border>
 
-                        <HorizontalStackLayout Spacing="6" Padding="8,4">
+                        <HorizontalStackLayout Spacing="5" Padding="5">
                             <Label Text="✓" FontSize="10" TextColor="{StaticResource Success}" VerticalOptions="Center"/>
-                            <Label Text="v1.0.0 • LAN Ready" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                            <Label Text="v1.0.0 • LAN Ready" FontSize="10" TextColor="{DynamicResource TertiaryTextColor}"/>
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
                 </Border>

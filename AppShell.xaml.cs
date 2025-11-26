@@ -10,7 +10,7 @@ namespace Headquartz
         private readonly RoleService _roleService;
         private readonly ThemeService _themeService;
 
-        public string RoleName => _roleService.CurrentRole?.Name ?? "Guest";
+        public string RoleName => _roleService.CurrentRole?.Name ?? "dda";
 
         public bool IsDarkMode
         {

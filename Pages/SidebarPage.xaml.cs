@@ -13,7 +13,7 @@ namespace Headquartz.Pages
         private readonly IServiceProvider _services;
         private string _currentPage = "";
 
-        public string RoleName => _roleService.CurrentRole?.Name ?? "Guest";
+        public string RoleName => _roleService.CurrentRole?.Name ?? "CEO";
 
         public bool IsDarkMode
         {
