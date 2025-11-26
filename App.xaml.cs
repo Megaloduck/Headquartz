@@ -17,8 +17,11 @@ namespace Headquartz
             // Get RoleService from the DI container
             var roleService = Handler?.MauiContext?.Services.GetRequiredService<RoleService>();
 
-            // Create AppShell with the required dependency
-            return new Window(new AppShell(roleService));
+            // Store services for later access
+            Headquartz.Pages.MauiProgram.Services = Handler?.MauiContext?.Services;
+
+            // Use MainLayout instead of AppShell
+            return new Window(new SidebarPage(roleService));
         }
     }
 }

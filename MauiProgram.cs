@@ -30,6 +30,7 @@ namespace Headquartz
             builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>();
             builder.Services.AddSingleton<ISaveService, JsonSaveService>();
             builder.Services.AddSingleton<RoleService>(); // ✅ IMPORTANT: Must be registered
+            builder.Services.AddSingleton<SidebarPage>();
 
             // Dashboard
             builder.Services.AddTransient<DashboardPageModel>();
