@@ -28,6 +28,7 @@
     <!-- Button Colors -->
     <Color x:Key="ButtonBackgroundColor">#1D9BF0</Color>
     <Color x:Key="ButtonTextColor">#FFFFFF</Color>
+    <Color x:Key="HoverButton">#F0F0F0</Color>
 
     <!-- Category Badge -->
     <Color x:Key="BadgeBackgroundColor">#E0F2FE</Color>
