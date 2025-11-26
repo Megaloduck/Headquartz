@@ -9,13 +9,14 @@ namespace Headquartz.Models
     public enum PlayerRole
     {
         CEO,
-        MarketManager,
+        MarketingManager,
         WarehouseManager,
         SalesManager,
         HRManager,
         FinanceManager,
         ProductionManager,
         LogisticsManager,
+        Administrator,
         Viewer
     }
 

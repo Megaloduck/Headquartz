@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.Input;
-using Headquartz.Services;
+using Headquartz.Models;
 using Headquartz.PageModels;
+using Headquartz.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -13,7 +14,31 @@ namespace Headquartz.Pages
         private readonly IServiceProvider _services;
         private string _currentPage = "";
 
+        // Displayed role name in UI
         public string RoleName => _roleService.CurrentRole?.Name ?? "CEO";
+
+        // ROLE PICKER BINDING
+        public List<RolePermissions> Roles => _roleService.AvailableRoles;
+
+        private RolePermissions _selectedRole;
+        public RolePermissions SelectedRole
+        {
+            get => _selectedRole;
+            set
+            {
+                if (_selectedRole != value)
+                {
+                    _selectedRole = value;
+
+                    // Apply new role
+                    _roleService.SetRole(_selectedRole);
+
+                    // Refresh UI
+                    OnPropertyChanged(nameof(RoleName));
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public bool IsDarkMode
         {
@@ -48,6 +73,9 @@ namespace Headquartz.Pages
             _roleService = roleService;
             _themeService = ThemeService.Instance;
             _services = services;
+
+            // Initialize selected role
+            _selectedRole = _roleService.CurrentRole;
 
             _themeService.PropertyChanged += (s, e) =>
             {

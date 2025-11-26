@@ -48,7 +48,7 @@
                         </HorizontalStackLayout>
 
                         <!-- User Role Badge -->
-                        <Border Background="{DynamicResource CardBackgroundColor}"
+                        <!--Border Background="{DynamicResource CardBackgroundColor}"
                                 Padding="10,5,10,5"
                                 StrokeShape="RoundRectangle 7.5"
                                 StrokeThickness="0"
@@ -61,7 +61,23 @@
                                        FontAttributes="Bold"
                                        TextColor="{StaticResource Primary}"/>
                             </HorizontalStackLayout>
+                        </Border -->
+
+                        <!-- Role Switcher Dropdown -->
+                        <Border Background="{DynamicResource CardBackgroundColor}"
+                                Padding="10,5"
+                                StrokeShape="RoundRectangle 7.5"
+                                StrokeThickness="0"
+                                Margin="0,5">
+                            <Picker x:Name="RolePicker"
+                                    Title="Select Role"
+                                    ItemsSource="{Binding Roles}"
+                                    ItemDisplayBinding="{Binding Name}"
+                                    SelectedItem="{Binding SelectedRole}" 
+                                    FontSize="13"
+                                    TextColor="{DynamicResource PrimaryColor}"/>
                         </Border>
+
 
                         <BoxView HeightRequest="1" Color="{DynamicResource BorderColor}"/>
                     </VerticalStackLayout>
