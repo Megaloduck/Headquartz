@@ -25,7 +25,7 @@ namespace Headquartz
             var roleService = services.GetRequiredService<RoleService>();
 
             // Create SidebarPage with required dependencies
-            var sidebarPage = new SidebarPage(roleService, services);
+            var sidebarPage = new SidebarPage();
 
             return new Window(sidebarPage);
         }

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Headquartz.Pages.Dashboard.CompanyDashboardPage"
+             Title="DashboardPage">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="5" Spacing="0">
+
+            <!-- Page Header -->
+            <Label Text="Dashboard"  />
+            <Label Text="Welcome to your ERP system overview"  />
+
+            <!-- Top Stats Grid -->
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16" RowSpacing="16" Margin="0,0,0,24">
+
+                <!-- Total Products -->
+                <Border Grid.Column="0" >
+                    <VerticalStackLayout Spacing="4">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="Total Products" VerticalOptions="Center" />
+                            <Label Text="📦" FontSize="16" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Label Text="{Binding TotalProducts}"  />
+                        <Label Text="{Binding ProductsChange}" TextColor="{DynamicResource Success}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Monthly Revenue -->
+                <Border Grid.Column="1" Style="{DynamicResource StatCard}">
+                    <VerticalStackLayout Spacing="4">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="Monthly Revenue" Style="{DynamicResource CardTitle}" VerticalOptions="Center" />
+                            <Label Text="💰" FontSize="16" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Label Text="{Binding MonthlyRevenue, StringFormat='${0:N2}'}" Style="{DynamicResource StatValue}" />
+                        <Label Text="{Binding RevenueChange}" Style="{DynamicResource StatChange}" TextColor="{DynamicResource Success}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Active Orders -->
+                <Border Grid.Column="2" Style="{DynamicResource StatCard}">
+                    <VerticalStackLayout Spacing="4">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="Active Orders" Style="{DynamicResource CardTitle}" VerticalOptions="Center" />
+                            <Label Text="🛒" FontSize="16" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Label Text="{Binding ActiveOrders}" Style="{DynamicResource StatValue}" />
+                        <Label Text="Currently processing" Style="{DynamicResource StatChange}" TextColor="{DynamicResource SecondaryText}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Orders This Month -->
+                <Border Grid.Column="3" Style="{DynamicResource StatCard}">
+                    <VerticalStackLayout Spacing="4">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="Orders This Month" Style="{DynamicResource CardTitle}" VerticalOptions="Center" />
+                            <Label Text="📈" FontSize="16" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Label Text="{Binding OrdersThisMonth}" Style="{DynamicResource StatValue}" />
+                        <Label Text="{Binding OrdersChange}" Style="{DynamicResource StatChange}" TextColor="{DynamicResource Success}" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!-- Main Content Grid -->
+            <Grid ColumnDefinitions="2*,1*" ColumnSpacing="16" RowSpacing="16">
+
+                <!-- Revenue Overview Chart -->
+                <Border Grid.Column="0" Style="{DynamicResource CardBorder}">
+                    <VerticalStackLayout Spacing="16">
+                        <HorizontalStackLayout Spacing="8" HorizontalOptions="FillAndExpand">
+                            <Label Text="Revenue Overview" Style="{DynamicResource Title3}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
+                            <Label Text="Monthly revenue and order trends" FontSize="13" TextColor="{DynamicResource SecondaryText}" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <!-- Chart Placeholder -->
+                        <Border Background="{DynamicResource BorderColor}" StrokeShape="RoundRectangle 8" Padding="0" HeightRequest="300" StrokeThickness="0">
+                            <Grid>
+                                <!-- Bar Chart Visualization -->
+                                <HorizontalStackLayout Spacing="16" Padding="40,20" HorizontalOptions="Center" VerticalOptions="End">
+                                    <BoxView Color="{DynamicResource Primary}" WidthRequest="60" HeightRequest="180" CornerRadius="4" />
+                                    <BoxView Color="{DynamicResource Primary}" WidthRequest="60" HeightRequest="220" CornerRadius="4" />
+                                    <BoxView Color="{DynamicResource Primary}" WidthRequest="60" HeightRequest="200" CornerRadius="4" />
+                                    <BoxView Color="{DynamicResource Primary}" WidthRequest="60" HeightRequest="250" CornerRadius="4" />
+                                    <BoxView Color="{DynamicResource Primary}" WidthRequest="60" HeightRequest="240" CornerRadius="4" />
+                                    <BoxView Color="{DynamicResource Primary}" WidthRequest="60" HeightRequest="270" CornerRadius="4" />
+                                </HorizontalStackLayout>
+
+                                <!-- Month Labels -->
+                                <HorizontalStackLayout Spacing="40" Padding="52,0" HorizontalOptions="Center" VerticalOptions="End" Margin="0,0,0,4">
+                                    <Label Text="Jan" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
+                                    <Label Text="Feb" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
+                                    <Label Text="Mar" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
+                                    <Label Text="Apr" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
+                                    <Label Text="May" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
+                                    <Label Text="Jun" TextColor="{DynamicResource SecondaryTextColor}" FontSize="12" />
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Recent Activity -->
+                <Border Grid.Column="1" Style="{DynamicResource CardBorder}">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="Recent Activity" Style="{DynamicResource Title3}" />
+
+                        <CollectionView ItemsSource="{Binding RecentActivities}" HeightRequest="320">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{DynamicResource ActivityItemBorder}">
+                                        <HorizontalStackLayout Spacing="12">
+                                            <!-- Avatar/Icon -->
+                                            <Border Style="{DynamicResource ActivityIcon}">
+                                                <Label Text="{Binding Icon}" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                                            </Border>
+
+                                            <!-- Activity Details -->
+                                            <VerticalStackLayout Spacing="2" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                                                <Label Text="{Binding Description}" FontSize="14" TextColor="{DynamicResource PrimaryTextColor}" />
+                                                <Label Text="{Binding TimeAgo}" FontSize="12" TextColor="{DynamicResource SecondaryTextColor}" />
+                                            </VerticalStackLayout>
+
+                                            <!-- Action Icon -->
+                                            <Label Text="{Binding ActionIcon}" FontSize="16" VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!-- Simulation Controls -->
+            <Border Style="{DynamicResource CardBorder}" Margin="0,16,0,0">
+                <HorizontalStackLayout Spacing="16" HorizontalOptions="Center">
+                    <Button Text="▶ Start Simulation" Command="{Binding StartCommand}" Style="{DynamicResource PrimaryButton}" />
+                    <Button Text="⏸ Stop Simulation" Command="{Binding StopCommand}" Style="{DynamicResource DangerButton}" />
+                    <Label Text="{Binding GameTimeString}" FontSize="16" FontAttributes="Bold" TextColor="{DynamicResource Primary}" VerticalOptions="Center" Margin="16,0,0,0" />
+                </HorizontalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

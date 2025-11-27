@@ -12,9 +12,7 @@ namespace Headquartz.Modules
         public static void Update(GameState state)
         {
             // Wage expense
-            double salaryCost = state.HumanResource.Employees * state.HumanResource.SalaryPerEmployee;
 
-            state.Finance.ExpensePerTick += salaryCost;
         }
     }
 }

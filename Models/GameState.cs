@@ -15,7 +15,6 @@ namespace Headquartz.Models
         // Core Systems
         public Company Company { get; set; } = new();
         public Market Market { get; set; } = new();
-        public HumanResource HumanResource { get; set; } = new();
         public Finance Finance { get; set; } = new();
         public Warehouse Warehouse { get; set; } = new();
 

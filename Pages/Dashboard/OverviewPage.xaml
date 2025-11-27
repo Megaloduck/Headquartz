@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pageModels="clr-namespace:Headquartz.PageModels"             
+             xmlns:models="clr-namespace:Headquartz.Models"
+             xmlns:controls="clr-namespace:Headquartz.Pages.Controls"
+             xmlns:pullToRefresh="clr-namespace:Syncfusion.Maui.Toolkit.PullToRefresh;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Headquartz.Pages.Dashboard.OverviewPage"
+             x:DataType="pageModels:OverviewPageModel"
+              Title="Headquartz">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource LayoutPadding}" Spacing="0">
+
+            <!-- Page Header -->
+            <Label Text="System Overview" Style="{StaticResource PageTitle}" />
+            <Label Text="Real-time simulation monitoring and controls" Style="{StaticResource PageSubtitle}" />
+
+            <!-- Status Cards -->
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16" Margin="0,0,0,24">
+
+                <!-- Simulation Time -->
+                <Border Grid.Column="0" Style="{StaticResource StatCard}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Simulation Time" Style="{StaticResource CardTitle}" />
+                        <Label Text="{Binding SimTime}" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                        <Label Text="{Binding SimulationStatus}" Style="{StaticResource StatChange}" TextColor="{StaticResource Success}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Cash -->
+                <Border Grid.Column="1" Style="{StaticResource StatCard}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Available Cash" Style="{StaticResource CardTitle}" />
+                        <Label Text="{Binding Cash, StringFormat='${0:N2}'}" Style="{StaticResource StatValue}" />
+                        <Label Text="Company funds" Style="{StaticResource StatChange}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Market Demand -->
+                <Border Grid.Column="2" Style="{StaticResource StatCard}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Market Demand" Style="{StaticResource CardTitle}" />
+                        <Label Text="{Binding CurrentDemand, StringFormat='{0:F0}'}" Style="{StaticResource StatValue}" />
+                        <Label Text="Current market level" Style="{StaticResource StatChange}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Total Stock -->
+                <Border Grid.Column="3" Style="{StaticResource StatCard}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Total Stock" Style="{StaticResource CardTitle}" />
+                        <Label Text="{Binding TotalStock}" Style="{StaticResource StatValue}" />
+                        <Label Text="Units in inventory" Style="{StaticResource StatChange}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!-- Simulation Controls Card -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="20">
+
+                    <Label Text="Simulation Controls" Style="{StaticResource Title3}" />
+
+                    <HorizontalStackLayout Spacing="16" HorizontalOptions="Center">
+                        <Button Text="▶ Start" Command="{Binding StartSimulationCommand}" Style="{StaticResource PrimaryButton}" WidthRequest="150" />
+                        <Button Text="⏸ Pause" Command="{Binding StopSimulationCommand}" BackgroundColor="{StaticResource Warning}" TextColor="White" CornerRadius="8" Padding="20,12" FontAttributes="Bold" WidthRequest="150" />
+                        <Button Text="💾 Save" Command="{Binding SaveGameCommand}" Style="{StaticResource SecondaryButton}" WidthRequest="150" />
+                        <Button Text="📂 Load" Command="{Binding LoadGameCommand}" BackgroundColor="{StaticResource Info}" TextColor="White" CornerRadius="8" Padding="20,12" FontAttributes="Bold" WidthRequest="150" />
+                    </HorizontalStackLayout>
+
+                    <!-- Progress Indicator -->
+                    <Border Background="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource DarkBackground}}" Padding="16" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Simulation Status" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                            <ProgressBar Progress="0.65" ProgressColor="{StaticResource Primary}" HeightRequest="8" />
+                            <Label Text="Running smoothly - 65% of tick cycle" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Quick Stats Grid -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="16" RowSpacing="16" Margin="0,16,0,0">
+
+                <!-- Finance Summary -->
+                <Border Grid.Column="0" Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="16">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="💰" FontSize="24" />
+                            <Label Text="Finance Summary" Style="{StaticResource Title3}" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12">
+                            <Label Grid.Row="0" Grid.Column="0" Text="Revenue" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                            <Label Grid.Row="0" Grid.Column="1" Text="$12,450" FontAttributes="Bold" TextColor="{StaticResource Success}" />
+
+                            <Label Grid.Row="1" Grid.Column="0" Text="Expenses" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="$3,206" FontAttributes="Bold" TextColor="{StaticResource Danger}" />
+
+                            <BoxView Grid.Row="2" Grid.ColumnSpan="2" HeightRequest="1" Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource BorderColor}}" />
+
+                            <Label Grid.Row="3" Grid.Column="0" Text="Net Profit" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}" />
+                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Cash, StringFormat='${0:N0}'}" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Success}" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Market Overview -->
+                <Border Grid.Column="1" Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="16">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="📊" FontSize="24" />
+                            <Label Text="Market Overview" Style="{StaticResource Title3}" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12">
+                            <Label Grid.Row="0" Grid.Column="0" Text="Current Demand" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding CurrentDemand, StringFormat='{0:F0}'}" FontAttributes="Bold" />
+
+                            <Label Grid.Row="1" Grid.Column="0" Text="Average Price" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="$45.50" FontAttributes="Bold" />
+
+                            <Label Grid.Row="2" Grid.Column="0" Text="Market Trend" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                            <Label Grid.Row="2" Grid.Column="1" Text="📈 Rising" FontAttributes="Bold" TextColor="{StaticResource Success}" />
+
+                            <Label Grid.Row="3" Grid.Column="0" Text="Competitors" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                            <Label Grid.Row="3" Grid.Column="1" Text="3 Active" FontAttributes="Bold" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
