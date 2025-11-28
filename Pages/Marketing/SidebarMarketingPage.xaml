@@ -20,6 +20,7 @@
                 <Border Grid.Row="0" 
                         Padding="20,10,20,0"
                         StrokeShape="RoundRectangle 0"
+                        StrokeThickness="0"
                         Background="{DynamicResource HeaderBackgroundColor}">
 
                     <VerticalStackLayout Spacing="0">
@@ -112,7 +113,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Marketing Dashboard" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Stock management" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Outreach performance" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -127,7 +128,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Campaigns" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Orders and Customers" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Active promotions" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -142,7 +143,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Market Research" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Demand and Pricing" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Consumer insights" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -157,7 +158,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Pricing Strategy" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Manufacturing ops" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Value setting" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -172,7 +173,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Competitor Analysis" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Shipping and Delivery" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Rival tracking" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -187,7 +188,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Branding" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Revenue and Costs" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Identity and Assets" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -202,7 +203,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Marketing Reports" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Employee management" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="ROI analysis" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -249,7 +250,7 @@
                     <VerticalStackLayout Spacing="5" HorizontalOptions="Center" VerticalOptions="Center">
                         <BoxView HeightRequest="1" Color="{DynamicResource BorderColor}"/>
 
-                        <Border Background="Transparent" Padding="0">
+                        <Border Background="Transparent" Padding="0" StrokeThickness="0">
                             <HorizontalStackLayout Spacing="10">
                                 <Label Text="{Binding IsDarkMode}" FontSize="16" VerticalOptions="Center" TextColor="{DynamicResource SecondaryTextColor}" />
                                 <Label Text="Dark Mode" FontSize="12" TextColor="{DynamicResource PrimaryTextColor}" VerticalOptions="Center" />
