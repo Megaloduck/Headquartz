@@ -19,6 +19,7 @@
                 <!-- Sidebar Header -->
                 <Border Grid.Row="0" 
                         Padding="20,10,20,0"
+                        StrokeThickness="0"
                         StrokeShape="RoundRectangle 0"
                         Background="{DynamicResource HeaderBackgroundColor}">
 
@@ -265,7 +266,7 @@
                     <VerticalStackLayout Spacing="5" HorizontalOptions="Center" VerticalOptions="Center">
                         <BoxView HeightRequest="1" Color="{DynamicResource BorderColor}"/>
 
-                        <Border Background="Transparent" Padding="0">
+                        <Border Background="Transparent" Padding="0" StrokeThickness="0">
                             <HorizontalStackLayout Spacing="10">
                                 <Label Text="{Binding IsDarkMode}" FontSize="16" VerticalOptions="Center" TextColor="{DynamicResource SecondaryTextColor}" />
                                 <Label Text="Dark Mode" FontSize="12" TextColor="{DynamicResource PrimaryTextColor}" VerticalOptions="Center" />
