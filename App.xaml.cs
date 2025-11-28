@@ -29,7 +29,7 @@ namespace Headquartz
                 ?? throw new InvalidOperationException("Services not available");
 
             // 👍 Resolve SidebarPage through DI (IMPORTANT)
-            var sidebarPage = services.GetRequiredService<SidebarMarketingPage>();
+            var sidebarPage = services.GetRequiredService<SidebarSalesPage>();
 
             return new Window(sidebarPage);
         }
