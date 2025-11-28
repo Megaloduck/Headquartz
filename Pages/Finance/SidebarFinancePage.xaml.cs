@@ -2,8 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Headquartz.Models;
 using Headquartz.Pages.Dashboard;
-using Headquartz.Pages.Dashboard;
-using Headquartz.Pages.Sales;
 using Headquartz.Pages.System;
 using Headquartz.Services;
 using System.ComponentModel;

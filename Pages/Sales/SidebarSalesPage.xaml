@@ -156,7 +156,7 @@
                                     <Label Text="⚙️" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
-                                    <Label Text="Orders " Style="{StaticResource SidebarItemText}"/>
+                                    <Label Text="Orders" Style="{StaticResource SidebarItemText}"/>
                                     <Label Text="Manufacturing ops" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>

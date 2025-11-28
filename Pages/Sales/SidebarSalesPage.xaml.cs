@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Headquartz.Services;
 using Headquartz.Models;
-using Headquartz.Pages.Dashboard;
 using Headquartz.Pages.System;
 
 namespace Headquartz.Pages.Sales;
