@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Maui;
 using Headquartz.Models;
-using Headquartz.Modules.HumanResource;
 using Headquartz.PageModels;
 using Headquartz.Pages;
 using Headquartz.Pages.CEO;

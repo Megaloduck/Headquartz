@@ -1,5 +1,4 @@
-﻿using Headquartz.Modules.HumanResource;
-using Headquartz.Pages.Dashboard;
+﻿using Headquartz.Pages.Dashboard;
 using Headquartz.Pages.Finance;
 using Headquartz.Pages.HumanResource;
 using Headquartz.Pages.Logistics;

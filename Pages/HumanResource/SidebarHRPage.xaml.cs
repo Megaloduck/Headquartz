@@ -6,7 +6,6 @@ using Headquartz.Pages.System;
 using Headquartz.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Headquartz.Pages.HumanResource; // Add this using directive at the top
 
 namespace Headquartz.Pages.HumanResource;
 
@@ -98,22 +97,22 @@ public partial class SidebarHRPage : ContentPage
         NavigateToHRDashboardCommand = new RelayCommand(() =>
             LoadPage("HR Dashboard", () => _services.GetRequiredService<HRDashboardPage>()));
 
-        NavigateToEmployeeListCommand = new RelayCommand(() =>
+        NavigateToEmployeeListCommand = new RelayCommand(() =>              
             LoadPage("Employee List", () => _services.GetRequiredService<EmployeeListPage>()));
 
-        NavigateToRecruitmentCommand = new RelayCommand(() =>
+        NavigateToRecruitmentCommand = new RelayCommand(() =>              
             LoadPage("Recruitment", () => _services.GetRequiredService<RecruitmentPage>()));
 
-        NavigateToPayrollCommand = new RelayCommand(() =>
+        NavigateToPayrollCommand = new RelayCommand(() =>              
             LoadPage("Payroll", () => _services.GetRequiredService<PayrollPage>()));
 
-        NavigateToTrainingCommand = new RelayCommand(() =>
+        NavigateToTrainingCommand = new RelayCommand(() =>            
             LoadPage("Training", () => _services.GetRequiredService<TrainingPage>()));
 
         NavigateToHRPoliciesCommand = new RelayCommand(() =>
             LoadPage("HR Policies", () => _services.GetRequiredService<HRPoliciesPage>()));
 
-        NavigateToHRReportsCommand = new RelayCommand(() =>
+       NavigateToHRReportsCommand = new RelayCommand(() =>            
             LoadPage("HR Reports", () => _services.GetRequiredService<HRReportsPage>()));
 
         NavigateToUsersCommand = new RelayCommand(() =>
