@@ -113,7 +113,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Warehouse Dashboard" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Performance Summary" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Performance summary" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -128,7 +128,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Inventory" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Current Stock Details" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Current stock details" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -143,7 +143,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Stock In" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Goods Receiving" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Goods receiving" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -158,7 +158,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Stock Out" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Order Fulfillment" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Order fulfillment" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -173,7 +173,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Shipments" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Delivery Tracking  " FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Delivery tracking  " FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -188,7 +188,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Storage Allocation" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Location Management" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Location management" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -203,7 +203,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Warehouse Reports" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Data Analysis" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="Data analysis" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
