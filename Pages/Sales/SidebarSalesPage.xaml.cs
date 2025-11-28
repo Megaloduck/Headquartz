@@ -106,7 +106,7 @@ public partial class SidebarSalesPage : ContentPage
             LoadPage("Orders", () => _services.GetRequiredService<OrdersPage>()));
 
         NavigateToSalesTargetsCommand = new RelayCommand(() =>
-            LoadPage("SalesTargets", () => _services.GetRequiredService<SalesTargetsPage>()));
+            LoadPage("Sales Targets", () => _services.GetRequiredService<SalesTargetsPage>()));
 
         NavigateToCustomersCommand = new RelayCommand(() =>
             LoadPage("Customers", () => _services.GetRequiredService<CustomersPage>()));
