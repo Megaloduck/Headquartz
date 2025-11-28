@@ -24,14 +24,8 @@ namespace Headquartz
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            // Get services from DI container
-            var services = Handler?.MauiContext?.Services
-                ?? throw new InvalidOperationException("Services not available");
-
-            // 👍 Resolve SidebarPage through DI (IMPORTANT)
-            var sidebarPage = services.GetRequiredService<SidebarSalesPage>();
-
-            return new Window(sidebarPage);
+            // Root of app MUST be AppShell for navigation to work
+            return new Window(new AppShell());
         }
     }
 }

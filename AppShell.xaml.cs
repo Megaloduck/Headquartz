@@ -5,20 +5,14 @@ using System.Runtime.CompilerServices;
 
 namespace Headquartz
 {
-    public partial class AppShell : Shell, INotifyPropertyChanged
+    public partial class AppShell : Shell
     {
-        
-
-        public new event PropertyChangedEventHandler? PropertyChanged;
-
-        protected new void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        public AppShell()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+            InitializeComponent();
 
-        /// <summary>
-        /// Switch to a different role (useful for testing or role changes)
-        /// </summary>
-        
+            // Start the app at LoginPage
+            GoToAsync("//LoginPage");
+        }
     }
 }

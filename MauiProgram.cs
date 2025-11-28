@@ -56,6 +56,11 @@ namespace Headquartz
             builder.Services.AddSingleton<SidebarMarketingPage>();
             builder.Services.AddSingleton<SidebarLogisticsPage>();
 
+            // Core Fundamental Pages
+            builder.Services.AddSingleton<LoginPage>();
+            builder.Services.AddSingleton<LoginPageModel>();
+            builder.Services.AddSingleton<BasePlatePage>();
+
             // ────────────────────────────────────────────────
             // COMPANY-WIDE PAGES
             // ────────────────────────────────────────────────

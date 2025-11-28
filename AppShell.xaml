@@ -4,10 +4,50 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:Headquartz.Pages"
-    Shell.FlyoutBehavior="Locked"
-    Shell.FlyoutWidth="260"
-    Shell.NavBarIsVisible="True"
+    xmlns:ceo="clr-namespace:Headquartz.Pages.CEO"
+    xmlns:hr="clr-namespace:Headquartz.Pages.HumanResource"
+    xmlns:fin="clr-namespace:Headquartz.Pages.Finance"
+    xmlns:sales="clr-namespace:Headquartz.Pages.Sales"
+    xmlns:mkt="clr-namespace:Headquartz.Pages.Marketing"
+    xmlns:prod="clr-namespace:Headquartz.Pages.Production"
+    xmlns:wh="clr-namespace:Headquartz.Pages.Warehouse"
+    xmlns:log="clr-namespace:Headquartz.Pages.Logistics"
     Title="Headquartz">
 
-    
+    <!-- LOGIN PAGE -->
+    <ShellContent Route="LoginPage"
+                  ContentTemplate="{DataTemplate pages:LoginPage}" />
+
+    <!-- CEO -->
+    <ShellContent Route="SidebarCEOPage"
+                  ContentTemplate="{DataTemplate ceo:SidebarCEOPage}" />
+
+    <!-- HR -->
+    <ShellContent Route="SidebarHRPage"
+                  ContentTemplate="{DataTemplate hr:SidebarHRPage}" />
+
+    <!-- Finance -->
+    <ShellContent Route="SidebarFinancePage"
+                  ContentTemplate="{DataTemplate fin:SidebarFinancePage}" />
+
+    <!-- Sales -->
+    <ShellContent Route="SidebarSalesPage"
+                  ContentTemplate="{DataTemplate sales:SidebarSalesPage}" />
+
+    <!-- Marketing -->
+    <ShellContent Route="SidebarMarketingPage"
+                  ContentTemplate="{DataTemplate mkt:SidebarMarketingPage}" />
+
+    <!-- Production -->
+    <ShellContent Route="SidebarProductionPage"
+                  ContentTemplate="{DataTemplate prod:SidebarProductionPage}" />
+
+    <!-- Warehouse -->
+    <ShellContent Route="SidebarWarehousePage"
+                  ContentTemplate="{DataTemplate wh:SidebarWarehousePage}" />
+
+    <!-- Logistics -->
+    <ShellContent Route="SidebarLogisticsPage"
+                  ContentTemplate="{DataTemplate log:SidebarLogisticsPage}" />
+
 </Shell>
