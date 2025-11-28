@@ -9,8 +9,8 @@
         <VerticalStackLayout Padding="{StaticResource LayoutPadding}" Spacing="0">
 
             <!-- Page Header -->
-            <HorizontalStackLayout Spacing="0" HorizontalOptions="FillAndExpand" Margin="0,0,0,8">
-                <VerticalStackLayout HorizontalOptions="StartAndExpand">
+            <HorizontalStackLayout Spacing="0" Margin="0,0,0,8">
+                <VerticalStackLayout >
                     <Label Text="Warehouse" Style="{StaticResource PageTitle}" />
                     <Label Text="Manage your product stock levels" Style="{StaticResource PageSubtitle}" />
                 </VerticalStackLayout>

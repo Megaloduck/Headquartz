@@ -70,8 +70,8 @@
                 <!-- Revenue Overview Chart -->
                 <Border Grid.Column="0" Style="{DynamicResource CardBorder}">
                     <VerticalStackLayout Spacing="16">
-                        <HorizontalStackLayout Spacing="8" HorizontalOptions="FillAndExpand">
-                            <Label Text="Revenue Overview" Style="{DynamicResource Title3}" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
+                        <HorizontalStackLayout Spacing="8" >
+                            <Label Text="Revenue Overview" Style="{DynamicResource Title3}" VerticalOptions="Center"  />
                             <Label Text="Monthly revenue and order trends" FontSize="13" TextColor="{DynamicResource SecondaryText}" VerticalOptions="Center" />
                         </HorizontalStackLayout>
 
@@ -119,7 +119,7 @@
                                             </Border>
 
                                             <!-- Activity Details -->
-                                            <VerticalStackLayout Spacing="2" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                                            <VerticalStackLayout Spacing="2" VerticalOptions="Center" >
                                                 <Label Text="{Binding Description}" FontSize="14" TextColor="{DynamicResource PrimaryTextColor}" />
                                                 <Label Text="{Binding TimeAgo}" FontSize="12" TextColor="{DynamicResource SecondaryTextColor}" />
                                             </VerticalStackLayout>

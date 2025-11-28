@@ -10,9 +10,9 @@
             <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
                 <VerticalStackLayout Grid.Column="0" Spacing="4">
                     <Label Text="Warehouse Management"
-                           Style="{StaticResource PageTitleStyle}"/>
+                           Style="{DynamicResource PageTitle}"/>
                     <Label Text="Monitor inventory, track movements, and manage stock levels"
-                           Style="{StaticResource PageSubtitleStyle}"/>
+                           Style="{StaticResource PageSubtitle}"/>
                 </VerticalStackLayout>
 
                 <Border Grid.Column="1"
