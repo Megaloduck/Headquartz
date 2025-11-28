@@ -45,6 +45,7 @@ namespace Headquartz
             builder.Services.AddSingleton<RoleService>();
 
             // Sidebar - must stay alive during the entire app lifetime
+            builder.Services.AddSingleton<SidebarPageModel>();
             builder.Services.AddSingleton<SidebarPage>();
 
             // ────────────────────────────────────────────────
