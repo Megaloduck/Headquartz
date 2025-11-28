@@ -68,7 +68,7 @@ public partial class SidebarCEOPage : ContentPage, INotifyPropertyChanged
     public RelayCommand NavigateToOverviewCommand { get; }
     public RelayCommand NavigateToWarehouseCommand { get; }
     public RelayCommand NavigateToSalesCommand { get; }
-    public RelayCommand NavigateToMarketCommand { get; }
+    public RelayCommand NavigateToMarketingCommand { get; }
     public RelayCommand NavigateToProductionCommand { get; }
     public RelayCommand NavigateToLogisticsCommand { get; }
     public RelayCommand NavigateToFinanceCommand { get; }
@@ -105,7 +105,7 @@ public partial class SidebarCEOPage : ContentPage, INotifyPropertyChanged
         NavigateToWarehouseCommand = new RelayCommand(() =>
             LoadPage("Warehouse", () => _services.GetRequiredService<WarehouseDashboardPage>()));
 
-        NavigateToMarketCommand = new RelayCommand(() =>
+        NavigateToMarketingCommand = new RelayCommand(() =>
             LoadPage("Market", () => _services.GetRequiredService<MarketingDashboardPage>()));
 
         NavigateToFinanceCommand = new RelayCommand(() =>
@@ -118,7 +118,7 @@ public partial class SidebarCEOPage : ContentPage, INotifyPropertyChanged
             LoadPage("Sales", () => _services.GetRequiredService<SalesDashboardPage>()));
 
         NavigateToProductionCommand = new RelayCommand(() => 
-            LoadPage("Prodduction", () => _services.GetRequiredService<ProductionDashboardPage>()));
+            LoadPage("Production", () => _services.GetRequiredService<ProductionDashboardPage>()));
 
         NavigateToLogisticsCommand = new RelayCommand(() => 
             LoadPage("Logistics", () => _services.GetRequiredService<LogisticsDashboardPage>()));

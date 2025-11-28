@@ -115,8 +115,8 @@
                             </HorizontalStackLayout>
                         </Border>
 
-                        <!-- MODULES Section -->
-                        <Label Text="MODULES" Style="{StaticResource SidebarSectionHeader}" Margin="12,16,12,4"/>
+                        <!-- DEPARTMENTS Section -->
+                        <Label Text="DEPARTMENTS" Style="{StaticResource SidebarSectionHeader}" Margin="12,16,12,4"/>
 
                         <Border Style="{StaticResource SidebarItemStyle}">
                             <Border.GestureRecognizers>
@@ -150,14 +150,14 @@
 
                         <Border Style="{StaticResource SidebarItemStyle}">
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NavigateToMarketCommand}"/>
+                                <TapGestureRecognizer Command="{Binding NavigateToMarketingCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
                                 <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="📈" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
-                                    <Label Text="Market" Style="{StaticResource SidebarItemText}"/>
+                                    <Label Text="Marketing" Style="{StaticResource SidebarItemText}"/>
                                     <Label Text="Demand and Pricing" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>

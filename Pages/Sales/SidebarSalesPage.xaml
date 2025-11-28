@@ -57,7 +57,7 @@
 
                             <HorizontalStackLayout Spacing="8" VerticalOptions="Center" >
                                 <Label Text="👤" FontSize="14"/>
-                                <Label Text="{Binding RoleName}" 
+                                <Label Text="Sales Manager"                                       
                                        FontSize="13"
                                        FontAttributes="Bold"
                                        TextColor="{StaticResource Primary}"/>
@@ -99,7 +99,7 @@
                             </HorizontalStackLayout>
                         </Border>
 
-                        <!-- MODULES Section -->
+                        <!-- TOOLS Section -->
                         <Label Text="Tools" Style="{StaticResource SidebarSectionHeader}" Margin="12,16,12,4"/>
 
                         <Border Style="{StaticResource SidebarItemStyle}">
@@ -119,14 +119,14 @@
 
                         <Border Style="{StaticResource SidebarItemStyle}">
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NavigateToSalesCommand}"/>
+                                <TapGestureRecognizer Command="{Binding NavigateToLeadsCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
                                 <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="🛒" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
-                                    <Label Text="Sales" Style="{StaticResource SidebarItemText}"/>
+                                    <Label Text="Leads" Style="{StaticResource SidebarItemText}"/>
                                     <Label Text="Orders and Customers" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
@@ -134,14 +134,14 @@
 
                         <Border Style="{StaticResource SidebarItemStyle}">
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NavigateToMarketCommand}"/>
+                                <TapGestureRecognizer Command="{Binding NavigateToPricingCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
                                 <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="📈" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
-                                    <Label Text="Market" Style="{StaticResource SidebarItemText}"/>
+                                    <Label Text="Pricing" Style="{StaticResource SidebarItemText}"/>
                                     <Label Text="Demand and Pricing" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
@@ -149,14 +149,14 @@
 
                         <Border Style="{StaticResource SidebarItemStyle}">
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NavigateToProductionCommand}"/>
+                                <TapGestureRecognizer Command="{Binding NavigateToOrdersCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
                                 <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="⚙️" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
-                                    <Label Text="Production" Style="{StaticResource SidebarItemText}"/>
+                                    <Label Text="Orders " Style="{StaticResource SidebarItemText}"/>
                                     <Label Text="Manufacturing ops" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
@@ -164,14 +164,14 @@
 
                         <Border Style="{StaticResource SidebarItemStyle}">
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NavigateToLogisticsCommand}"/>
+                                <TapGestureRecognizer Command="{Binding NavigateToSalesTargetsCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
                                 <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="🚚" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
-                                    <Label Text="Logistics" Style="{StaticResource SidebarItemText}"/>
+                                    <Label Text="Sales Targets" Style="{StaticResource SidebarItemText}"/>
                                     <Label Text="Shipping and Delivery" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
@@ -179,14 +179,14 @@
 
                         <Border Style="{StaticResource SidebarItemStyle}">
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NavigateToFinanceCommand}"/>
+                                <TapGestureRecognizer Command="{Binding NavigateToCustomersCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
                                 <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="💰" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
-                                    <Label Text="Finance" Style="{StaticResource SidebarItemText}"/>
+                                    <Label Text="Customers" Style="{StaticResource SidebarItemText}"/>
                                     <Label Text="Revenue and Costs" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
@@ -194,14 +194,14 @@
 
                         <Border Style="{StaticResource SidebarItemStyle}">
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NavigateToHRCommand}"/>
+                                <TapGestureRecognizer Command="{Binding NavigateToSalesReportsCommand}"/>
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="12" Padding="12,12">
                                 <Border Style="{StaticResource SidebarLayout}">
                                     <Label Text="👥" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
-                                    <Label Text="HR" Style="{StaticResource SidebarItemText}"/>
+                                    <Label Text="Sales Reports" Style="{StaticResource SidebarItemText}"/>
                                     <Label Text="Employee management" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
