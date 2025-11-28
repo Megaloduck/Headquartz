@@ -285,9 +285,6 @@
 	  <MauiXaml Update="Pages\Production\ProductionDashboardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\SidebarPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Pages\WarehousePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -3,6 +3,7 @@ using Headquartz.Models;
 using Headquartz.Modules.HumanResource;
 using Headquartz.PageModels;
 using Headquartz.Pages;
+using Headquartz.Pages.CEO;
 using Headquartz.Pages.Dashboard;
 using Headquartz.Pages.Finance;
 using Headquartz.Pages.HumanResource;
@@ -46,7 +47,15 @@ namespace Headquartz
 
             // Sidebar - must stay alive during the entire app lifetime
             builder.Services.AddSingleton<SidebarPageModel>();
-            builder.Services.AddSingleton<SidebarPage>();
+           // builder.Services.AddSingleton<SidebarPage>();
+            builder.Services.AddSingleton<SidebarCEOPage>();
+            builder.Services.AddSingleton<SidebarHRPage>();
+            builder.Services.AddSingleton<SidebarWarehousePage>();
+            builder.Services.AddSingleton<SidebarFinancePage>();
+            builder.Services.AddSingleton<SidebarProductionPage>();
+            builder.Services.AddSingleton<SidebarSalesPage>();
+            builder.Services.AddSingleton<SidebarMarketingPage>();
+            builder.Services.AddSingleton<SidebarLogisticsPage>();
 
             // ────────────────────────────────────────────────
             // COMPANY-WIDE PAGES

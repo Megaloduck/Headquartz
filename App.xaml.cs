@@ -3,6 +3,15 @@ using Microsoft.Maui.Controls;
 using Headquartz.Pages;
 using Headquartz.Services;
 using Headquartz.Pages.CEO;
+using Headquartz.Pages.Dashboard;
+using Headquartz.Pages.Finance;
+using Headquartz.Pages.HumanResource;
+using Headquartz.Pages.Logistics;
+using Headquartz.Pages.Marketing;
+using Headquartz.Pages.Production;
+using Headquartz.Pages.Sales;
+using Headquartz.Pages.System;
+using Headquartz.Pages.Warehouse;
 
 namespace Headquartz
 {

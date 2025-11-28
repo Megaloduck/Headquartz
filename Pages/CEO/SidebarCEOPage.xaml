@@ -49,7 +49,7 @@
                         </HorizontalStackLayout>
 
                         <!-- User Role Badge -->
-                        <!--Border Background="{DynamicResource CardBackgroundColor}"
+                        <Border Background="{DynamicResource CardBackgroundColor}"
                                 Padding="10,5,10,5"
                                 StrokeShape="RoundRectangle 7.5"
                                 StrokeThickness="0"
@@ -62,7 +62,7 @@
                                        FontAttributes="Bold"
                                        TextColor="{StaticResource Primary}"/>
                             </HorizontalStackLayout>
-                        </Border -->
+                        </Border>
 
                         <!-- Role Switcher Dropdown -->
                         <!--Border Background="{DynamicResource CardBackgroundColor}"
@@ -128,7 +128,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Warehouse" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Stock management" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                                    <Label Text="Stock management" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -143,7 +143,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Sales" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Orders and Customers" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                                    <Label Text="Orders and Customers" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -158,7 +158,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Market" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Demand and Pricing" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                                    <Label Text="Demand and Pricing" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -173,7 +173,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Production" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Manufacturing ops" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                                    <Label Text="Manufacturing ops" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -188,7 +188,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Logistics" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Shipping and Delivery" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                                    <Label Text="Shipping and Delivery" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -203,7 +203,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Finance" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Revenue and Costs" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                                    <Label Text="Revenue and Costs" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -218,7 +218,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="HR" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="Employee management" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                                    <Label Text="Employee management" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -236,7 +236,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Users" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="User management" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                                    <Label Text="User management" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -251,7 +251,7 @@
                                 </Border>
                                 <VerticalStackLayout Spacing="0" VerticalOptions="Center">
                                     <Label Text="Settings" Style="{StaticResource SidebarItemText}"/>
-                                    <Label Text="System configuration" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource SecondaryDarkText}}"/>
+                                    <Label Text="System configuration" FontSize="10" TextColor="{DynamicResource SecondaryTextColor}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                         </Border>
@@ -268,7 +268,7 @@
                         <Border Background="Transparent" Padding="0">
                             <HorizontalStackLayout Spacing="10">
                                 <Label Text="{Binding IsDarkMode}" FontSize="16" VerticalOptions="Center" TextColor="{DynamicResource SecondaryTextColor}" />
-                                <Label Text="Dark Mode" FontSize="12" TextColor="{DynamicResource PrimaryTextColor}" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                <Label Text="Dark Mode" FontSize="12" TextColor="{DynamicResource PrimaryTextColor}" VerticalOptions="Center" />
                                 <Switch IsToggled="{Binding IsDarkMode}" OnColor="{DynamicResource Primary}" ThumbColor="White" VerticalOptions="Center" Scale="0.7"/>
                             </HorizontalStackLayout>
                         </Border>
