@@ -12,6 +12,5 @@ namespace Headquartz.Models
         public decimal Cash { get; set; } = 100000m;
         public int Level { get; set; } = 1;
         public List<Product> Products { get; set; } = new();
-        public List<Employee> Employees { get; set; } = new();
     }
 }

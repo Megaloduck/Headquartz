@@ -2,6 +2,16 @@
 using Microsoft.Maui.Controls;
 using Headquartz.Pages;
 using Headquartz.Services;
+using Headquartz.Pages.CEO;
+using Headquartz.Pages.Dashboard;
+using Headquartz.Pages.Finance;
+using Headquartz.Pages.HumanResource;
+using Headquartz.Pages.Logistics;
+using Headquartz.Pages.Marketing;
+using Headquartz.Pages.Production;
+using Headquartz.Pages.Sales;
+using Headquartz.Pages.System;
+using Headquartz.Pages.Warehouse;
 
 namespace Headquartz
 {
@@ -14,20 +24,8 @@ namespace Headquartz
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            // Get services from the DI container
-            var services = Handler?.MauiContext?.Services;
-
-            if (services == null)
-            {
-                throw new InvalidOperationException("Services not available");
-            }
-
-            var roleService = services.GetRequiredService<RoleService>();
-
-            // Create SidebarPage with required dependencies
-            var sidebarPage = new SidebarPage(roleService, services);
-
-            return new Window(sidebarPage);
+            // Root of app MUST be AppShell for navigation to work
+            return new Window(new AppShell());
         }
     }
 }

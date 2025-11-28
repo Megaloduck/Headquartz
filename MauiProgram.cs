@@ -1,10 +1,20 @@
 ﻿using CommunityToolkit.Maui;
+using Headquartz.Models;
+using Headquartz.PageModels;
+using Headquartz.Pages;
+using Headquartz.Pages.CEO;
+using Headquartz.Pages.Dashboard;
+using Headquartz.Pages.Finance;
+using Headquartz.Pages.HumanResource;
+using Headquartz.Pages.Logistics;
+using Headquartz.Pages.Marketing;
+using Headquartz.Pages.Production;
+using Headquartz.Pages.Sales;
+using Headquartz.Pages.System;
+using Headquartz.Pages.Warehouse;
+using Headquartz.Services;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
-using Headquartz.Models;
-using Headquartz.Services;
-using Headquartz.Pages;
-using Headquartz.PageModels;
 
 namespace Headquartz
 {
@@ -13,6 +23,7 @@ namespace Headquartz
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
@@ -23,42 +34,130 @@ namespace Headquartz
             builder.Logging.AddDebug();
 #endif
 
-            // Core Game State - Singleton
+            // ────────────────────────────────────────────────
+            // CORE GAME SERVICES
+            // ────────────────────────────────────────────────
             builder.Services.AddSingleton<GameState>();
-
-            // Core Services - Singletons
             builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>();
             builder.Services.AddSingleton<ISaveService, JsonSaveService>();
-            builder.Services.AddSingleton<RoleService>(); // ✅ IMPORTANT: Must be registered
-            builder.Services.AddSingleton<SidebarPage>();
 
-            // Dashboard
-            builder.Services.AddTransient<DashboardPageModel>();
-            builder.Services.AddTransient<DashboardPage>();
+            // Role Service (global access everywhere)
+            builder.Services.AddSingleton<RoleService>();
 
-            // Main Page
-            builder.Services.AddTransient<OverviewPageModel>();
+            // Sidebar - must stay alive during the entire app lifetime
+            builder.Services.AddSingleton<SidebarPageModel>();
+           // builder.Services.AddSingleton<SidebarPage>();
+            builder.Services.AddSingleton<SidebarCEOPage>();
+            builder.Services.AddSingleton<SidebarHRPage>();
+            builder.Services.AddSingleton<SidebarWarehousePage>();
+            builder.Services.AddSingleton<SidebarFinancePage>();
+            builder.Services.AddSingleton<SidebarProductionPage>();
+            builder.Services.AddSingleton<SidebarSalesPage>();
+            builder.Services.AddSingleton<SidebarMarketingPage>();
+            builder.Services.AddSingleton<SidebarLogisticsPage>();
+
+            // Core Fundamental Pages
+            builder.Services.AddSingleton<LoginPage>();
+            builder.Services.AddSingleton<LoginPageModel>();
+            builder.Services.AddSingleton<BasePlatePage>();
+
+            // ────────────────────────────────────────────────
+            // COMPANY-WIDE PAGES
+            // ────────────────────────────────────────────────
+            builder.Services.AddTransient<CompanyDashboardPage>();
             builder.Services.AddTransient<OverviewPage>();
 
-            // Market
-            builder.Services.AddTransient<MarketPageModel>();
-            builder.Services.AddTransient<MarketPage>();
+            // ────────────────────────────────────────────────
+            // WAREHOUSE MODULE
+            // ────────────────────────────────────────────────
+            builder.Services.AddTransient<WarehouseDashboardPage>();
+            builder.Services.AddTransient<InventoryPage>();
+            builder.Services.AddTransient<StockInPage>();
+            builder.Services.AddTransient<StockOutPage>();
+            builder.Services.AddTransient<ShipmentsPage>();
+            builder.Services.AddTransient<StorageAllocationPage>();
+            builder.Services.AddTransient<WarehouseReportsPage>();
 
-            // Warehouse
-            builder.Services.AddTransient<WarehousePageModel>();
-            builder.Services.AddTransient<WarehousePage>();
+            // ────────────────────────────────────────────────
+            // PRODUCTION MODULE
+            // ────────────────────────────────────────────────
+            builder.Services.AddTransient<ProductionDashboardPage>();
+            builder.Services.AddTransient<WorkOrdersPage>();
+            builder.Services.AddTransient<FactorySchedulePage>();
+            builder.Services.AddTransient<RawMaterialsPage>();
+            builder.Services.AddTransient<MachinesPage>();
+            builder.Services.AddTransient<ProductionQualityPage>();
+            builder.Services.AddTransient<ProductionReportsPage>();
 
-            // Finance
-            builder.Services.AddTransient<FinancePage>();
+            // ────────────────────────────────────────────────
+            // SALES MODULE
+            // ────────────────────────────────────────────────
+            builder.Services.AddTransient<SalesDashboardPage>();
+            builder.Services.AddTransient<LeadsPage>();
+            builder.Services.AddTransient<PricingPage>();
+            builder.Services.AddTransient<OrdersPage>();
+            builder.Services.AddTransient<SalesTargetsPage>();
+            builder.Services.AddTransient<CustomersPage>();
+            builder.Services.AddTransient<SalesReportsPage>();
 
-            // Human Resources
-            builder.Services.AddTransient<HumanResourcePage>();
+            // ────────────────────────────────────────────────
+            // MARKETING MODULE
+            // ────────────────────────────────────────────────
+            builder.Services.AddTransient<MarketingDashboardPage>();
+            builder.Services.AddTransient<CampaignsPage>();
+            builder.Services.AddTransient<MarketResearchPage>();
+            builder.Services.AddTransient<PricingStrategyPage>();
+            builder.Services.AddTransient<CompetitorAnalysisPage>();
+            builder.Services.AddTransient<BrandingPage>();
+            builder.Services.AddTransient<MarketingReportsPage>();
 
+            // ────────────────────────────────────────────────
+            // FINANCE MODULE
+            // ────────────────────────────────────────────────
+            builder.Services.AddTransient<FinanceDashboardPage>();
+            builder.Services.AddTransient<BudgetPage>();
+            builder.Services.AddTransient<ExpensesPage>();
+            builder.Services.AddTransient<RevenuePage>();
+            builder.Services.AddTransient<CashFlowPage>();
+            builder.Services.AddTransient<FinancialStatementsPage>();
+            builder.Services.AddTransient<FinanceReportsPage>();
+
+            // ────────────────────────────────────────────────
+            // HUMAN RESOURCE MODULE
+            // ────────────────────────────────────────────────
+            builder.Services.AddTransient<HRDashboardPage>();
+            builder.Services.AddTransient<EmployeeListPage>();
+            builder.Services.AddTransient<RecruitmentPage>();
+            builder.Services.AddTransient<PayrollPage>();
+            builder.Services.AddTransient<TrainingPage>();
+            builder.Services.AddTransient<HRPoliciesPage>();
+            builder.Services.AddTransient<HRReportsPage>();
+
+            // ────────────────────────────────────────────────
+            // LOGISTICS MODULE
+            // ────────────────────────────────────────────────
+            builder.Services.AddTransient<LogisticsDashboardPage>();
+            builder.Services.AddTransient<ShippingPage>();
+            builder.Services.AddTransient<DeliveryTrackingPage>();
+            builder.Services.AddTransient<RoutingPage>();
+            builder.Services.AddTransient<SupplierManagementPage>();
+            builder.Services.AddTransient<FleetManagementPage>();
+            builder.Services.AddTransient<LogisticsReportsPage>();
+
+            // ────────────────────────────────────────────────
+            // SYSTEM MODULE
+            // ────────────────────────────────────────────────
+            builder.Services.AddTransient<UsersPage>();
+            builder.Services.AddTransient<SettingsPage>();
+
+            // ────────────────────────────────────────────────
+            // BUILD APP
+            // ────────────────────────────────────────────────
             var app = builder.Build();
 
             // Seed initial game data
-            var state = app.Services.GetRequiredService<GameState>();
-            SeedService.Seed(state);
+            var gameState = app.Services.GetRequiredService<GameState>();
+            SeedService.Seed(gameState);
 
             return app;
         }

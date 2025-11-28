@@ -77,7 +77,7 @@ namespace Headquartz.PageModels
                     _state.Company = loaded.Company;
                     _state.Market = loaded.Market;
                     _state.Warehouse = loaded.Warehouse;
-                    _state.HumanResource = loaded.HumanResource;
+                    //  _state.HumanResource = loaded.HumanResource;
                     _state.Finance = loaded.Finance;
                     // Then update UI
                     UpdateBindings();
