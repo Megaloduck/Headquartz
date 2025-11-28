@@ -12,7 +12,9 @@
     xmlns:prod="clr-namespace:Headquartz.Pages.Production"
     xmlns:wh="clr-namespace:Headquartz.Pages.Warehouse"
     xmlns:log="clr-namespace:Headquartz.Pages.Logistics"
-    Title="Headquartz">
+    Title="Headquartz"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False">
 
     <!-- LOGIN PAGE -->
     <ShellContent Route="LoginPage"
