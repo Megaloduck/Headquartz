@@ -2,8 +2,8 @@ namespace Headquartz.Pages.Production;
 
 public partial class ProductionDashboardPage : ContentPage
 {
-	public ProductionDashboardPage()
-	{
-		InitializeComponent();
-	}
+    public ProductionDashboardPage()
+    {
+        InitializeComponent();
+    }
 }

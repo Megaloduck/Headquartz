@@ -1,4 +1,4 @@
-﻿using Headquartz.Models;
+using Headquartz.Models;
 using Headquartz.PageModels;
 
 namespace Headquartz.Pages.Dashboard
@@ -8,7 +8,7 @@ namespace Headquartz.Pages.Dashboard
         public OverviewPage()
         {
             InitializeComponent();
-     
+
         }
     }
 }

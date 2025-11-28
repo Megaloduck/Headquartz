@@ -84,14 +84,14 @@
 	  <Compile Update="Pages\Dashboard\CompanyDashboardPage.xaml.cs">
 	    <DependentUpon>CompanyDashboardPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\Dashboard\OverviewPage.xaml.cs">
+	    <DependentUpon>OverviewPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\Finance\FinanceDashboardPage.xaml.cs">
 	    <DependentUpon>FinanceDashboardPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Pages\HumanResource\HRDashboardPage.xaml.cs">
 	    <DependentUpon>HRDashboardPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Pages\Dashboard\OverviewPage.xaml.cs">
-	    <DependentUpon>OverviewPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Pages\Logistics\LogisticsDashboardPage.xaml.cs">
 	    <DependentUpon>LogisticsDashboardPage.xaml</DependentUpon>
@@ -114,6 +114,12 @@
 	  <MauiXaml Update="Pages\CEO\SidebarCEOPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Dashboard\CompanyDashboardPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Dashboard\OverviewPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Finance\BudgetPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -129,6 +135,9 @@
 	  <MauiXaml Update="Pages\Finance\FinancialStatementsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Finance\FinanceDashboardPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Finance\RevenuePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -138,13 +147,13 @@
 	  <MauiXaml Update="Pages\HumanResource\EmployeeListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\HumanResource\HRDashboardPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Pages\HumanResource\HRPoliciesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\HumanResource\HRReportsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\HumanResource\HRDashboardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\HumanResource\PayrollPage.xaml">
@@ -166,6 +175,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Logistics\LogisticsReportsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Logistics\LogisticsDashboardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Logistics\RoutingPage.xaml">
@@ -195,6 +207,9 @@
 	  <MauiXaml Update="Pages\Marketing\MarketResearchPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Marketing\MarketingDashboardPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Marketing\PricingStrategyPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -205,6 +220,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Production\MachinesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Production\ProductionDashboardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Production\ProductionQualityPage.xaml">
@@ -273,25 +291,10 @@
 	  <MauiXaml Update="Pages\Warehouse\WarehouseDashboardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\Dashboard\CompanyDashboardPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\Finance\FinanceDashboardPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Pages\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\Logistics\LogisticsDashboardPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\Production\ProductionDashboardPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Pages\WarehousePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\Marketing\MarketingDashboardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Warehouse\WarehouseReportsPage.xaml">
