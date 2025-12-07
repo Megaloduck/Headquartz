@@ -2,11 +2,54 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.HumanResource.HRDashboardPage"
-             Title="HRDashboardPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="HRDashboardPage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
+            <!-- Summary cards -->
+            <HorizontalStackLayout Spacing="12">
+                <Frame CornerRadius="8" Padding="12" HasShadow="True" WidthRequest="220">
+                    <VerticalStackLayout>
+                        <Label Text="Employees" FontAttributes="Bold"/>
+                        <Label Text="{Binding EmployeeCount}" FontSize="24"/>
+                        <Label Text="Avg. morale: {Binding AverageMorale}" FontSize="12"/>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame CornerRadius="8" Padding="12" HasShadow="True" WidthRequest="220">
+                    <VerticalStackLayout>
+                        <Label Text="Open Positions" FontAttributes="Bold"/>
+                        <Label Text="{Binding OpenPositions}" FontSize="24"/>
+                        <Button Text="Recruit" Command="{Binding OpenRecruitCommand}" />
+                    </VerticalStackLayout>
+                </Frame>
+            </HorizontalStackLayout>
+
+            <!-- Employee list -->
+            <Label Text="Employee List" FontAttributes="Bold" Margin="0,6,0,0"/>
+            <CollectionView ItemsSource="{Binding Employees}" SelectionMode="Single" HeightRequest="360">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="0,6" CornerRadius="6">
+                            <Grid ColumnDefinitions="*,auto" RowDefinitions="Auto,Auto">
+                                <StackLayout Grid.Column="0">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Role}" FontSize="12"/>
+                                </StackLayout>
+                                <StackLayout Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center">
+                                    <Label Text="{Binding Morale, StringFormat='Morale: {0:F0}%'}"/>
+                                    <Button Text="Profile" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenEmployeeCommand}" CommandParameter="{Binding .}" />
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Actions -->
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button Text="Open Policies" Command="{Binding OpenPoliciesCommand}" />
+                <Button Text="Run Training" Command="{Binding RunTrainingCommand}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

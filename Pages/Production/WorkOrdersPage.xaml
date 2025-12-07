@@ -3,10 +3,50 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Production.WorkOrdersPage"
              Title="WorkOrdersPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto, *, Auto" Padding="20" RowSpacing="20">
+
+        <Label Grid.Row="0" Text="New Production Run" FontSize="28" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+
+        <Border Grid.Row="1" StrokeShape="RoundRectangle 10" Padding="20" >
+            <ScrollView>
+                <VerticalStackLayout Spacing="15">
+
+                    <Label Text="Product to Manufacture:" FontSize="16" FontAttributes="Bold" />
+                    <Picker x:Name="ProductPicker" Title="Select Finished Good">
+                    </Picker>
+
+                    <Label Text="Production Quantity (Units):" FontSize="16" FontAttributes="Bold" />
+                    <Entry Placeholder="Enter target quantity" 
+                           x:Name="QuantityEntry"
+                           Keyboard="Numeric"
+                           Text="{Binding TargetQuantity}" />
+
+                    <BoxView HeightRequest="1" Color="{StaticResource LightGray}" Margin="0,10,0,10" />
+                    <Label Text="Raw Material Requirements" FontSize="18" FontAttributes="Bold" />
+                    <Grid ColumnDefinitions="*, Auto, Auto" RowSpacing="5">
+                        <Label Grid.Column="0" Text="Material A Required:" />
+                        <Label Grid.Column="1" Text="Binding MaterialA_Required" />
+                        <Label Grid.Column="2" Text="(Available: 1,500)" TextColor="Green"/>
+
+                        <Label Grid.Column="0" Text="Material B Required:" />
+                        <Label Grid.Column="1" Text="Binding MaterialB_Required" />
+                        <Label Grid.Column="2" Text="(Available: 400)" TextColor="Red"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource LightGray}" Margin="0,10,0,10" />
+                    <Label Text="Estimated Completion Time:" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="Binding EstimatedCompletionTime" FontSize="16" TextColor="DarkOrange" />
+                    <Label Text="Capacity Utilized: 85%" FontSize="14" TextColor="{StaticResource Secondary}" />
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <Button Grid.Row="2" Text="Start Work Order (Commit Resources)" 
+
+                Style="{StaticResource PrimaryAction}"
+                Margin="0,10,0,0"
+                IsEnabled="{Binding HasSufficientRawMaterials}"/>
+
+    </Grid>
 </ContentPage>

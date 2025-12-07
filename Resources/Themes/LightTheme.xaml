@@ -3,38 +3,129 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Resources.Themes.LightTheme">
 
-    <!-- Background Colors -->
-    <Color x:Key="PageBackgroundColor">#FAFAFB</Color>
+    <!-- ==================== -->
+    <!-- BACKGROUND COLORS    -->
+    <!-- ==================== -->
+    <!-- Light, airy backgrounds with subtle elevation -->
+    <Color x:Key="PageBackgroundColor">#F8F9FA</Color>
+    <!-- Very light gray -->
     <Color x:Key="CardBackgroundColor">#FFFFFF</Color>
-    <Color x:Key="HeaderBackgroundColor">#e4e5f1</Color>
-    <Color x:Key="SidebarBackgroundColor">#E1E1E1</Color>
+    <!-- Pure white for cards -->
+    <Color x:Key="HeaderBackgroundColor">#FFFFFF</Color>
+    <!-- White header -->
+    <Color x:Key="SidebarBackgroundColor">#F1F3F5</Color>
+    <!-- Slightly tinted sidebar -->
+    <Color x:Key="SurfaceColor">#FFFFFF</Color>
+    <!-- For elevated elements -->
 
-    <!-- Text Colors -->
-    <Color x:Key="PrimaryTextColor">#1C1C1E</Color>
-    <Color x:Key="SecondaryTextColor">#5F6368</Color>
-    <Color x:Key="TertiaryTextColor">#9CA3AF</Color>
+    <!-- ==================== -->
+    <!-- TEXT COLORS          -->
+    <!-- ==================== -->
+    <!-- High contrast text with clear hierarchy -->
+    <Color x:Key="PrimaryTextColor">#1A1A1A</Color>
+    <!-- Near black for primary text -->
+    <Color x:Key="SecondaryTextColor">#666666</Color>
+    <!-- Medium gray for secondary -->
+    <Color x:Key="TertiaryTextColor">#999999</Color>
+    <!-- Lighter gray for tertiary -->
+    <Color x:Key="DisabledTextColor">#CCCCCC</Color>
+    <!-- Clearly disabled -->
 
-    <!-- Accent Colors -->
-    <Color x:Key="PrimaryColor">#1D9BF0</Color>
-    <Color x:Key="SecondaryColor">#22C55E</Color>
-    <Color x:Key="AccentColor">#F59E0B</Color>
-    <Color x:Key="DangerColor">#EF4444</Color>
-    <Color x:Key="SuccessColor">#16A34A</Color>
+    <!-- ==================== -->
+    <!-- ACCENT & SEMANTIC    -->
+    <!-- ==================== -->
+    <!-- Vibrant but sophisticated accent colors -->
+    <Color x:Key="PrimaryColor">#007AFF</Color>
+    <!-- Apple-style blue -->
+    <Color x:Key="PrimaryVariantColor">#0056CC</Color>
+    <!-- Darker for pressed states -->
+    <Color x:Key="SecondaryColor">#28CD41</Color>
+    <!-- Fresh success green -->
+    <Color x:Key="AccentColor">#FF9500</Color>
+    <!-- Warm, friendly orange -->
 
-    <!-- Border Colors -->
-    <Color x:Key="BorderColor">#d2d3db</Color>
+    <!-- Semantic Colors -->
+    <Color x:Key="SuccessColor">#34C759</Color>
+    <!-- Bright success green -->
+    <Color x:Key="WarningColor">#FF9500</Color>
+    <!-- Warning orange -->
+    <Color x:Key="DangerColor">#FF3B30</Color>
+    <!-- Alert red -->
+    <Color x:Key="InfoColor">#5AC8FA</Color>
+    <!-- Info blue -->
+
+    <!-- ==================== -->
+    <!-- BORDER & DIVIDER     -->
+    <!-- ==================== -->
+    <!-- Very subtle borders for clean separation -->
+    <Color x:Key="BorderColor">#E9ECEF</Color>
+    <!-- Light border for cards -->
     <Color x:Key="DividerColor">#F1F3F5</Color>
+    <!-- Very subtle dividers -->
+    <Color x:Key="LightBorderColor">#F8F9FA</Color>
+    <!-- Minimal separators -->
 
-    <!-- Button Colors -->
-    <Color x:Key="ButtonBackgroundColor">#1D9BF0</Color>
-    <Color x:Key="ButtonTextColor">#FFFFFF</Color>
-    <Color x:Key="HoverButton">#F0F0F0</Color>
+    <!-- ==================== -->
+    <!-- INTERACTIVE ELEMENTS -->
+    <!-- ==================== -->
+    <!-- Button Colors - Clean with good contrast -->
+    <Color x:Key="PrimaryButtonBackground">#007AFF</Color>
+    <Color x:Key="PrimaryButtonTextColor">#FFFFFF</Color>
+    <!-- White text on colored buttons -->
 
-    <!-- Category Badge -->
-    <Color x:Key="BadgeBackgroundColor">#E0F2FE</Color>
-    <Color x:Key="BadgeTextColor">#0369A1</Color>
+    <Color x:Key="SecondaryButtonBackground">#F1F3F5</Color>
+    <!-- Light gray background -->
+    <Color x:Key="SecondaryButtonTextColor">#1A1A1A</Color>
+    <!-- Dark text -->
 
-    <!-- Shadow -->
-    <Color x:Key="ShadowColor">#33000000</Color>
+    <Color x:Key="TextButtonColor">#007AFF</Color>
+    <!-- Colored text only -->
 
+    <!-- Hover States -->
+    <Color x:Key="HoverOverlayColor">#0A000000</Color>
+    <!-- 4% black overlay -->
+    <Color x:Key="PressedOverlayColor">#14000000</Color>
+    <!-- 8% black overlay -->
+
+    <!-- ==================== -->
+    <!-- SPECIAL COMPONENTS   -->
+    <!-- ==================== -->
+    <!-- Category Badge - Subtle tint -->
+    <Color x:Key="BadgeBackgroundColor">#E8F4FF</Color>
+    <!-- Very light blue tint -->
+    <Color x:Key="BadgeTextColor">#007AFF</Color>
+
+    <!-- Input Fields -->
+    <Color x:Key="InputBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="InputBorderColor">#E9ECEF</Color>
+    <Color x:Key="InputPlaceholderColor">#CCCCCC</Color>
+
+    <!-- Selection & Focus -->
+    <Color x:Key="SelectionColor">#1A007AFF</Color>
+    <!-- 10% primary color overlay -->
+    <Color x:Key="FocusBorderColor">#007AFF</Color>
+
+    <!-- ==================== -->
+    <!-- SHADOWS & ELEVATION  -->
+    <!-- ==================== -->
+    <!-- Minimal shadows for subtle depth -->
+    <Color x:Key="ShadowColor">#0D000000</Color>
+    <!-- Very subtle shadow -->
+    <Color x:Key="ElevationShadowColor">#1A000000</Color>
+    <!-- Slightly stronger for elevation -->
+
+    <!-- ==================== -->
+    <!-- STATUS & INDICATORS  -->
+    <!-- ==================== -->
+    <Color x:Key="ActiveColor">#34C759</Color>
+    <Color x:Key="InactiveColor">#FF9500</Color>
+    <Color x:Key="OfflineColor">#FF3B30</Color>
+
+    <!-- ==================== -->
+    <!-- SPECIFIC LIGHT MODE  -->
+    <!-- ==================== -->
+    <Color x:Key="OverlayColor">#80000000</Color>
+    <!-- For modals, sheets -->
+    <Color x:Key="ScrimColor">#40000000</Color>
+    <!-- For background scrims -->
 </ResourceDictionary>

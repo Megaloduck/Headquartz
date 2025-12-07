@@ -2,11 +2,54 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Finance.FinanceDashboardPage"
-             Title="FinancePage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="FinancePage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+
+            <Label Text="Current Financial Status" FontSize="28" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+            <Label Text="End of Simulated Week 45" FontSize="16" TextColor="{StaticResource Secondary}" />
+
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto, Auto" ColumnSpacing="15" RowSpacing="15">
+
+                <Frame Grid.Row="0" Grid.Column="0" CornerRadius="10" Padding="15" HasShadow="True" BackgroundColor="{DynamicResource CardBackgroundColor}">
+                    <StackLayout Spacing="5">
+                        <Label Text="Cash Balance" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Gray900}" />
+                        <Label Text="Binding CashBalance, StringFormat='{0:C0}'" FontSize="24" FontAttributes="Bold" TextColor="Green" />
+                    </StackLayout>
+                </Frame>
+
+                <Frame Grid.Row="0" Grid.Column="1" CornerRadius="10" Padding="15" HasShadow="True">
+                    <StackLayout Spacing="5">
+                        <Label Text="Net Profit (YTD)" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Gray900}" />
+                        <Label Text="Binding NetProfit, StringFormat='{0:C0}'" FontSize="24" FontAttributes="Bold" TextColor="Red" />
+                    </StackLayout>
+                </Frame>
+
+                <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" Padding="15" HasShadow="True">
+                    <StackLayout Spacing="5">
+                        <Label Text="Inventory Value" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Gray900}" />
+                        <Label Text="Binding InventoryValue, StringFormat='{0:C0}'" FontSize="24" />
+                    </StackLayout>
+                </Frame>
+
+                <Frame Grid.Row="1" Grid.Column="1" CornerRadius="10" Padding="15" HasShadow="True">
+                    <StackLayout Spacing="5">
+                        <Label Text="DSO" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Gray900}" />
+                        <Label Text="Binding DSO, StringFormat='{0:F1} Days'" FontSize="24" />
+                    </StackLayout>
+                </Frame>
+            </Grid>
+
+            <Border StrokeShape="RoundRectangle 10" Padding="15" >
+                <StackLayout>
+                    <Label Text="Cash Flow Trend (Last 8 Weeks)" FontSize="18" FontAttributes="Bold" />
+                    <BoxView HeightRequest="200" Color="{StaticResource LightGray}" CornerRadius="5">
+
+                    </BoxView>
+                </StackLayout>
+            </Border>
+
+        </StackLayout>
+    </ScrollView>
 </ContentPage>
