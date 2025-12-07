@@ -2,7 +2,7 @@
 using Headquartz.Pages.Finance;
 using Headquartz.Pages.HumanResource;
 using Headquartz.Pages.Logistics;
-using Headquartz.Pages.Marketing;
+using Headquartz.Pages.Marketing;   
 using Headquartz.Pages.Production;
 using Headquartz.Pages.Sales;
 using Headquartz.Pages.System;
@@ -87,6 +87,8 @@ namespace Headquartz.PageModels
         public ICommand NavigateToInventoryCommand { get; private set; }
         public ICommand NavigateToStockInCommand { get; private set; }
         public ICommand NavigateToStockOutCommand { get; private set; }
+        public ICommand NavigateToShipmentsCommand { get; private set; }
+        public ICommand NavigateToStorageAllocationCommand { get; private set; }
         public ICommand NavigateToWarehouseReportsCommand { get; private set; }
 
         // HR Manager Tools
@@ -95,6 +97,7 @@ namespace Headquartz.PageModels
         public ICommand NavigateToRecruitmentCommand { get; private set; }
         public ICommand NavigateToPayrollCommand { get; private set; }
         public ICommand NavigateToTrainingCommand { get; private set; }
+        public ICommand NavigateToHRPoliciesCommand { get; private set; }
         public ICommand NavigateToHRReportsCommand { get; private set; }
 
         // Finance Manager Tools
@@ -102,12 +105,16 @@ namespace Headquartz.PageModels
         public ICommand NavigateToBudgetCommand { get; private set; }
         public ICommand NavigateToExpensesCommand { get; private set; }
         public ICommand NavigateToRevenueCommand { get; private set; }
+        public ICommand NavigateToCashFlowCommand { get; private set; }
+        public ICommand NavigateToFinancialStatementsCommand { get; private set; }
         public ICommand NavigateToFinanceReportsCommand { get; private set; }
 
         // Sales Manager Tools
         public ICommand NavigateToSalesDashboardCommand { get; private set; }
         public ICommand NavigateToLeadsCommand { get; private set; }
+        public ICommand NavigateToPricingCommand { get; private set; }
         public ICommand NavigateToOrdersCommand { get; private set; }
+        public ICommand NavigateToSalesTargetsCommand { get; private set; }
         public ICommand NavigateToCustomersCommand { get; private set; }
         public ICommand NavigateToSalesReportsCommand { get; private set; }
 
@@ -115,18 +122,27 @@ namespace Headquartz.PageModels
         public ICommand NavigateToMarketingDashboardCommand { get; private set; }
         public ICommand NavigateToCampaignsCommand { get; private set; }
         public ICommand NavigateToMarketResearchCommand { get; private set; }
+        public ICommand NavigateToPricingStrategyCommand { get; private set; }
+        public ICommand NavigateToCompetitorAnalysisCommand { get; private set; }
+        public ICommand NavigateToBrandingCommand { get; private set; }
         public ICommand NavigateToMarketingReportsCommand { get; private set; }
 
         // Production Manager Tools
         public ICommand NavigateToProductionDashboardCommand { get; private set; }
         public ICommand NavigateToWorkOrdersCommand { get; private set; }
+        public ICommand NavigateToFactoryScheduleCommand { get; private set; }
+        public ICommand NavigateToRawMaterialsCommand { get; private set; }
         public ICommand NavigateToMachinesCommand { get; private set; }
+        public ICommand NavigateToProductionQualityCommand { get; private set; }
         public ICommand NavigateToProductionReportsCommand { get; private set; }
 
         // Logistics Manager Tools
         public ICommand NavigateToLogisticsDashboardCommand { get; private set; }
         public ICommand NavigateToShippingCommand { get; private set; }
         public ICommand NavigateToDeliveryTrackingCommand { get; private set; }
+        public ICommand NavigateToRoutingCommand { get; private set; }
+        public ICommand NavigateToSupplierManagementCommand { get; private set; }
+        public ICommand NavigateToFleetManagementCommand { get; private set; }
         public ICommand NavigateToLogisticsReportsCommand { get; private set; }
 
         // System Commands
@@ -153,6 +169,8 @@ namespace Headquartz.PageModels
             NavigateToInventoryCommand = new Command(() => NavigateAction?.Invoke(new InventoryPage()));
             NavigateToStockInCommand = new Command(() => NavigateAction?.Invoke(new StockInPage()));
             NavigateToStockOutCommand = new Command(() => NavigateAction?.Invoke(new StockOutPage()));
+            NavigateToShipmentsCommand = new Command(() => NavigateAction?.Invoke(new ShipmentsPage()));
+            NavigateToStorageAllocationCommand = new Command(() => NavigateAction?.Invoke(new StorageAllocationPage()));
             NavigateToWarehouseReportsCommand = new Command(() => NavigateAction?.Invoke(new WarehouseReportsPage()));
 
             // HR Manager Tools
@@ -162,18 +180,23 @@ namespace Headquartz.PageModels
             NavigateToPayrollCommand = new Command(() => NavigateAction?.Invoke(new PayrollPage()));
             NavigateToTrainingCommand = new Command(() => NavigateAction?.Invoke(new TrainingPage()));
             NavigateToHRReportsCommand = new Command(() => NavigateAction?.Invoke(new HRReportsPage()));
+            NavigateToHRPoliciesCommand = new Command(() => NavigateAction?.Invoke(new HRPoliciesPage()));
 
             // Finance Manager Tools
             NavigateToFinanceDashboardCommand = new Command(() => NavigateAction?.Invoke(new FinanceDashboardPage()));
             NavigateToBudgetCommand = new Command(() => NavigateAction?.Invoke(new BudgetPage()));
             NavigateToExpensesCommand = new Command(() => NavigateAction?.Invoke(new ExpensesPage()));
             NavigateToRevenueCommand = new Command(() => NavigateAction?.Invoke(new RevenuePage()));
+            NavigateToCashFlowCommand = new Command(() => NavigateAction?.Invoke(new CashFlowPage()));            
+            NavigateToFinancialStatementsCommand = new Command(() => NavigateAction?.Invoke(new FinancialStatementsPage()));
             NavigateToFinanceReportsCommand = new Command(() => NavigateAction?.Invoke(new FinanceReportsPage()));
 
             // Sales Manager Tools
             NavigateToSalesDashboardCommand = new Command(() => NavigateAction?.Invoke(new SalesDashboardPage()));
             NavigateToLeadsCommand = new Command(() => NavigateAction?.Invoke(new LeadsPage()));
+            NavigateToPricingCommand = new Command(() => NavigateAction?.Invoke(new PricingPage()));
             NavigateToOrdersCommand = new Command(() => NavigateAction?.Invoke(new OrdersPage()));
+            NavigateToSalesTargetsCommand = new Command(() => NavigateAction?.Invoke(new SalesTargetsPage()));
             NavigateToCustomersCommand = new Command(() => NavigateAction?.Invoke(new CustomersPage()));
             NavigateToSalesReportsCommand = new Command(() => NavigateAction?.Invoke(new SalesReportsPage()));
 
@@ -181,18 +204,27 @@ namespace Headquartz.PageModels
             NavigateToMarketingDashboardCommand = new Command(() => NavigateAction?.Invoke(new MarketingDashboardPage()));
             NavigateToCampaignsCommand = new Command(() => NavigateAction?.Invoke(new CampaignsPage()));
             NavigateToMarketResearchCommand = new Command(() => NavigateAction?.Invoke(new MarketResearchPage()));
+            NavigateToPricingStrategyCommand = new Command(() => NavigateAction?.Invoke(new PricingStrategyPage()));
+            NavigateToCompetitorAnalysisCommand = new Command(() => NavigateAction?.Invoke(new CompetitorAnalysisPage()));
+            NavigateToBrandingCommand = new Command(() => NavigateAction?.Invoke(new BrandingPage()));
             NavigateToMarketingReportsCommand = new Command(() => NavigateAction?.Invoke(new MarketingReportsPage()));
 
             // Production Manager Tools
             NavigateToProductionDashboardCommand = new Command(() => NavigateAction?.Invoke(new ProductionDashboardPage()));
             NavigateToWorkOrdersCommand = new Command(() => NavigateAction?.Invoke(new WorkOrdersPage()));
+            NavigateToFactoryScheduleCommand = new Command(() => NavigateAction?.Invoke(new FactorySchedulePage()));
+            NavigateToRawMaterialsCommand = new Command(() => NavigateAction?.Invoke(new RawMaterialsPage()));
             NavigateToMachinesCommand = new Command(() => NavigateAction?.Invoke(new MachinesPage()));
+            NavigateToProductionQualityCommand = new Command(() => NavigateAction?.Invoke(new ProductionQualityPage()));
             NavigateToProductionReportsCommand = new Command(() => NavigateAction?.Invoke(new ProductionReportsPage()));
 
             // Logistics Manager Tools
             NavigateToLogisticsDashboardCommand = new Command(() => NavigateAction?.Invoke(new LogisticsDashboardPage()));
             NavigateToShippingCommand = new Command(() => NavigateAction?.Invoke(new ShippingPage()));
             NavigateToDeliveryTrackingCommand = new Command(() => NavigateAction?.Invoke(new DeliveryTrackingPage()));
+            NavigateToRoutingCommand = new Command(() => NavigateAction?.Invoke(new RoutingPage()));
+            NavigateToSupplierManagementCommand = new Command(() => NavigateAction?.Invoke(new SupplierManagementPage()));
+            NavigateToFleetManagementCommand = new Command(() => NavigateAction?.Invoke(new FleetManagementPage()));
             NavigateToLogisticsReportsCommand = new Command(() => NavigateAction?.Invoke(new LogisticsReportsPage()));
 
             // System
