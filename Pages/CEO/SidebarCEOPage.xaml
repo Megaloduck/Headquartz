@@ -88,7 +88,7 @@
                 <ScrollView Grid.Row="1" 
                             Padding="8,0,8,0"
                             VerticalScrollBarVisibility="Never">
-                    <VerticalStackLayout Spacing="0" Padding="0,8">
+                    <VerticalStackLayout Spacing="2">
 
                         <!-- MAIN Section -->
                         <Label Text="MAIN MENU" 
@@ -175,10 +175,10 @@
                                         Background="{DynamicResource CardBackgroundColor}"
                                         StrokeThickness="0"
                                         StrokeShape="RoundRectangle 8">
-                                    <Label Text="📦" 
-                                           FontSize="16" 
-                                           HorizontalOptions="Center" 
-                                           VerticalOptions="Center"/>
+                                        <Label Text="📦" 
+                                               FontSize="16" 
+                                               HorizontalOptions="Center" 
+                                               VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                     <Label Text="Warehouse" 
@@ -354,15 +354,11 @@
                                            HorizontalOptions="Center" 
                                            VerticalOptions="Center"/>
                                 </Border>
-                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                                    <Label Text="Human Resources" 
-                                           FontSize="14"
-                                           FontAttributes="Bold"    
-                                           TextColor="{DynamicResource PrimaryTextColor}"/>
-                                    <Label Text="Employee management" 
-                                           FontSize="11" 
-                                           TextColor="{DynamicResource TertiaryTextColor}"/>
-                                </VerticalStackLayout>
+                                <Label Text="CEO" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       VerticalTextAlignment="Center"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
                             </Grid>
                         </Border>
 
@@ -473,8 +469,8 @@
 
                                 <Switch Grid.Column="1"
                                         IsToggled="{Binding IsDarkMode}"
-                                        OnColor="{DynamicResource PrimaryColor}"
-                                        ThumbColor="{AppThemeBinding Light=White, Dark=#FFFFFF}"
+                                        OnColor="{DynamicResource PrimaryButtonBackground}"
+                                        ThumbColor="{DynamicResource PrimaryTextColor}"
                                         VerticalOptions="Center"
                                         HorizontalOptions="End"
                                         Scale="0.8"/>

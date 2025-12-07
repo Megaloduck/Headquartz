@@ -3,53 +3,231 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.HumanResource.HRDashboardPage"
              Title="HRDashboardPage"
-             BackgroundColor="{DynamicResource PageBackgroundColor}">
+            BackgroundColor="{DynamicResource PageBackgroundColor}">
+
     <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="12">
-            <!-- Summary cards -->
-            <HorizontalStackLayout Spacing="12">
-                <Frame CornerRadius="8" Padding="12" HasShadow="True" WidthRequest="220">
-                    <VerticalStackLayout>
-                        <Label Text="Employees" FontAttributes="Bold"/>
-                        <Label Text="{Binding EmployeeCount}" FontSize="24"/>
-                        <Label Text="Avg. morale: {Binding AverageMorale}" FontSize="12"/>
-                    </VerticalStackLayout>
-                </Frame>
-                <Frame CornerRadius="8" Padding="12" HasShadow="True" WidthRequest="220">
-                    <VerticalStackLayout>
-                        <Label Text="Open Positions" FontAttributes="Bold"/>
-                        <Label Text="{Binding OpenPositions}" FontSize="24"/>
-                        <Button Text="Recruit" Command="{Binding OpenRecruitCommand}" />
-                    </VerticalStackLayout>
-                </Frame>
-            </HorizontalStackLayout>
+        <VerticalStackLayout Spacing="20" Padding="20">
 
-            <!-- Employee list -->
-            <Label Text="Employee List" FontAttributes="Bold" Margin="0,6,0,0"/>
-            <CollectionView ItemsSource="{Binding Employees}" SelectionMode="Single" HeightRequest="360">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Padding="10" Margin="0,6" CornerRadius="6">
-                            <Grid ColumnDefinitions="*,auto" RowDefinitions="Auto,Auto">
-                                <StackLayout Grid.Column="0">
-                                    <Label Text="{Binding Name}" FontAttributes="Bold"/>
-                                    <Label Text="{Binding Role}" FontSize="12"/>
-                                </StackLayout>
-                                <StackLayout Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center">
-                                    <Label Text="{Binding Morale, StringFormat='Morale: {0:F0}%'}"/>
-                                    <Button Text="Profile" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenEmployeeCommand}" CommandParameter="{Binding .}" />
-                                </StackLayout>
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <!-- Header -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="HR Dashboard" 
+                       FontSize="28" 
+                       FontAttributes="Bold"
+                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                <Label Text="Workforce overview and key metrics" 
+                       FontSize="14"
+                       TextColor="{DynamicResource SecondaryTextColor}"/>
+            </VerticalStackLayout>
 
-            <!-- Actions -->
-            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                <Button Text="Open Policies" Command="{Binding OpenPoliciesCommand}" />
-                <Button Text="Run Training" Command="{Binding RunTrainingCommand}" />
-            </HorizontalStackLayout>
+            <!-- Quick Stats -->
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                <!-- Total Employees -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="15"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                        <Label Text="{Binding TotalEmployees}" 
+                               FontSize="32" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryColor}"/>
+                        <Label Text="Total Employees" 
+                               FontSize="12"
+                               TextColor="{DynamicResource TertiaryTextColor}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Open Positions -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="15"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                        <Label Text="{Binding OpenPositions}" 
+                               FontSize="32" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource WarningColor}"/>
+                        <Label Text="Open Positions" 
+                               FontSize="12"
+                               TextColor="{DynamicResource TertiaryTextColor}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Avg Satisfaction -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="15"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                        <Label Text="{Binding AvgSatisfaction, StringFormat='{0:F1}'}" 
+                               FontSize="32" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource SuccessColor}"/>
+                        <Label Text="Avg Satisfaction" 
+                               FontSize="12"
+                               TextColor="{DynamicResource TertiaryTextColor}"/>
+                        <ProgressBar Progress="{Binding AvgSatisfaction, Converter={StaticResource RatingToProgressConverter}}"
+                                    ProgressColor="{DynamicResource SuccessColor}"
+                                    HeightRequest="4"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Monthly Cost -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="15"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                        <Label Text="{Binding MonthlyCost, StringFormat='${0:N0}K'}" 
+                               FontSize="28" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Monthly Cost" 
+                               FontSize="12"
+                               TextColor="{DynamicResource TertiaryTextColor}"/>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Department Distribution -->
+            <Border Background="{DynamicResource CardBackgroundColor}"
+                    Padding="20"
+                    StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Department Distribution" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                    <Grid ColumnDefinitions="2*,*" ColumnSpacing="20">
+                        <!-- Chart Placeholder -->
+                        <Border Grid.Column="0" 
+                                Background="#1AFFFFFF"
+                                HeightRequest="200"
+                                StrokeShape="RoundRectangle 8">
+                            <Label Text="📊 Department Chart" 
+                                   FontSize="16"
+                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+
+                        <!-- Department List -->
+                        <VerticalStackLayout Grid.Column="1" Spacing="10">
+                            <Label Text="Headcount by Dept" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource SecondaryTextColor}"/>
+
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Departments}" Spacing="8">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <Label Grid.Column="0" 
+                                                   Text="{Binding Name}"
+                                                   FontSize="13"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            <Label Grid.Column="1" 
+                                                   Text="{Binding EmployeeCount}"
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryColor}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Upcoming Events -->
+            <Border Background="{DynamicResource CardBackgroundColor}"
+                    Padding="20"
+                    StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="15">
+                    <HorizontalStackLayout>
+                        <Label Text="📅 Upcoming Events" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="{Binding UpcomingEvents.Count}" 
+                               BackgroundColor="{DynamicResource PrimaryColor}"
+                               TextColor="White"
+                               Padding="8,4"
+                               Margin="10,0,0,0"/>
+
+                    </HorizontalStackLayout>
+
+                    <CollectionView ItemsSource="{Binding UpcomingEvents}" HeightRequest="150">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="12" Margin="0,0,0,5" 
+                                        Background="{DynamicResource HeaderBackgroundColor}"
+                                        StrokeShape="RoundRectangle 8">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                                        <Border Grid.Column="0" 
+                                                Background="{Binding TypeColor}"
+                                                WidthRequest="40"
+                                                HeightRequest="40"
+                                                StrokeShape="RoundRectangle 8">
+                                            <Label Text="{Binding Icon}" 
+                                                   FontSize="18"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                        </Border>
+
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                            <Label Text="{Binding Title}" 
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            <Label Text="{Binding Description}" 
+                                                   FontSize="12"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"/>
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="End">
+                                            <Label Text="{Binding Date, StringFormat='{0:MMM dd}'}" 
+                                                   FontSize="12"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryColor}"/>
+                                            <Label Text="{Binding Time}" 
+                                                   FontSize="11"
+                                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Action Buttons -->
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                <Button Grid.Column="0" 
+                        Text="➕ Hire New"
+                        BackgroundColor="{DynamicResource PrimaryColor}"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="50"
+                        Command="{Binding HireNewCommand}"/>
+
+                <Button Grid.Column="1" 
+                        Text="📊 View Reports"
+                        BackgroundColor="{DynamicResource CardBackgroundColor}"
+                        TextColor="{DynamicResource PrimaryTextColor}"
+                        CornerRadius="8"
+                        HeightRequest="50"
+                        Command="{Binding ViewReportsCommand}"/>
+
+                <Button Grid.Column="2" 
+                        Text="⚙️ Settings"
+                        BackgroundColor="{DynamicResource CardBackgroundColor}"
+                        TextColor="{DynamicResource PrimaryTextColor}"
+                        CornerRadius="8"
+                        HeightRequest="50"
+                        Command="{Binding SettingsCommand}"/>
+            </Grid>
+
         </VerticalStackLayout>
     </ScrollView>
+
 </ContentPage>

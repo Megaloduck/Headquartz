@@ -3,10 +3,301 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.HumanResource.HRPoliciesPage"
              Title="HRPoliciesPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Policies Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="HR Policies and Compliance" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Rules, guidelines, and compliance documents" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <Border Background="{DynamicResource SuccessColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="📋" FontSize="18"/>
+                            <Label Text="{Binding TotalPolicies}" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Policy Categories -->
+                <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Center">
+                    <Border Background="{DynamicResource PrimaryColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 20"
+                            Margin="0,0,10,5">
+                        <Label Text="All Policies ({Binding TotalPolicies})" 
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                    </Border>
+
+                    <Border Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 20"
+                            Margin="0,0,10,5">
+                        <Label Text="Employment ({Binding EmploymentPolicies})" 
+                               FontSize="13"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Border>
+
+                    <Border Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 20"
+                            Margin="0,0,10,5">
+                        <Label Text="Code of Conduct ({Binding ConductPolicies})" 
+                               FontSize="13"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Border>
+
+                    <Border Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 20"
+                            Margin="0,0,10,5">
+                        <Label Text="Safety ({Binding SafetyPolicies})" 
+                               FontSize="13"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Border>
+
+                    <Button Text="➕ Create New"
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="20"
+                            Margin="0,0,10,5"
+                            Command="{Binding CreatePolicyCommand}"/>
+                </FlexLayout>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Policies Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Search and Filter -->
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                    <Border Grid.Column="0" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="🔍" 
+                                   FontSize="16"
+                                   VerticalOptions="Center"/>
+                            <Entry Placeholder="Search policies..." 
+                                   Text="{Binding SearchText}"
+                                   HorizontalOptions="FillAndExpand"
+                                   PlaceholderColor="{DynamicResource TertiaryTextColor}"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <Picker Grid.Column="1" 
+                            Title="Filter by Category"
+                            ItemsSource="{Binding Categories}"
+                            SelectedItem="{Binding SelectedCategory}"
+                            WidthRequest="180"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                    <Picker Grid.Column="2" 
+                            Title="Sort by"
+                            ItemsSource="{Binding SortOptions}"
+                            SelectedItem="{Binding SelectedSort}"
+                            WidthRequest="150"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"/>
+                </Grid>
+
+                <!-- Policy List -->
+                <CollectionView ItemsSource="{Binding Policies}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{DynamicResource CardBackgroundColor}"
+                                    Padding="20"
+                                    StrokeShape="RoundRectangle 10"
+                                    Margin="0,0,0,15">
+
+                                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
+                                    <!-- Policy Header -->
+                                    <HorizontalStackLayout Grid.Row="0" Spacing="10">
+                                        <Border Background="{Binding CategoryColor}"
+                                                WidthRequest="50"
+                                                HeightRequest="50"
+                                                StrokeShape="RoundRectangle 10">
+                                            <Label Text="{Binding CategoryIcon}" 
+                                                   FontSize="24"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                        </Border>
+
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="{Binding Title}" 
+                                                   FontSize="18" 
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            <Label Text="{Binding Description}" 
+                                                   FontSize="13"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"/>
+                                        </VerticalStackLayout>
+
+                                        <Border Background="{Binding StatusColor}"
+                                                Padding="10,5"
+                                                StrokeShape="RoundRectangle 5"
+                                                HorizontalOptions="End">
+                                            <Label Text="{Binding Status}" 
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"/>
+                                        </Border>
+                                    </HorizontalStackLayout>
+
+                                    <!-- Policy Details -->
+                                    <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                            <Label Text="📅 Last Updated" 
+                                                   FontSize="11"
+                                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                                            <Label Text="{Binding LastUpdated, StringFormat='{0:MMM dd, yyyy}'}" 
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                            <Label Text="👥 Applicable To" 
+                                                   FontSize="11"
+                                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                                            <Label Text="{Binding ApplicableTo}" 
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                            <Label Text="📄 Version" 
+                                                   FontSize="11"
+                                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                                            <Label Text="{Binding Version}" 
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Column="3" Spacing="2">
+                                            <Label Text="👀 Views" 
+                                                   FontSize="11"
+                                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                                            <Label Text="{Binding ViewCount}" 
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryColor}"/>
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <!-- Action Buttons -->
+                                    <Grid Grid.Row="2" ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                                        <Button Grid.Column="0" 
+                                                Text="View Policy"
+                                                BackgroundColor="{DynamicResource PrimaryColor}"
+                                                TextColor="White"
+                                                CornerRadius="8"
+                                                HeightRequest="40"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewPolicyCommand}"
+                                                CommandParameter="{Binding Id}"/>
+
+                                        <Button Grid.Column="1" 
+                                                Text="Edit"
+                                                BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                                TextColor="{DynamicResource PrimaryTextColor}"
+                                                CornerRadius="8"
+                                                HeightRequest="40"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditPolicyCommand}"
+                                                CommandParameter="{Binding Id}"/>
+
+                                        <Button Grid.Column="2" 
+                                                Text="Track Compliance"
+                                                BackgroundColor="{DynamicResource WarningColor}"
+                                                TextColor="White"
+                                                CornerRadius="8"
+                                                HeightRequest="40"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.TrackComplianceCommand}"
+                                                CommandParameter="{Binding Id}"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Compliance Overview -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Compliance Overview" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
+                            <Border Grid.Column="0" Padding="15" Background="{DynamicResource HeaderBackgroundColor}" StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="{Binding ComplianceRate, StringFormat='{0:P0}'}" 
+                                           FontSize="28" 
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource SuccessColor}"/>
+                                    <Label Text="Overall Compliance" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border Grid.Column="1" Padding="15" Background="{DynamicResource HeaderBackgroundColor}" StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="{Binding EmployeesAcknowledged}" 
+                                           FontSize="28" 
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryColor}"/>
+                                    <Label Text="Employees Acknowledged" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border Grid.Column="2" Padding="15" Background="{DynamicResource HeaderBackgroundColor}" StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="{Binding PendingAcknowledgements}" 
+                                           FontSize="28" 
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource WarningColor}"/>
+                                    <Label Text="Pending Acknowledgements" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+
 </ContentPage>

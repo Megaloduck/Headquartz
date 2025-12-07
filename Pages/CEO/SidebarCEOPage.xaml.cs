@@ -103,25 +103,25 @@ public partial class SidebarCEOPage : ContentPage, INotifyPropertyChanged
             LoadPage("Overview", () => _services.GetRequiredService<OverviewPage>()));
 
         NavigateToWarehouseCommand = new RelayCommand(() =>
-            LoadPage("Warehouse", () => _services.GetRequiredService<WarehouseDashboardPage>()));
+            LoadPage("Warehouse", () => _services.GetRequiredService<WarehouseReportsPage>()));
 
         NavigateToMarketingCommand = new RelayCommand(() =>
-            LoadPage("Market", () => _services.GetRequiredService<MarketingDashboardPage>()));
+            LoadPage("Market", () => _services.GetRequiredService<MarketingReportsPage>()));
 
         NavigateToFinanceCommand = new RelayCommand(() =>
-            LoadPage("Finance", () => _services.GetRequiredService<FinanceDashboardPage>()));
+            LoadPage("Finance", () => _services.GetRequiredService<FinanceReportsPage>()));
 
         NavigateToHRCommand = new RelayCommand(() =>
-            LoadPage("HR", () => _services.GetRequiredService<HRDashboardPage>()));
+            LoadPage("HR", () => _services.GetRequiredService<HRReportsPage>()));
 
         NavigateToSalesCommand = new RelayCommand(() => 
-            LoadPage("Sales", () => _services.GetRequiredService<SalesDashboardPage>()));
+            LoadPage("Sales", () => _services.GetRequiredService<SalesReportsPage>()));
 
         NavigateToProductionCommand = new RelayCommand(() => 
-            LoadPage("Production", () => _services.GetRequiredService<ProductionDashboardPage>()));
+            LoadPage("Production", () => _services.GetRequiredService<ProductionReportsPage>()));
 
         NavigateToLogisticsCommand = new RelayCommand(() => 
-            LoadPage("Logistics", () => _services.GetRequiredService<LogisticsDashboardPage>()));
+            LoadPage("Logistics", () => _services.GetRequiredService<LogisticsReportsPage>()));
 
         NavigateToUsersCommand = new RelayCommand(() => 
             LoadPage("Users", () => _services.GetRequiredService<UsersPage>()));

@@ -3,10 +3,271 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.HumanResource.PayrollPage"
              Title="PayrollPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Payroll Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Payroll Management" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Compensation, salary processing, and pay slips" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <Border Background="{DynamicResource SuccessColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="💰" FontSize="18"/>
+                            <Label Text="{Binding TotalPayroll, StringFormat='${0:N0}K'}" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Payroll Period Selector -->
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="15">
+                    <Border Grid.Column="0" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="📅" 
+                                   FontSize="16"
+                                   VerticalOptions="Center"/>
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Current Pay Period" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Label Text="{Binding CurrentPeriod, StringFormat='{0:MMMM yyyy}'}" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <Button Grid.Column="1" 
+                            Text="◀ Previous"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding PreviousPeriodCommand}"/>
+
+                    <Button Grid.Column="2" 
+                            Text="Process Payroll →"
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding ProcessPayrollCommand}"
+                            IsEnabled="{Binding CanProcessPayroll}"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Payroll Summary -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Summary Cards -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                    <!-- Total Salary -->
+                    <Border Grid.Column="0" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding TotalSalary, StringFormat='${0:N0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="Total Salary" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Tax Amount -->
+                    <Border Grid.Column="1" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding TotalTax, StringFormat='${0:N0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource DangerColor}"/>
+                            <Label Text="Total Tax" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Net Pay -->
+                    <Border Grid.Column="2" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding NetPay, StringFormat='${0:N0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource SuccessColor}"/>
+                            <Label Text="Net Pay" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Avg Salary -->
+                    <Border Grid.Column="3" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding AverageSalary, StringFormat='${0:N0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource AccentColor}"/>
+                            <Label Text="Avg per Employee" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Employee Payroll List -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Employee Payroll Details" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <CollectionView ItemsSource="{Binding EmployeePayments}" HeightRequest="300">
+                            <CollectionView.Header>
+                                <Grid ColumnDefinitions="*,100,100,100,100,80" 
+                                      Padding="10"
+                                      BackgroundColor="{DynamicResource HeaderBackgroundColor}">
+                                    <Label Grid.Column="0" Text="Employee" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                                    <Label Grid.Column="1" Text="Base Salary" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                                    <Label Grid.Column="2" Text="Bonus" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                                    <Label Grid.Column="3" Text="Deductions" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                                    <Label Grid.Column="4" Text="Tax" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                                    <Label Grid.Column="5" Text="Net Pay" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </Grid>
+                            </CollectionView.Header>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="15,10" 
+                                            Margin="0,0,0,1"
+                                            Background="{DynamicResource CardBackgroundColor}">
+
+                                        <Grid ColumnDefinitions="*,100,100,100,100,80" ColumnSpacing="10">
+
+                                            <!-- Employee -->
+                                            <HorizontalStackLayout Grid.Column="0" Spacing="10">
+                                                <Border Background="{DynamicResource PrimaryColor}"
+                                                        WidthRequest="32"
+                                                        HeightRequest="32"
+                                                        StrokeShape="RoundRectangle 16">
+                                                    <Label Text="{Binding Initials}" 
+                                                           FontSize="11"
+                                                           FontAttributes="Bold"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center"/>
+                                                </Border>
+                                                <VerticalStackLayout Spacing="2">
+                                                    <Label Text="{Binding Name}" 
+                                                           FontSize="13"
+                                                           FontAttributes="Bold"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                    <Label Text="{Binding Department}" 
+                                                           FontSize="11"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                                </VerticalStackLayout>
+                                            </HorizontalStackLayout>
+
+                                            <!-- Base Salary -->
+                                            <Label Grid.Column="1" 
+                                                   Text="{Binding BaseSalary, StringFormat='${0:N0}'}"
+                                                   FontSize="13"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   VerticalOptions="Center"/>
+
+                                            <!-- Bonus -->
+                                            <Label Grid.Column="2" 
+                                                   Text="{Binding Bonus, StringFormat='${0:N0}'}"
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource SuccessColor}"
+                                                   VerticalOptions="Center"/>
+
+                                            <!-- Deductions -->
+                                            <Label Grid.Column="3" 
+                                                   Text="{Binding Deductions, StringFormat='${0:N0}'}"
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource DangerColor}"
+                                                   VerticalOptions="Center"/>
+
+                                            <!-- Tax -->
+                                            <Label Grid.Column="4" 
+                                                   Text="{Binding Tax, StringFormat='${0:N0}'}"
+                                                   FontSize="13"
+                                                   TextColor="{DynamicResource WarningColor}"
+                                                   VerticalOptions="Center"/>
+
+                                            <!-- Net Pay -->
+                                            <Label Grid.Column="5" 
+                                                   Text="{Binding NetPay, StringFormat='${0:N0}'}"
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryColor}"
+                                                   VerticalOptions="Center"/>
+
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Payroll Actions -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <Button Grid.Column="0" 
+                            Text="📋 Generate Payslips"
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding GeneratePayslipsCommand}"/>
+
+                    <Button Grid.Column="1" 
+                            Text="📊 Salary Analysis"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding SalaryAnalysisCommand}"/>
+
+                    <Button Grid.Column="2" 
+                            Text="⚙️ Payroll Settings"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding PayrollSettingsCommand}"/>
+                </Grid>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+
 </ContentPage>

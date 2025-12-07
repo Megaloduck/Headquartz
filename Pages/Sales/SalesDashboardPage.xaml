@@ -3,10 +3,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Sales.SalesDashboardPage"
              Title="SalesDashboardPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+    <VerticalStackLayout Padding="12" Spacing="10">
+        <Label Text="Sales Dashboard" FontAttributes="Bold" FontSize="18"/>
+
+        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10">
+            <Frame CornerRadius="8" Padding="10">
+                <VerticalStackLayout>
+                    <Label Text="Active Leads"/>
+                    <Label Text="{Binding ActiveLeadsCount}" FontSize="20"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame CornerRadius="8" Padding="10">
+                <VerticalStackLayout>
+                    <Label Text="Open Orders"/>
+                    <Label Text="{Binding OpenOrdersCount}" FontSize="20"/>
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+
+        <Label Text="Leads" FontAttributes="Bold"/>
+        <CollectionView ItemsSource="{Binding Leads}" HeightRequest="280">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" CornerRadius="6" Margin="0,6">
+                        <Grid ColumnDefinitions="*,auto">
+                            <StackLayout>
+                                <Label Text="{Binding CustomerName}" FontAttributes="Bold"/>
+                                <Label Text="{Binding Stage}" FontSize="12"/>
+                            </StackLayout>
+                            <Button Text="Open" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenLeadCommand}" CommandParameter="{Binding .}" Grid.Column="1"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+            <Button Text="New Order" Command="{Binding CreateOrderCommand}" />
+            <Button Text="Pricing" Command="{Binding OpenPricingCommand}" />
+        </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentPage>
