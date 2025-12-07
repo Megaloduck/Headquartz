@@ -65,15 +65,11 @@
                                            HorizontalOptions="Center"
                                            VerticalOptions="Center"/>
                                 </Border>
-                                <VerticalStackLayout Spacing="1">
-                                    <Label Text="CEO Access" 
-                                           FontSize="11"
-                                           TextColor="{DynamicResource TertiaryTextColor}"/>
-                                    <Label Text="{Binding RoleName}" 
-                                           FontSize="14"
-                                           FontAttributes="Bold"
-                                           TextColor="{DynamicResource PrimaryTextColor}"/>
-                                </VerticalStackLayout>
+                                <Label Text="CEO" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       VerticalTextAlignment="Center"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
                             </HorizontalStackLayout>
                         </Border>
 
@@ -354,11 +350,15 @@
                                            HorizontalOptions="Center" 
                                            VerticalOptions="Center"/>
                                 </Border>
-                                <Label Text="CEO" 
-                                       FontSize="14"
-                                       FontAttributes="Bold"
-                                       VerticalTextAlignment="Center"
-                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label Text="Human Resource" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="Employee management" 
+                                           FontSize="11" 
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
                             </Grid>
                         </Border>
 
