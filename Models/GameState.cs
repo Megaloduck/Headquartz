@@ -1,11 +1,13 @@
-﻿using System;
+﻿// Models/GameState.cs
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Headquartz.Models.Warehouse;
-using Headquartz.Models.Sales;
-using Headquartz.Models.Production;
+using System.Linq;
 using Headquartz.Models.HumanResource;
+using Headquartz.Models.Production;
+using Headquartz.Models.Sales;
+using Headquartz.Models.Warehouse;
 
 namespace Headquartz.Models
 {
@@ -23,6 +25,7 @@ namespace Headquartz.Models
         private int _gameDay = 1;
         private int _gameWeek = 1;
         private int _gameMonth = 1;
+        private int _gameYear = 1;
         private TimeSpan _gameSpeed = TimeSpan.FromSeconds(10); // 1 game day = 10 real seconds
 
         // Financial Metrics
@@ -72,6 +75,24 @@ namespace Headquartz.Models
         {
             get => _gameDay;
             set { _gameDay = value; OnPropertyChanged(); }
+        }
+
+        public int GameWeek
+        {
+            get => _gameWeek;
+            set { _gameWeek = value; OnPropertyChanged(); }
+        }
+
+        public int GameMonth
+        {
+            get => _gameMonth;
+            set { _gameMonth = value; OnPropertyChanged(); }
+        }
+
+        public int GameYear
+        {
+            get => _gameYear;
+            set { _gameYear = value; OnPropertyChanged(); }
         }
 
         public decimal CashBalance
@@ -576,9 +597,9 @@ namespace Headquartz.Models
         public string Name { get; set; }
         public int Quantity { get; set; }
         public decimal UnitCost { get; set; }
-    }    
+    }
 
-  
+
 
     public class Transaction
     {
@@ -606,21 +627,11 @@ namespace Headquartz.Models
         public decimal UnitCost { get; set; }
     }
 
-    
-
     // Enums
-    
 
     public enum TransactionType
     {
         Revenue,
-        Expense,
-        Receipt,        // Goods received from supplier
-        Issue,          // Goods issued to production/sales
-        Transfer,       // Between locations
-        Adjustment,     // Inventory correction
-        Return,         // Customer/supplier return
-        Damage,         // Write-off
-        Production
-    }   
+        Expense
+    }
 }
