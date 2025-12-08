@@ -77,6 +77,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Models\Finance\" />
+	  <Folder Include="Models\Logistics\" />
+	  <Folder Include="Models\Marketing\" />
+	  <Folder Include="PageModels\Logistics\" />
+	  <Folder Include="PageModels\Marketing\" />
+	  <Folder Include="PageModels\Production\" />
+	  <Folder Include="PageModels\Sales\" />
 	  <Folder Include="Utilities\" />
 	</ItemGroup>
 
@@ -101,9 +108,6 @@
 	  </Compile>
 	  <Compile Update="Pages\Production\ProductionDashboardPage.xaml.cs">
 	    <DependentUpon>ProductionDashboardPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Pages\WarehousePage.xaml.cs">
-	    <DependentUpon>WarehousePage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -292,9 +296,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\LoginPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\WarehousePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Warehouse\WarehouseReportsPage.xaml">

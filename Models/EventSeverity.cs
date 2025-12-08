@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Headquartz.Models
 {
-    public class Warehouse
+    public enum EventSeverity
     {
-        public List<Product> Products { get; set; } = new();
-
-        public int TotalItems => Products.Sum(p => p.Stock);
+        Info,
+        Medium,
+        High
     }
 }
