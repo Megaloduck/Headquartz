@@ -3,10 +3,348 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Production.MachinesPage"
              Title="MachinesPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="{DynamicResource HeaderBackgroundColor}"
+               Padding="20"
+               CornerRadius="0">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="Machine Management" 
+                           FontSize="24" 
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+                    <Label Text="Equipment maintenance, downtime tracking, performance monitoring, calibration"
+                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="Add Machine"
+                            Command="{Binding AddMachineCommand}"
+                            BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                            TextColor="{DynamicResource PrimaryButtonTextColor}"
+                            Padding="15,10"/>
+                    <Button Text="Maintenance Log"
+                            Command="{Binding ViewMaintenanceLogCommand}"
+                            BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                            TextColor="{DynamicResource SecondaryButtonTextColor}"
+                            Padding="15,10"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Frame>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Padding="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Machine Summary -->
+            <Frame Grid.Column="0"
+                   BackgroundColor="{DynamicResource SidebarBackgroundColor}"
+                   Padding="15"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="20">
+                    <!-- Machine Stats -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Machine Overview"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="8">
+                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Total Machines:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding TotalMachines}"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="12"/>
+                                </Grid>
+
+                                <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Operational:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding OperationalMachines}"
+                                           TextColor="{DynamicResource SuccessColor}"
+                                           FontSize="12"/>
+                                </Grid>
+
+                                <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Under Maintenance:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding MaintenanceMachines}"
+                                           TextColor="{DynamicResource WarningColor}"
+                                           FontSize="12"/>
+                                </Grid>
+
+                                <Grid Grid.Row="3" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Downtime Today:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding DowntimeToday, StringFormat='{0:F1}h'}"
+                                           TextColor="{DynamicResource DangerColor}"
+                                           FontSize="12"/>
+                                </Grid>
+                            </Grid>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Status Filters -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Filter by Status"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="14"/>
+
+                        <RadioButton IsChecked="{Binding FilterOperational}" 
+                                  Content="Operational"
+                                  TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <RadioButton IsChecked="{Binding FilterMaintenance}" 
+                                  Content="Maintenance"
+                                  TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <RadioButton IsChecked="{Binding FilterIdle}" 
+                                  Content="Idle"
+                                  TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <RadioButton IsChecked="{Binding FilterBroken}" 
+                                  Content="Broken"
+                                  TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Machine Types -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Machine Types"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="14"/>
+
+                        <CollectionView ItemsSource="{Binding MachineTypes}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="*,Auto" Padding="10">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding TypeName}"
+                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                               FontSize="12"/>
+                                        <Label Grid.Column="1"
+                                               Text="{Binding Count}"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="12"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <!-- Quick Actions -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Quick Actions"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="14"
+                               FontAttributes="Bold"/>
+
+                        <Button Text="Schedule Maintenance"
+                                Command="{Binding ScheduleMaintenanceCommand}"
+                                BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                        <Button Text="Performance Report"
+                                Command="{Binding GeneratePerformanceReportCommand}"
+                                BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                        <Button Text="Calibration Check"
+                                Command="{Binding StartCalibrationCheckCommand}"
+                                BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Machines Dashboard -->
+            <Frame Grid.Column="1"
+                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                   Padding="20"
+                   CornerRadius="10"
+                   Margin="20,0,0,0">
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Dashboard Header -->
+                    <Grid Grid.Row="0" Margin="0,0,0,20">
+                        <HorizontalStackLayout Spacing="10">
+                            <SearchBar Text="{Binding SearchText}"
+                                       Placeholder="Search machines..."
+                                       WidthRequest="200"
+                                       BackgroundColor="{DynamicResource InputBackgroundColor}"
+                                       CancelButtonColor="{DynamicResource PrimaryColor}"/>
+                            <Picker Title="Department"
+                                    ItemsSource="{Binding Departments}"
+                                    SelectedItem="{Binding SelectedDepartment}"
+                                    WidthRequest="150"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                            <Button Text="Refresh"
+                                    Command="{Binding RefreshCommand}"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{DynamicResource TextButtonColor}"/>
+                            <Button Text="Grid View"
+                                    Command="{Binding SwitchToGridViewCommand}"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{DynamicResource TextButtonColor}"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!-- Machines Grid -->
+                    <CollectionView Grid.Row="1" 
+                                    ItemsSource="{Binding FilteredMachines}">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical"
+                                             Span="2"
+                                             VerticalItemSpacing="20"
+                                             HorizontalItemSpacing="20"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                                       Padding="20"
+                                       CornerRadius="10">
+                                    <VerticalStackLayout Spacing="15">
+                                        <!-- Machine Header -->
+                                        <Grid>
+                                            <VerticalStackLayout Spacing="5">
+                                                <Label Text="{Binding MachineName}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="18"
+                                                       FontAttributes="Bold"/>
+                                                <Label Text="{Binding MachineType}"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="12"/>
+                                            </VerticalStackLayout>
+                                            <BoxView Color="{Binding StatusColor}"
+                                                     WidthRequest="12"
+                                                     HeightRequest="12"
+                                                     HorizontalOptions="End"
+                                                     CornerRadius="6"/>
+                                        </Grid>
+
+                                        <!-- Machine Details -->
+                                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto"
+                                              ColumnSpacing="15" RowSpacing="10">
+                                            <!-- Serial Number -->
+                                            <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="2">
+                                                <Label Text="Serial No."
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding SerialNumber}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="12"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Department -->
+                                            <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="2">
+                                                <Label Text="Department"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding Department}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="12"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Utilization -->
+                                            <VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="2">
+                                                <Label Text="Utilization"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <ProgressBar Progress="{Binding Utilization}"
+                                                             ProgressColor="{DynamicResource PrimaryColor}"/>
+                                                <Label Text="{Binding Utilization, StringFormat='{0:P0}'}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="12"
+                                                       HorizontalOptions="Center"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- OEE -->
+                                            <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="2">
+                                                <Label Text="OEE"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding OEE, StringFormat='{0:P1}'}"
+                                                       TextColor="{Binding OEEColor}"
+                                                       FontSize="14"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Last Maintenance -->
+                                            <VerticalStackLayout Grid.Row="2" Grid.Column="0" Spacing="2">
+                                                <Label Text="Last Maintenance"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding LastMaintenance, StringFormat='{0:MMM dd}'}"
+                                                       TextColor="{Binding MaintenanceColor}"
+                                                       FontSize="12"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Next Maintenance -->
+                                            <VerticalStackLayout Grid.Row="2" Grid.Column="1" Spacing="2">
+                                                <Label Text="Next Maintenance"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding NextMaintenance, StringFormat='{0:MMM dd}'}"
+                                                       TextColor="{Binding NextMaintenanceColor}"
+                                                       FontSize="12"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+
+                                        <!-- Current Job -->
+                                        <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                               Padding="10"
+                                               CornerRadius="6">
+                                            <VerticalStackLayout Spacing="5">
+                                                <Label Text="Current Job"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding CurrentJob}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="12"
+                                                       LineBreakMode="TailTruncation"/>
+                                            </VerticalStackLayout>
+                                        </Frame>
+
+                                        <!-- Action Buttons -->
+                                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                            <Button Grid.Column="0"
+                                                    Text="View Details"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, 
+                                                            Path=BindingContext.ViewMachineDetailsCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                                    TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                                            <Button Grid.Column="1"
+                                                    Text="Log Issue"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, 
+                                                            Path=BindingContext.LogMachineIssueCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="{DynamicResource TextButtonColor}"/>
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Frame>
+        </Grid>
+    </Grid>
 </ContentPage>

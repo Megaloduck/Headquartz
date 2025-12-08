@@ -3,10 +3,360 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Marketing.MarketResearchPage"
              Title="MarketResearchPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- Header -->
+            <Grid>
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Market Research" 
+                           FontSize="24" 
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+                    <Label Text="Market trends, customer surveys, competitor analysis, opportunity identification"
+                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                    <Button Text="New Survey"
+                            Command="{Binding CreateSurveyCommand}"
+                            BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                            TextColor="{DynamicResource PrimaryButtonTextColor}"
+                            Padding="15,10"/>
+                    <Button Text="Run Analysis"
+                            Command="{Binding RunAnalysisCommand}"
+                            BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                            TextColor="{DynamicResource SecondaryButtonTextColor}"
+                            Padding="15,10"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Research Dashboard -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                <!-- Market Trends -->
+                <Frame Grid.Column="0"
+                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                       Padding="15"
+                       CornerRadius="10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Market Trends" 
+                               FontSize="18"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontAttributes="Bold"/>
+
+                        <CollectionView ItemsSource="{Binding MarketTrends}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                                           Padding="15"
+                                           CornerRadius="8"
+                                           Margin="0,0,0,10">
+                                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                                            <Label Grid.Row="0" Grid.Column="0"
+                                                   Text="{Binding TrendName}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"/>
+                                            <Label Grid.Row="0" Grid.Column="1"
+                                                   Text="{Binding Impact, StringFormat='{0:P1}'}"
+                                                   TextColor="{Binding ImpactColor}"
+                                                   FontSize="14"/>
+                                            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                   Text="{Binding Description}"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="12"
+                                                   LineBreakMode="WordWrap"/>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Customer Insights -->
+                <Frame Grid.Column="1"
+                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                       Padding="15"
+                       CornerRadius="10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Customer Insights" 
+                               FontSize="18"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontAttributes="Bold"/>
+
+                        <Grid RowDefinitions="*,*" RowSpacing="15">
+                            <!-- Satisfaction Score -->
+                            <Frame Grid.Row="0"
+                                   BackgroundColor="{DynamicResource SurfaceColor}"
+                                   Padding="15"
+                                   CornerRadius="8">
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="Customer Satisfaction"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="14"/>
+                                    <Label Text="{Binding SatisfactionScore, StringFormat='{0:F1}/10'}"
+                                           TextColor="{Binding SatisfactionColor}"
+                                           FontSize="32"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"/>
+                                    <ProgressBar Progress="{Binding SatisfactionProgress}"
+                                                 ProgressColor="{Binding SatisfactionColor}"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Recent Surveys -->
+                            <Frame Grid.Row="1"
+                                   BackgroundColor="{DynamicResource SurfaceColor}"
+                                   Padding="15"
+                                   CornerRadius="8">
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="Recent Surveys"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="14"/>
+                                    <CollectionView ItemsSource="{Binding RecentSurveys}">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid ColumnDefinitions="*,Auto" Padding="5">
+                                                    <Label Grid.Column="0"
+                                                           Text="{Binding SurveyName}"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                                           FontSize="12"/>
+                                                    <Label Grid.Column="1"
+                                                           Text="{Binding ResponseCount, StringFormat='{0} responses'}"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                                           FontSize="12"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Competitor Analysis -->
+            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                   Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Grid>
+                        <Label Text="Competitor Analysis" 
+                               FontSize="18"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontAttributes="Bold"/>
+                        <Button Text="Add Competitor"
+                                Command="{Binding AddCompetitorCommand}"
+                                HorizontalOptions="End"
+                                BackgroundColor="Transparent"
+                                TextColor="{DynamicResource TextButtonColor}"/>
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding Competitors}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                                       Padding="15"
+                                       CornerRadius="8"
+                                       Margin="0,0,0,10">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" 
+                                          RowDefinitions="Auto,Auto,Auto"
+                                          ColumnSpacing="15"
+                                          RowSpacing="5">
+                                        <!-- Competitor Logo/Icon -->
+                                        <Frame Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
+                                               BackgroundColor="{DynamicResource BadgeBackgroundColor}"
+                                               Padding="10"
+                                               CornerRadius="8"
+                                               WidthRequest="50"
+                                               HeightRequest="50">
+                                            <Label Text="{Binding Initials}"
+                                                   TextColor="{DynamicResource BadgeTextColor}"
+                                                   FontSize="16"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                        </Frame>
+
+                                        <!-- Competitor Info -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="2">
+                                            <Label Text="{Binding Name}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding Industry}"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="12"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Threat Level -->
+                                        <Frame Grid.Row="0" Grid.Column="2"
+                                               BackgroundColor="{Binding ThreatColor}"
+                                               Padding="5,2"
+                                               CornerRadius="4">
+                                            <Label Text="{Binding ThreatLevel}"
+                                                   TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                                   FontSize="11"/>
+                                        </Frame>
+
+                                        <!-- Market Share -->
+                                        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                              ColumnDefinitions="*,*" ColumnSpacing="10">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label Text="Market Share"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding MarketShare, StringFormat='{0:P1}'}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="14"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="Growth Rate"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding GrowthRate, StringFormat='{0:P1}'}"
+                                                       TextColor="{Binding GrowthColor}"
+                                                       FontSize="14"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+
+                                        <!-- Strengths & Weaknesses -->
+                                        <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                                              ColumnDefinitions="*,*" ColumnSpacing="15">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label Text="Strengths"
+                                                       TextColor="{DynamicResource SuccessColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding Strengths}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="12"
+                                                       LineBreakMode="WordWrap"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="Weaknesses"
+                                                       TextColor="{DynamicResource DangerColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding Weaknesses}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="12"
+                                                       LineBreakMode="WordWrap"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Opportunity Identification -->
+            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                   Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Identified Opportunities" 
+                           FontSize="18"
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
+                        <!-- High Priority -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="High Priority"
+                                       TextColor="{DynamicResource DangerColor}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"/>
+                                <CollectionView ItemsSource="{Binding HighPriorityOpportunities}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                                   Padding="10"
+                                                   CornerRadius="6"
+                                                   Margin="0,0,0,5">
+                                                <VerticalStackLayout Spacing="5">
+                                                    <Label Text="{Binding Opportunity}"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                                           FontSize="12"/>
+                                                    <Label Text="{Binding PotentialValue, StringFormat='Value: ${0:N0}'}"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                                           FontSize="10"/>
+                                                </VerticalStackLayout>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Medium Priority -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="Medium Priority"
+                                       TextColor="{DynamicResource WarningColor}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"/>
+                                <CollectionView ItemsSource="{Binding MediumPriorityOpportunities}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                                   Padding="10"
+                                                   CornerRadius="6"
+                                                   Margin="0,0,0,5">
+                                                <VerticalStackLayout Spacing="5">
+                                                    <Label Text="{Binding Opportunity}"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                                           FontSize="12"/>
+                                                    <Label Text="{Binding PotentialValue, StringFormat='Value: ${0:N0}'}"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                                           FontSize="10"/>
+                                                </VerticalStackLayout>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Low Priority -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="Low Priority"
+                                       TextColor="{DynamicResource InfoColor}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"/>
+                                <CollectionView ItemsSource="{Binding LowPriorityOpportunities}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                                   Padding="10"
+                                                   CornerRadius="6"
+                                                   Margin="0,0,0,5">
+                                                <VerticalStackLayout Spacing="5">
+                                                    <Label Text="{Binding Opportunity}"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                                           FontSize="12"/>
+                                                    <Label Text="{Binding PotentialValue, StringFormat='Value: ${0:N0}'}"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                                           FontSize="10"/>
+                                                </VerticalStackLayout>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -4,33 +4,244 @@
              x:Class="Headquartz.Pages.Marketing.MarketingDashboardPage"
             Title="MarketingDashboaardPage">
 
-    <VerticalStackLayout Padding="20" Spacing="16">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
 
-        <Label Text="Market Overview"
-               FontSize="28"
-               FontAttributes="Bold" />
+            <!-- Header Section -->
+            <Grid>
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Marketing Dashboard" 
+                           FontSize="24" 
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+                    <Label Text="Campaign performance, lead generation, and market insights"
+                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                    <Button Text="New Campaign"
+                            Command="{Binding StartNewCampaignCommand}"
+                            BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                            TextColor="{DynamicResource PrimaryButtonTextColor}"
+                            Padding="15,10"/>
+                    <Button Text="Quick Report"
+                            Command="{Binding GenerateQuickReportCommand}"
+                            BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                            TextColor="{DynamicResource SecondaryButtonTextColor}"
+                            Padding="15,10"/>
+                </HorizontalStackLayout>
+            </Grid>
 
-        <Frame Padding="16" BorderColor="#444">
-            <VerticalStackLayout>
+            <!-- KPI Cards -->
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                <!-- Campaign ROI -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Campaign ROI" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding CampaignROI, StringFormat='{0:P1}'}" 
+                               TextColor="{DynamicResource SuccessColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <ProgressBar Progress="{Binding ROITargetProgress}"
+                                     ProgressColor="{DynamicResource PrimaryColor}"/>
+                        <Label Text="{Binding ROITargetStatus}"
+                               TextColor="{DynamicResource TertiaryTextColor}"
+                               FontSize="12"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-                <Label Text="Current Demand" FontSize="18" />
-                <Label Text="{Binding Demand}" FontSize="24" />
+                <!-- Customer Acquisition Cost -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="CAC" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding CustomerAcquisitionCost, StringFormat='${0:N0}'}" 
+                               TextColor="{Binding CACColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <Label Text="vs Target: ${Binding CACTarget}"
+                               TextColor="{DynamicResource TertiaryTextColor}"
+                               FontSize="12"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-                <Label Text="Market Price" FontSize="18" Margin="0,10,0,0" />
-                <Label Text="{Binding Price}" FontSize="24" />
+                <!-- Market Share -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Market Share" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding MarketShare, StringFormat='{0:P1}'}" 
+                               TextColor="{DynamicResource InfoColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <ProgressBar Progress="{Binding MarketShareProgress}"
+                                     ProgressColor="{DynamicResource InfoColor}"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-                <Label Text="Market Trend" FontSize="18" Margin="0,10,0,0" />
-                <Label Text="{Binding TrendDescription}" FontSize="18" />
+                <!-- Lead Conversion -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Lead Conversion" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding LeadConversionRate, StringFormat='{0:P1}'}" 
+                               TextColor="{DynamicResource SecondaryColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <Label Text="{Binding QualifiedLeads}"
+                               TextColor="{DynamicResource TertiaryTextColor}"
+                               FontSize="12"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
 
-            </VerticalStackLayout>
-        </Frame>
+            <!-- Active Campaigns -->
+            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                   Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Active Campaigns" 
+                           FontSize="18"
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
 
-        <Button Text="Refresh Forecast"
-                Command="{Binding RefreshForecastCommand}" />
+                    <CollectionView ItemsSource="{Binding ActiveCampaigns}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                                       Padding="15"
+                                       CornerRadius="8"
+                                       Margin="0,0,0,10">
+                                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                        <!-- Campaign Name & Status -->
+                                        <VerticalStackLayout Grid.Column="0" Grid.Row="0" Spacing="5">
+                                            <Label Text="{Binding Name}" 
+                                                   FontSize="16"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontAttributes="Bold"/>
+                                            <HorizontalStackLayout Spacing="10">
+                                                <BoxView Color="{Binding StatusColor}"
+                                                         WidthRequest="10"
+                                                         HeightRequest="10"
+                                                         VerticalOptions="Center"
+                                                         CornerRadius="5"/>
+                                                <Label Text="{Binding Status}"
+                                                       TextColor="{Binding StatusColor}"
+                                                       FontSize="12"/>
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
 
-        <Label Text="{Binding Forecast}"
-               FontSize="16"
-               TextColor="Gray"/>
+                                        <!-- Budget & Performance -->
+                                        <VerticalStackLayout Grid.Column="1" Grid.Row="0" 
+                                                             HorizontalOptions="End" Spacing="5">
+                                            <Label Text="{Binding Budget, StringFormat='Budget: ${0:N0}'}"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="12"/>
+                                            <Label Text="{Binding ROIToDate, StringFormat='ROI: {0:P1}'}"
+                                                   TextColor="{Binding ROIColor}"
+                                                   FontSize="14"/>
+                                        </VerticalStackLayout>
 
-    </VerticalStackLayout>
+                                        <!-- Progress Bar -->
+                                        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" 
+                                              Margin="0,10,0,0">
+                                            <ProgressBar Progress="{Binding Progress}"
+                                                         ProgressColor="{DynamicResource PrimaryColor}"/>
+                                            <Label Text="{Binding Progress, StringFormat='{0:P0} complete'}"
+                                                   HorizontalOptions="Center"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   BackgroundColor="{DynamicResource SurfaceColor}"
+                                                   Padding="10,0"/>
+                                        </Grid>
+
+                                        <!-- Actions -->
+                                        <HorizontalStackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2"
+                                                               Margin="0,10,0,0" Spacing="10">
+                                            <Button Text="View Details"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, 
+                                                            Path=BindingContext.ViewCampaignDetailsCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="{DynamicResource TextButtonColor}"
+                                                    Padding="0"/>
+                                            <Button Text="Adjust Budget"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, 
+                                                            Path=BindingContext.AdjustBudgetCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="{DynamicResource TextButtonColor}"
+                                                    Padding="0"/>
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Button Text="View All Campaigns"
+                            Command="{Binding NavigateToCampaignsCommand}"
+                            HorizontalOptions="End"
+                            BackgroundColor="Transparent"
+                            TextColor="{DynamicResource TextButtonColor}"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Marketing Channels Performance -->
+            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                   Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Channel Performance" 
+                           FontSize="18"
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                        <!-- Pie Chart Placeholder -->
+                        <Frame Grid.Column="0" 
+                               BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8"
+                               HeightRequest="200">
+                            <Label Text="Budget Allocation Chart"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </Frame>
+
+                        <!-- Channel List -->
+                        <VerticalStackLayout Grid.Column="1" Spacing="10">
+                            <CollectionView ItemsSource="{Binding ChannelPerformance}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto,Auto" Padding="10">
+                                            <Label Grid.Column="0" 
+                                                   Text="{Binding Channel}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            <ProgressBar Grid.Column="1"
+                                                         Progress="{Binding Performance}"
+                                                         ProgressColor="{DynamicResource PrimaryColor}"
+                                                         WidthRequest="100"
+                                                         VerticalOptions="Center"/>
+                                            <Label Grid.Column="2" 
+                                                   Text="{Binding Performance, StringFormat='{0:P0}'}"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="12"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

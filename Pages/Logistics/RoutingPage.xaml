@@ -3,10 +3,363 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Logistics.RoutingPage"
              Title="RoutingPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- Header -->
+            <Grid>
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Route Optimization" 
+                           FontSize="24" 
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+                    <Label Text="Route optimization, delivery sequencing, vehicle allocation, fuel efficiency"
+                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                    <Button Text="Optimize Routes"
+                            Command="{Binding OptimizeRoutesCommand}"
+                            BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                            TextColor="{DynamicResource PrimaryButtonTextColor}"
+                            Padding="15,10"/>
+                    <Button Text="New Route Plan"
+                            Command="{Binding CreateRoutePlanCommand}"
+                            BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                            TextColor="{DynamicResource SecondaryButtonTextColor}"
+                            Padding="15,10"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Optimization Metrics -->
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                <!-- Total Distance -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Total Distance" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding TotalDistance, StringFormat='{0:F1} km'}" 
+                               TextColor="{DynamicResource PrimaryColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <Label Text="{Binding DistanceSaved, StringFormat='Saved: {0:F1} km'}"
+                               TextColor="{DynamicResource TertiaryTextColor}"
+                               FontSize="12"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Fuel Efficiency -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Fuel Efficiency" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding FuelEfficiency, StringFormat='{0:F1} km/L'}" 
+                               TextColor="{DynamicResource SecondaryColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <Label Text="{Binding FuelSaved, StringFormat='Saved: {0:F1} L'}"
+                               TextColor="{DynamicResource TertiaryTextColor}"
+                               FontSize="12"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Delivery Time -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Avg Delivery Time" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding AverageDeliveryTime, StringFormat='{0:F1} min'}" 
+                               TextColor="{DynamicResource InfoColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <Label Text="{Binding TimeSaved, StringFormat='Saved: {0:F1} min'}"
+                               TextColor="{DynamicResource TertiaryTextColor}"
+                               FontSize="12"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Vehicle Utilization -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Vehicle Utilization" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding VehicleUtilization, StringFormat='{0:P1}'}" 
+                               TextColor="{Binding UtilizationColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <ProgressBar Progress="{Binding VehicleUtilization}"
+                                     ProgressColor="{Binding UtilizationColor}"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Route Planning Map -->
+            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                   Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Grid>
+                        <Label Text="Route Planning Map" 
+                               FontSize="18"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontAttributes="Bold"/>
+                        <Button Text="Add Stop"
+                                Command="{Binding AddStopCommand}"
+                                HorizontalOptions="End"
+                                BackgroundColor="Transparent"
+                                TextColor="{DynamicResource TextButtonColor}"/>
+                    </Grid>
+
+                    <!-- Map Container -->
+                    <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                           HeightRequest="400"
+                           CornerRadius="8"
+                           Padding="0">
+                        <Grid>
+                            <!-- Map Placeholder -->
+                            <BoxView Color="{DynamicResource BorderColor}"/>
+                            <Label Text="Interactive Route Map"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+
+                            <!-- Route Visualization -->
+                            <AbsoluteLayout>
+                                <!-- Example route line -->
+                                <BoxView AbsoluteLayout.LayoutBounds="0.2,0.3,0.6,0.005"
+                                         AbsoluteLayout.LayoutFlags="All"
+                                         Color="{DynamicResource PrimaryColor}"
+                                         Rotation="30"/>
+
+                                <!-- Stops -->
+                                <Frame AbsoluteLayout.LayoutBounds="0.2,0.3,30,30"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       BackgroundColor="{DynamicResource PrimaryColor}"
+                                       Padding="0"
+                                       CornerRadius="15">
+                                    <Label Text="1"
+                                           FontSize="14"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           TextColor="{DynamicResource PrimaryButtonTextColor}"/>
+                                </Frame>
+
+                                <Frame AbsoluteLayout.LayoutBounds="0.8,0.6,30,30"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       BackgroundColor="{DynamicResource SecondaryColor}"
+                                       Padding="0"
+                                       CornerRadius="15">
+                                    <Label Text="2"
+                                           FontSize="14"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           TextColor="{DynamicResource PrimaryButtonTextColor}"/>
+                                </Frame>
+                            </AbsoluteLayout>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Route Details -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                        <!-- Stops List -->
+                        <Frame Grid.Column="0"
+                               BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="Route Stops"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontSize="16"/>
+
+                                <CollectionView ItemsSource="{Binding RouteStops}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="Auto,*,Auto" Padding="10">
+                                                <Label Grid.Column="0"
+                                                       Text="{Binding StopNumber}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="14"/>
+                                                <Label Grid.Column="1"
+                                                       Text="{Binding Address}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="12"/>
+                                                <Label Grid.Column="2"
+                                                       Text="{Binding ETA, StringFormat='{0:HH:mm}'}"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="12"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Optimization Options -->
+                        <Frame Grid.Column="1"
+                               BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Label Text="Optimization Options"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontSize="16"/>
+
+                                <VerticalStackLayout Spacing="10">
+                                    <RadioButton IsChecked="{Binding OptimizeForTime}" 
+                                              Content="Minimize Time"
+                                              TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <RadioButton IsChecked="{Binding OptimizeForDistance}" 
+                                              Content="Minimize Distance"
+                                              TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <RadioButton IsChecked="{Binding OptimizeForFuel}" 
+                                              Content="Minimize Fuel"
+                                              TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <RadioButton IsChecked="{Binding ConsiderTraffic}" 
+                                              Content="Consider Traffic"
+                                              TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <RadioButton IsChecked="{Binding ConsiderTimeWindows}" 
+                                              Content="Time Windows"
+                                              TextColor="{DynamicResource PrimaryTextColor}"/>
+                                </VerticalStackLayout>
+
+                                <Button Text="Calculate Optimal Route"
+                                        Command="{Binding CalculateOptimalRouteCommand}"
+                                        BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                                        TextColor="{DynamicResource PrimaryButtonTextColor}"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Vehicle Allocation -->
+            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                   Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Grid>
+                        <Label Text="Vehicle Allocation" 
+                               FontSize="18"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontAttributes="Bold"/>
+                        <Button Text="Reassign Vehicles"
+                                Command="{Binding ReassignVehiclesCommand}"
+                                HorizontalOptions="End"
+                                BackgroundColor="Transparent"
+                                TextColor="{DynamicResource TextButtonColor}"/>
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding VehicleAllocations}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                                       Padding="15"
+                                       CornerRadius="8"
+                                       Margin="0,0,0,10">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" 
+                                          RowDefinitions="Auto,Auto,Auto"
+                                          ColumnSpacing="15"
+                                          RowSpacing="5">
+                                        <!-- Vehicle Info -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
+                                                             WidthRequest="50">
+                                            <Label Text="🚚"
+                                                   FontSize="24"
+                                                   HorizontalOptions="Center"/>
+                                            <Label Text="{Binding VehicleId}"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="11"
+                                                   HorizontalOptions="Center"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Driver & Status -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="5">
+                                            <Label Text="{Binding DriverName}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="16"/>
+                                            <HorizontalStackLayout Spacing="10">
+                                                <BoxView Color="{Binding StatusColor}"
+                                                         WidthRequest="8"
+                                                         HeightRequest="8"
+                                                         VerticalOptions="Center"
+                                                         CornerRadius="4"/>
+                                                <Label Text="{Binding Status}"
+                                                       TextColor="{Binding StatusColor}"
+                                                       FontSize="12"/>
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+
+                                        <!-- Capacity -->
+                                        <Frame Grid.Row="0" Grid.Column="2"
+                                               BackgroundColor="{DynamicResource BadgeBackgroundColor}"
+                                               Padding="5,2"
+                                               CornerRadius="4">
+                                            <Label Text="{Binding Capacity, StringFormat='{0} stops'}"
+                                                   TextColor="{DynamicResource BadgeTextColor}"
+                                                   FontSize="11"/>
+                                        </Frame>
+
+                                        <!-- Route Details -->
+                                        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                              ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label Text="Total Stops"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding TotalStops}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="14"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="Total Distance"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding TotalDistance, StringFormat='{0:F1} km'}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="14"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Text="Est. Fuel"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding EstimatedFuel, StringFormat='{0:F1} L'}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="14"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+
+                                        <!-- Action Buttons -->
+                                        <HorizontalStackLayout Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                                                               Spacing="10">
+                                            <Button Text="View Route"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, 
+                                                            Path=BindingContext.ViewVehicleRouteCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="{DynamicResource TextButtonColor}"/>
+                                            <Button Text="Optimize"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, 
+                                                            Path=BindingContext.OptimizeVehicleRouteCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="{DynamicResource TextButtonColor}"/>
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

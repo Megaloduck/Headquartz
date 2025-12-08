@@ -3,10 +3,391 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Production.ProductionQualityPage"
              Title="ProductionQualityPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- Header -->
+            <Grid>
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Production Quality Control" 
+                           FontSize="24" 
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+                    <Label Text="Quality control checks, defect tracking, compliance standards, improvement plans"
+                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                    <Button Text="New Quality Check"
+                            Command="{Binding NewQualityCheckCommand}"
+                            BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                            TextColor="{DynamicResource PrimaryButtonTextColor}"
+                            Padding="15,10"/>
+                    <Button Text="Generate Report"
+                            Command="{Binding GenerateQualityReportCommand}"
+                            BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                            TextColor="{DynamicResource SecondaryButtonTextColor}"
+                            Padding="15,10"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Quality KPIs -->
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                <!-- Overall Quality Score -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Quality Score" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding QualityScore, StringFormat='{0:F1}/10'}" 
+                               TextColor="{Binding QualityScoreColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <ProgressBar Progress="{Binding QualityScoreProgress}"
+                                     ProgressColor="{Binding QualityScoreColor}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Defect Rate -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Defect Rate" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding DefectRate, StringFormat='{0:P2}'}" 
+                               TextColor="{Binding DefectRateColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <Label Text="{Binding DefectRateTarget, StringFormat='Target: {0:P2}'}"
+                               TextColor="{DynamicResource TertiaryTextColor}"
+                               FontSize="12"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- First Pass Yield -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="First Pass Yield" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding FirstPassYield, StringFormat='{0:P1}'}" 
+                               TextColor="{DynamicResource SuccessColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <Label Text="{Binding ReworkRate, StringFormat='Rework: {0:P1}'}"
+                               TextColor="{DynamicResource WarningColor}"
+                               FontSize="12"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Customer Returns -->
+                <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                       Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Customer Returns" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <Label Text="{Binding CustomerReturns}" 
+                               TextColor="{DynamicResource DangerColor}"
+                               FontSize="28"
+                               FontAttributes="Bold"/>
+                        <Label Text="{Binding ReturnRate, StringFormat='Rate: {0:P2}'}"
+                               TextColor="{DynamicResource TertiaryTextColor}"
+                               FontSize="12"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Quality Trends -->
+            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                   Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Quality Trends" 
+                           FontSize="18"
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+
+                    <!-- Chart Placeholder -->
+                    <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                           HeightRequest="250"
+                           CornerRadius="8"
+                           Padding="0">
+                        <Label Text="Defect Rate &amp; Quality Score Trends"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               TextColor="{DynamicResource TertiaryTextColor}"/>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Recent Quality Checks -->
+            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}" 
+                   Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Grid>
+                        <Label Text="Recent Quality Checks" 
+                               FontSize="18"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontAttributes="Bold"/>
+                        <Button Text="View All"
+                                Command="{Binding ViewAllQualityChecksCommand}"
+                                HorizontalOptions="End"
+                                BackgroundColor="Transparent"
+                                TextColor="{DynamicResource TextButtonColor}"/>
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding RecentQualityChecks}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                                       Padding="15"
+                                       CornerRadius="8"
+                                       Margin="0,0,0,10">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" 
+                                          RowDefinitions="Auto,Auto,Auto"
+                                          ColumnSpacing="15"
+                                          RowSpacing="5">
+                                        <!-- Check Type -->
+                                        <Frame Grid.Row="0" Grid.Column="0"
+                                               BackgroundColor="{Binding CheckTypeColor}"
+                                               Padding="5,2"
+                                               CornerRadius="4">
+                                            <Label Text="{Binding CheckType}"
+                                                   TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                                   FontSize="11"/>
+                                        </Frame>
+
+                                        <!-- Product Details -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="2">
+                                            <Label Text="{Binding ProductName}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"/>
+                                            <Label Text="{Binding BatchNumber}"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="12"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Result -->
+                                        <Frame Grid.Row="0" Grid.Column="2"
+                                               BackgroundColor="{Binding ResultColor}"
+                                               Padding="5,2"
+                                               CornerRadius="4">
+                                            <Label Text="{Binding Result}"
+                                                   TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                                   FontSize="11"/>
+                                        </Frame>
+
+                                        <!-- Inspector & Date -->
+                                        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                              ColumnDefinitions="*,*">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label Text="Inspector"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding Inspector}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="12"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="Date &amp; Time"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding CheckDateTime, StringFormat='{0:MMM dd HH:mm}'}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="12"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+
+                                        <!-- Defects Found -->
+                                        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+                                            <VerticalStackLayout Spacing="2">
+                                                <Label Text="Defects Found"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding DefectsFound}"
+                                                       TextColor="{Binding DefectsColor}"
+                                                       FontSize="12"/>
+                                            </VerticalStackLayout>
+
+                                            <Button Text="View Details"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, 
+                                                            Path=BindingContext.ViewCheckDetailsCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    HorizontalOptions="End"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="{DynamicResource TextButtonColor}"/>
+                                        </Grid>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Defect Analysis -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                <!-- Defect Categories -->
+                <Frame Grid.Column="0"
+                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                       Padding="15"
+                       CornerRadius="10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Defect Categories" 
+                               FontSize="18"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontAttributes="Bold"/>
+
+                        <CollectionView ItemsSource="{Binding DefectCategories}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                                           Padding="15"
+                                           CornerRadius="8"
+                                           Margin="0,0,0,10">
+                                        <Grid ColumnDefinitions="*,Auto,Auto" 
+                                              RowDefinitions="Auto,Auto"
+                                              ColumnSpacing="10"
+                                              RowSpacing="5">
+                                            <!-- Category Name -->
+                                            <Label Grid.Row="0" Grid.Column="0"
+                                                   Text="{Binding CategoryName}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"/>
+
+                                            <!-- Defect Count -->
+                                            <Label Grid.Row="0" Grid.Column="1"
+                                                   Text="{Binding DefectCount}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"/>
+
+                                            <!-- Percentage -->
+                                            <Label Grid.Row="0" Grid.Column="2"
+                                                   Text="{Binding Percentage, StringFormat='{0:P1}'}"
+                                                   TextColor="{DynamicResource PrimaryColor}"
+                                                   FontSize="14"/>
+
+                                            <!-- Trend -->
+                                            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+                                                <ProgressBar Progress="{Binding Percentage}"
+                                                             ProgressColor="{DynamicResource PrimaryColor}"/>
+                                                <Label Text="{Binding Trend}"
+                                                       TextColor="{Binding TrendColor}"
+                                                       FontSize="11"
+                                                       HorizontalOptions="End"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Quality Improvement Plans -->
+                <Frame Grid.Column="1"
+                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                       Padding="15"
+                       CornerRadius="10">
+                    <VerticalStackLayout Spacing="15">
+                        <Grid>
+                            <Label Text="Improvement Plans" 
+                                   FontSize="18"
+                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                   FontAttributes="Bold"/>
+                            <Button Text="New Plan"
+                                    Command="{Binding CreateImprovementPlanCommand}"
+                                    HorizontalOptions="End"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{DynamicResource TextButtonColor}"/>
+                        </Grid>
+
+                        <CollectionView ItemsSource="{Binding ImprovementPlans}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                                           Padding="15"
+                                           CornerRadius="8"
+                                           Margin="0,0,0,10">
+                                        <Grid ColumnDefinitions="Auto,*,Auto" 
+                                              RowDefinitions="Auto,Auto,Auto"
+                                              ColumnSpacing="15"
+                                              RowSpacing="5">
+                                            <!-- Priority -->
+                                            <Frame Grid.Row="0" Grid.Column="0"
+                                                   BackgroundColor="{Binding PriorityColor}"
+                                                   Padding="5,2"
+                                                   CornerRadius="4">
+                                                <Label Text="{Binding Priority}"
+                                                       TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                                       FontSize="11"/>
+                                            </Frame>
+
+                                            <!-- Plan Name -->
+                                            <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding PlanName}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="14"/>
+                                                <Label Text="{Binding TargetArea}"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="12"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Status -->
+                                            <HorizontalStackLayout Grid.Row="0" Grid.Column="2"
+                                                                   Spacing="5">
+                                                <BoxView Color="{Binding StatusColor}"
+                                                         WidthRequest="8"
+                                                         HeightRequest="8"
+                                                         VerticalOptions="Center"
+                                                         CornerRadius="4"/>
+                                                <Label Text="{Binding Status}"
+                                                       TextColor="{Binding StatusColor}"
+                                                       FontSize="12"/>
+                                            </HorizontalStackLayout>
+
+                                            <!-- Description -->
+                                            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                                   Text="{Binding Description}"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="12"
+                                                   LineBreakMode="WordWrap"/>
+
+                                            <!-- Timeline & Progress -->
+                                            <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                                                  ColumnDefinitions="*,*" ColumnSpacing="15">
+                                                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                    <Label Text="Due Date"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                                           FontSize="11"/>
+                                                    <Label Text="{Binding DueDate, StringFormat='{0:MMM dd}'}"
+                                                           TextColor="{Binding DueDateColor}"
+                                                           FontSize="12"/>
+                                                </VerticalStackLayout>
+
+                                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                    <Label Text="Progress"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                                           FontSize="11"/>
+                                                    <ProgressBar Progress="{Binding Progress}"
+                                                                 ProgressColor="{DynamicResource PrimaryColor}"
+                                                                 WidthRequest="100"
+                                                                 VerticalOptions="Center"/>
+                                                </VerticalStackLayout>
+                                            </Grid>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

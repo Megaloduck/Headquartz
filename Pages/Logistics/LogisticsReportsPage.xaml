@@ -3,10 +3,536 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Logistics.LogisticsReportsPage"
              Title="LogisticsReportsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="{DynamicResource HeaderBackgroundColor}"
+               Padding="20"
+               CornerRadius="0">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="Logistics Reports" 
+                           FontSize="24" 
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+                    <Label Text="On-time delivery rates, shipping costs, route efficiency, carrier performance"
+                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="Generate Report"
+                            Command="{Binding GenerateReportCommand}"
+                            BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                            TextColor="{DynamicResource PrimaryButtonTextColor}"
+                            Padding="15,10"/>
+                    <Button Text="Export All"
+                            Command="{Binding ExportAllReportsCommand}"
+                            BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                            TextColor="{DynamicResource SecondaryButtonTextColor}"
+                            Padding="15,10"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Frame>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Padding="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Report Categories -->
+            <Frame Grid.Column="0"
+                   BackgroundColor="{DynamicResource SidebarBackgroundColor}"
+                   Padding="15"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="20">
+                    <!-- Report Types -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Report Types"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+
+                        <Button Text="Delivery Performance"
+                                Command="{Binding SelectDeliveryReportsCommand}"
+                                BackgroundColor="{Binding DeliveryReportsButtonColor}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                        <Button Text="Cost Analysis"
+                                Command="{Binding SelectCostReportsCommand}"
+                                BackgroundColor="{Binding CostReportsButtonColor}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                        <Button Text="Route Efficiency"
+                                Command="{Binding SelectRouteReportsCommand}"
+                                BackgroundColor="{Binding RouteReportsButtonColor}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                        <Button Text="Carrier Performance"
+                                Command="{Binding SelectCarrierReportsCommand}"
+                                BackgroundColor="{Binding CarrierReportsButtonColor}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                        <Button Text="Fleet Management"
+                                Command="{Binding SelectFleetReportsCommand}"
+                                BackgroundColor="{Binding FleetReportsButtonColor}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Date Range -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Date Range"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="14"/>
+
+                        <Picker Title="Select Range"
+                                ItemsSource="{Binding DateRanges}"
+                                SelectedItem="{Binding SelectedDateRange}"/>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="From"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       FontSize="11"/>
+                                <DatePicker Date="{Binding StartDate}"
+                                            TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="To"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       FontSize="11"/>
+                                <DatePicker Date="{Binding EndDate}"
+                                            TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Carrier Filter -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Carriers"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="14"/>
+
+                        <CollectionView ItemsSource="{Binding Carriers}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <RadioButton IsChecked="{Binding IsSelected}"
+                                              Content="{Binding CarrierName}"
+                                              TextColor="{DynamicResource PrimaryTextColor}"/>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <Button Text="Select All"
+                                Command="{Binding SelectAllCarriersCommand}"
+                                BackgroundColor="Transparent"
+                                TextColor="{DynamicResource TextButtonColor}"
+                                FontSize="12"/>
+                    </VerticalStackLayout>
+
+                    <!-- Logistics Stats -->
+                    <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                           Padding="15"
+                           CornerRadius="8">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Logistics Stats"
+                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"/>
+
+                            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="8">
+                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="On-Time %:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding OnTimePercentage, StringFormat='{0:P1}'}"
+                                           TextColor="{DynamicResource SuccessColor}"
+                                           FontSize="12"/>
+                                </Grid>
+
+                                <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Avg Cost/Shipment:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding AverageCostPerShipment, StringFormat='${0:F2}'}"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="12"/>
+                                </Grid>
+
+                                <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Route Efficiency:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding RouteEfficiency, StringFormat='{0:P1}'}"
+                                           TextColor="{DynamicResource InfoColor}"
+                                           FontSize="12"/>
+                                </Grid>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Report Dashboard -->
+            <Frame Grid.Column="1"
+                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                   Padding="20"
+                   CornerRadius="10"
+                   Margin="20,0,0,0">
+                <ScrollView>
+                    <VerticalStackLayout Spacing="20">
+                        <!-- Report Header -->
+                        <Grid>
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding SelectedReportType}" 
+                                       FontSize="20"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontAttributes="Bold"/>
+                                <Label Text="{Binding DateRangeText}"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       FontSize="14"/>
+                            </VerticalStackLayout>
+
+                            <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                                <Button Text="Print"
+                                        Command="{Binding PrintReportCommand}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource TextButtonColor}"/>
+                                <Button Text="Share"
+                                        Command="{Binding ShareReportCommand}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource TextButtonColor}"/>
+                                <Button Text="Schedule"
+                                        Command="{Binding ScheduleReportCommand}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource TextButtonColor}"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+
+                        <!-- Key Performance Indicators -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Label Text="Key Performance Indicators" 
+                                       FontSize="18"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontAttributes="Bold"/>
+
+                                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                                    <!-- On-Time Delivery -->
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label Text="On-Time Delivery"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="14"/>
+                                        <Label Text="{Binding OnTimeDeliveryRate, StringFormat='{0:P1}'}"
+                                               TextColor="{Binding DeliveryColor}"
+                                               FontSize="28"
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding DeliveryTrend}"
+                                               TextColor="{Binding DeliveryTrendColor}"
+                                               FontSize="12"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Average Cost -->
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label Text="Avg Shipping Cost"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="14"/>
+                                        <Label Text="{Binding AverageShippingCost, StringFormat='${0:F2}'}"
+                                               TextColor="{Binding CostColor}"
+                                               FontSize="28"
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding CostTrend}"
+                                               TextColor="{Binding CostTrendColor}"
+                                               FontSize="12"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Route Efficiency -->
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label Text="Route Efficiency"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="14"/>
+                                        <Label Text="{Binding RouteEfficiencyScore, StringFormat='{0:P1}'}"
+                                               TextColor="{Binding EfficiencyColor}"
+                                               FontSize="28"
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding EfficiencyTrend}"
+                                               TextColor="{Binding EfficiencyTrendColor}"
+                                               FontSize="12"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Damage Rate -->
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label Text="Damage Rate"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="14"/>
+                                        <Label Text="{Binding DamageRate, StringFormat='{0:P2}'}"
+                                               TextColor="{Binding DamageColor}"
+                                               FontSize="28"
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding DamageTrend}"
+                                               TextColor="{Binding DamageTrendColor}"
+                                               FontSize="12"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Delivery Performance by Carrier -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Label Text="Delivery Performance by Carrier" 
+                                       FontSize="18"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontAttributes="Bold"/>
+
+                                <CollectionView ItemsSource="{Binding CarrierPerformance}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                                   Padding="15"
+                                                   CornerRadius="8"
+                                                   Margin="0,0,0,10">
+                                                <Grid ColumnDefinitions="*,Auto,Auto" 
+                                                      RowDefinitions="Auto,Auto"
+                                                      ColumnSpacing="15"
+                                                      RowSpacing="10">
+                                                    <!-- Carrier Info -->
+                                                    <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
+                                                        <Label Text="{Binding CarrierName}"
+                                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                                               FontSize="16"/>
+                                                        <Label Text="{Binding ServiceType}"
+                                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                                               FontSize="12"/>
+                                                    </VerticalStackLayout>
+
+                                                    <!-- Performance Score -->
+                                                    <VerticalStackLayout Grid.Row="0" Grid.Column="1"
+                                                                         HorizontalOptions="End"
+                                                                         Spacing="2">
+                                                        <Label Text="Score"
+                                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                                               FontSize="11"/>
+                                                        <Label Text="{Binding PerformanceScore, StringFormat='{0:F1}/10'}"
+                                                               TextColor="{Binding PerformanceColor}"
+                                                               FontSize="16"/>
+                                                    </VerticalStackLayout>
+
+                                                    <!-- Status -->
+                                                    <Frame Grid.Row="0" Grid.Column="2"
+                                                           BackgroundColor="{Binding StatusColor}"
+                                                           Padding="5,2"
+                                                           CornerRadius="4">
+                                                        <Label Text="{Binding Status}"
+                                                               TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                                               FontSize="11"/>
+                                                    </Frame>
+
+                                                    <!-- Performance Metrics -->
+                                                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                                          ColumnDefinitions="*,*,*,*">
+                                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                            <Label Text="On-Time %"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                                   FontSize="11"/>
+                                                            <Label Text="{Binding OnTimeRate, StringFormat='{0:P1}'}"
+                                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+
+                                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                            <Label Text="Cost/Shipment"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                                   FontSize="11"/>
+                                                            <Label Text="{Binding CostPerShipment, StringFormat='${0:F2}'}"
+                                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+
+                                                        <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                            <Label Text="Damage Rate"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                                   FontSize="11"/>
+                                                            <Label Text="{Binding DamageRate, StringFormat='{0:P1}'}"
+                                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+
+                                                        <VerticalStackLayout Grid.Column="3" Spacing="2">
+                                                            <Label Text="Shipments"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                                   FontSize="11"/>
+                                                            <Label Text="{Binding ShipmentCount}"
+                                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+                                                    </Grid>
+                                                </Grid>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Cost Analysis -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Label Text="Cost Analysis" 
+                                       FontSize="18"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontAttributes="Bold"/>
+
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                                    <!-- Cost Breakdown -->
+                                    <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                        <Label Text="Cost Breakdown"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="14"/>
+
+                                        <CollectionView ItemsSource="{Binding CostBreakdown}">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid ColumnDefinitions="*,Auto,Auto" Padding="10">
+                                                        <Label Grid.Column="0"
+                                                               Text="{Binding CostCategory}"
+                                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                                               FontSize="12"/>
+                                                        <ProgressBar Grid.Column="1"
+                                                                     Progress="{Binding Percentage}"
+                                                                     ProgressColor="{DynamicResource PrimaryColor}"
+                                                                     WidthRequest="100"
+                                                                     VerticalOptions="Center"/>
+                                                        <Label Grid.Column="2"
+                                                               Text="{Binding Percentage, StringFormat='{0:P1}'}"
+                                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                                               FontSize="12"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </VerticalStackLayout>
+
+                                    <!-- Monthly Trend -->
+                                    <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                        <Label Text="Monthly Cost Trend"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="14"/>
+
+                                        <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                               HeightRequest="150"
+                                               CornerRadius="8"
+                                               Padding="0">
+                                            <Label Text="Cost Trend Chart"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"
+                                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                                        </Frame>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Route Efficiency Analysis -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Label Text="Route Efficiency Analysis" 
+                                       FontSize="18"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontAttributes="Bold"/>
+
+                                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
+                                    <!-- Distance Analysis -->
+                                    <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                        <Label Text="Distance Analysis"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="14"/>
+
+                                        <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                               Padding="15"
+                                               CornerRadius="8">
+                                            <VerticalStackLayout Spacing="5">
+                                                <Label Text="Total Distance"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="12"/>
+                                                <Label Text="{Binding TotalDistance, StringFormat='{0:N0} km'}"
+                                                       TextColor="{DynamicResource PrimaryColor}"
+                                                       FontSize="24"
+                                                       FontAttributes="Bold"/>
+                                                <Label Text="{Binding DistanceSaved, StringFormat='Saved: {0:N0} km'}"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"
+                                                       FontSize="11"/>
+                                            </VerticalStackLayout>
+                                        </Frame>
+                                    </VerticalStackLayout>
+
+                                    <!-- Fuel Efficiency -->
+                                    <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                        <Label Text="Fuel Efficiency"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="14"/>
+
+                                        <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                               Padding="15"
+                                               CornerRadius="8">
+                                            <VerticalStackLayout Spacing="5">
+                                                <Label Text="Avg Fuel Efficiency"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="12"/>
+                                                <Label Text="{Binding AverageFuelEfficiency, StringFormat='{0:F1} km/L'}"
+                                                       TextColor="{DynamicResource SecondaryColor}"
+                                                       FontSize="24"
+                                                       FontAttributes="Bold"/>
+                                                <Label Text="{Binding FuelSaved, StringFormat='Saved: {0:F1} L'}"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"
+                                                       FontSize="11"/>
+                                            </VerticalStackLayout>
+                                        </Frame>
+                                    </VerticalStackLayout>
+
+                                    <!-- Time Efficiency -->
+                                    <VerticalStackLayout Grid.Column="2" Spacing="10">
+                                        <Label Text="Time Efficiency"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="14"/>
+
+                                        <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                               Padding="15"
+                                               CornerRadius="8">
+                                            <VerticalStackLayout Spacing="5">
+                                                <Label Text="Avg Delivery Time"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="12"/>
+                                                <Label Text="{Binding AverageDeliveryTime, StringFormat='{0:F1} min'}"
+                                                       TextColor="{DynamicResource InfoColor}"
+                                                       FontSize="24"
+                                                       FontAttributes="Bold"/>
+                                                <Label Text="{Binding TimeSaved, StringFormat='Saved: {0:F1} hours'}"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"
+                                                       FontSize="11"/>
+                                            </VerticalStackLayout>
+                                        </Frame>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Frame>
+        </Grid>
+    </Grid>
 </ContentPage>

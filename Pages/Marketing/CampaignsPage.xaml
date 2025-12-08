@@ -3,10 +3,328 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Marketing.CampaignsPage"
              Title="CampaignsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="{StaticResource HeaderBackgroundColor}"
+               Padding="20"
+               CornerRadius="0">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="Campaign Management" 
+                           FontSize="24" 
+                           TextColor="{StaticResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+                    <Label Text="Plan, execute, and track marketing campaigns"
+                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="New Campaign"
+                            Command="{Binding CreateCampaignCommand}"
+                            BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                            TextColor="{DynamicResource PrimaryButtonTextColor}"
+                            Padding="15,10"/>
+                    <Button Text="Import Template"
+                            Command="{Binding ImportTemplateCommand}"
+                            BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                            TextColor="{DynamicResource SecondaryButtonTextColor}"
+                            Padding="15,10"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Frame>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Padding="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Campaign List Sidebar -->
+            <Frame Grid.Column="0"
+                   BackgroundColor="{DynamicResource SidebarBackgroundColor}"
+                   Padding="15"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Campaigns" 
+                           FontSize="18"
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+
+                    <SearchBar Placeholder="Search campaigns..."
+                               Text="{Binding SearchText}"
+                               BackgroundColor="{DynamicResource InputBackgroundColor}"
+                               CancelButtonColor="{DynamicResource PrimaryColor}"/>
+
+                    <CollectionView ItemsSource="{Binding FilteredCampaigns}"
+                                    SelectionMode="Single"
+                                    SelectedItem="{Binding SelectedCampaign}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10" HeightRequest="70">
+                                    <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                                           Padding="15"
+                                           CornerRadius="8">
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="{Binding Name}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"
+                                                   LineBreakMode="TailTruncation"/>
+                                            <HorizontalStackLayout Spacing="5">
+                                                <BoxView Color="{Binding StatusColor}"
+                                                         WidthRequest="8"
+                                                         HeightRequest="8"
+                                                         VerticalOptions="Center"
+                                                         CornerRadius="4"/>
+                                                <Label Text="{Binding Status}"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="12"/>
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Campaign Filters -->
+                    <VerticalStackLayout Spacing="10" Margin="0,10,0,0">
+                        <Label Text="Filter by Status"
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14"/>
+                        <RadioButton IsChecked="{Binding FilterActive}" 
+                                  Content="Active"
+                                 TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <RadioButton IsChecked="{Binding FilterPlanning}" 
+                                  Content="Planning"
+                                  TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <RadioButton IsChecked="{Binding FilterCompleted}" 
+                                  Content="Completed"
+                                  TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Campaign Detail View -->
+            <Frame Grid.Column="1"
+                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                   Padding="20"
+                   CornerRadius="10"
+                   Margin="20,0,0,0"
+                   IsVisible="{Binding HasSelectedCampaign}">
+                <ScrollView>
+                    <VerticalStackLayout Spacing="20">
+                        <!-- Campaign Header -->
+                        <Grid>
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding SelectedCampaign.Name}"
+                                       FontSize="24"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontAttributes="Bold"/>
+                                <HorizontalStackLayout Spacing="10">
+                                    <BoxView Color="{Binding SelectedCampaign.StatusColor}"
+                                             WidthRequest="12"
+                                             HeightRequest="12"
+                                             VerticalOptions="Center"
+                                             CornerRadius="6"/>
+                                    <Label Text="{Binding SelectedCampaign.Status}"
+                                           TextColor="{Binding SelectedCampaign.StatusColor}"/>
+                                    <Label Text="|"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                    <Label Text="{Binding SelectedCampaign.Type}"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+
+                            <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                                <Button Text="Edit"
+                                        Command="{Binding EditCampaignCommand}"
+                                        BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                        TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                                <Button Text="Duplicate"
+                                        Command="{Binding DuplicateCampaignCommand}"
+                                        BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                        TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                                <Button Text="{Binding SelectedCampaign.ActionButtonText}"
+                                        Command="{Binding CampaignActionCommand}"
+                                        BackgroundColor="{Binding SelectedCampaign.ActionButtonColor}"
+                                        TextColor="{DynamicResource PrimaryButtonTextColor}"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+
+                        <!-- Campaign Details Tabs -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="0"
+                               CornerRadius="8">
+                            <VerticalStackLayout>
+                                <!-- Tab Headers -->
+                                <Grid ColumnDefinitions="*,*,*,*" 
+                                      BackgroundColor="{DynamicResource CardBackgroundColor}">
+                                    <Button Grid.Column="0" 
+                                            Text="Overview"
+                                            Command="{Binding SelectOverviewTabCommand}"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{Binding OverviewTabColor}"/>
+                                    <Button Grid.Column="1" 
+                                            Text="Budget"
+                                            Command="{Binding SelectBudgetTabCommand}"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{Binding BudgetTabColor}"/>
+                                    <Button Grid.Column="2" 
+                                            Text="Channels"
+                                            Command="{Binding SelectChannelsTabCommand}"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{Binding ChannelsTabColor}"/>
+                                    <Button Grid.Column="3" 
+                                            Text="Results"
+                                            Command="{Binding SelectResultsTabCommand}"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{Binding ResultsTabColor}"/>
+                                </Grid>
+
+                                <!-- Tab Content -->
+                                <Frame Padding="20" IsVisible="{Binding IsOverviewTabVisible}">
+                                    <VerticalStackLayout Spacing="15">
+                                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                                <Label Text="Campaign Objective"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                                <Label Text="{Binding SelectedCampaign.Objective}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="16"/>
+                                            </VerticalStackLayout>
+                                            <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                                <Label Text="Target Audience"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                                <Label Text="{Binding SelectedCampaign.TargetAudience}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="16"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+
+                                        <Label Text="Description"
+                                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                                        <Label Text="{Binding SelectedCampaign.Description}"
+                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                               LineBreakMode="WordWrap"/>
+                                    </VerticalStackLayout>
+                                </Frame>
+
+                                <!-- Budget Tab Content (similar structure for others) -->
+                                <Frame Padding="20" IsVisible="{Binding IsBudgetTabVisible}">
+                                    <!-- Budget allocation controls -->
+                                    <VerticalStackLayout Spacing="15">
+                                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                                <Label Text="Total Budget"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                                <Entry Text="{Binding SelectedCampaign.Budget}"
+                                                       Keyboard="Numeric"
+                                                       BackgroundColor="{DynamicResource InputBackgroundColor}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </VerticalStackLayout>
+                                            <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                                <Label Text="Budget Spent"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                                <Label Text="{Binding SelectedCampaign.BudgetSpent, StringFormat='${0:N0}'}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="18"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Timeline -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="20"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Label Text="Campaign Timeline"
+                                       FontSize="16"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontAttributes="Bold"/>
+
+                                <Grid ColumnDefinitions="Auto,*,Auto" 
+                                      RowDefinitions="Auto,Auto,Auto" 
+                                      ColumnSpacing="15" 
+                                      RowSpacing="10">
+
+                                    <!-- Planning Phase -->
+                                    <BoxView Grid.Row="0" Grid.Column="0"
+                                             Color="{Binding SelectedCampaign.PlanningColor}"
+                                             WidthRequest="12"
+                                             HeightRequest="12"
+                                             VerticalOptions="Center"
+                                             CornerRadius="6"/>
+                                    <Label Grid.Row="0" Grid.Column="1"
+                                           Text="Planning"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Grid.Row="0" Grid.Column="2"
+                                           Text="{Binding SelectedCampaign.PlanningDate, StringFormat='{0:MMM dd}'}"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+
+                                    <!-- Execution Phase -->
+                                    <BoxView Grid.Row="1" Grid.Column="0"
+                                             Color="{Binding SelectedCampaign.ExecutionColor}"
+                                             WidthRequest="12"
+                                             HeightRequest="12"
+                                             VerticalOptions="Center"
+                                             CornerRadius="6"/>
+                                    <Label Grid.Row="1" Grid.Column="1"
+                                           Text="Execution"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Grid.Row="1" Grid.Column="2"
+                                           Text="{Binding SelectedCampaign.ExecutionDate, StringFormat='{0:MMM dd}'}"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+
+                                    <!-- Analysis Phase -->
+                                    <BoxView Grid.Row="2" Grid.Column="0"
+                                             Color="{Binding SelectedCampaign.AnalysisColor}"
+                                             WidthRequest="12"
+                                             HeightRequest="12"
+                                             VerticalOptions="Center"
+                                             CornerRadius="6"/>
+                                    <Label Grid.Row="2" Grid.Column="1"
+                                           Text="Analysis"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Grid.Row="2" Grid.Column="2"
+                                           Text="{Binding SelectedCampaign.AnalysisDate, StringFormat='{0:MMM dd}'}"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Frame>
+
+            <!-- Empty State -->
+            <Frame Grid.Column="1"
+                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                   Padding="40"
+                   CornerRadius="10"
+                   Margin="20,0,0,0"
+                   IsVisible="{Binding HasSelectedCampaign, Converter={StaticResource InverseBooleanConverter}}">
+                <VerticalStackLayout HorizontalOptions="Center" 
+                                     VerticalOptions="Center"
+                                     Spacing="20">
+                    <Label Text="📋"
+                           FontSize="48"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Select a campaign to view details"
+                           FontSize="18"
+                           TextColor="{DynamicResource SecondaryTextColor}"
+                           HorizontalOptions="Center"/>
+                    <Button Text="Create Your First Campaign"
+                            Command="{Binding CreateCampaignCommand}"
+                            BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                            TextColor="{DynamicResource PrimaryButtonTextColor}"
+                            HorizontalOptions="Center"
+                            Padding="30,15"/>
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+    </Grid>
 </ContentPage>

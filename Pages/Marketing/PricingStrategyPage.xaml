@@ -3,10 +3,498 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Marketing.PricingStrategyPage"
              Title="PricingStrategyPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="{DynamicResource HeaderBackgroundColor}"
+               Padding="20"
+               CornerRadius="0">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="Pricing Strategy" 
+                           FontSize="24" 
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+                    <Label Text="Price optimization, promotional pricing, bundle pricing, seasonal adjustments"
+                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="New Strategy"
+                            Command="{Binding CreateNewStrategyCommand}"
+                            BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                            TextColor="{DynamicResource PrimaryButtonTextColor}"
+                            Padding="15,10"/>
+                    <Button Text="Run Simulation"
+                            Command="{Binding RunPricingSimulationCommand}"
+                            BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                            TextColor="{DynamicResource SecondaryButtonTextColor}"
+                            Padding="15,10"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Frame>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Padding="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Pricing Models Sidebar -->
+            <Frame Grid.Column="0"
+                   BackgroundColor="{DynamicResource SidebarBackgroundColor}"
+                   Padding="15"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="20">
+                    <!-- Current Strategy -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Current Strategy"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="{Binding CurrentStrategy.Name}"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontSize="14"/>
+                                <Label Text="{Binding CurrentStrategy.Type}"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       FontSize="12"/>
+                                <Label Text="{Binding CurrentStrategy.Effectiveness, StringFormat='Effectiveness: {0:P1}'}"
+                                       TextColor="{Binding CurrentStrategy.EffectivenessColor}"
+                                       FontSize="12"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Pricing Models -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Available Models"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+
+                        <CollectionView ItemsSource="{Binding PricingModels}"
+                                        SelectionMode="Single"
+                                        SelectedItem="{Binding SelectedModel}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                                           Padding="15"
+                                           CornerRadius="8"
+                                           Margin="0,0,0,10">
+                                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                                            <Label Grid.Row="0" Grid.Column="0"
+                                                   Text="{Binding Name}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"/>
+                                            <Label Grid.Row="0" Grid.Column="1"
+                                                   Text="{Binding Complexity}"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="11"/>
+                                            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                   Text="{Binding Description}"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="12"
+                                                   LineBreakMode="WordWrap"/>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <!-- Quick Actions -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Quick Actions"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+
+                        <Button Text="Analyze Competitor Pricing"
+                                Command="{Binding AnalyzeCompetitorPricingCommand}"
+                                BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                        <Button Text="Calculate Optimal Price"
+                                Command="{Binding CalculateOptimalPriceCommand}"
+                                BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                        <Button Text="Set Seasonal Adjustment"
+                                Command="{Binding SetSeasonalAdjustmentCommand}"
+                                BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Pricing Dashboard -->
+            <Frame Grid.Column="1"
+                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                   Padding="20"
+                   CornerRadius="10"
+                   Margin="20,0,0,0">
+                <ScrollView>
+                    <VerticalStackLayout Spacing="20">
+                        <!-- Price Optimization -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Label Text="Price Optimization" 
+                                       FontSize="18"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontAttributes="Bold"/>
+
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                                    <!-- Current Pricing -->
+                                    <VerticalStackLayout Spacing="10">
+                                        <Label Text="Current Pricing"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="14"/>
+
+                                        <CollectionView ItemsSource="{Binding CurrentPricing}">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid ColumnDefinitions="*,*,*" Padding="10">
+                                                        <Label Grid.Column="0"
+                                                               Text="{Binding ProductName}"
+                                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                                               FontSize="12"/>
+                                                        <Label Grid.Column="1"
+                                                               Text="{Binding CurrentPrice, StringFormat='${0:F2}'}"
+                                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                                               FontSize="12"/>
+                                                        <Label Grid.Column="2"
+                                                               Text="{Binding Margin, StringFormat='{0:P1}'}"
+                                                               TextColor="{Binding MarginColor}"
+                                                               FontSize="12"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </VerticalStackLayout>
+
+                                    <!-- Recommended Pricing -->
+                                    <VerticalStackLayout Spacing="10">
+                                        <Label Text="Recommended Pricing"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               FontSize="14"/>
+
+                                        <CollectionView ItemsSource="{Binding RecommendedPricing}">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid ColumnDefinitions="*,*,*" Padding="10">
+                                                        <Label Grid.Column="0"
+                                                               Text="{Binding ProductName}"
+                                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                                               FontSize="12"/>
+                                                        <Label Grid.Column="1"
+                                                               Text="{Binding RecommendedPrice, StringFormat='${0:F2}'}"
+                                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                                               FontSize="12"/>
+                                                        <Label Grid.Column="2"
+                                                               Text="{Binding ExpectedImpact, StringFormat='{0:P1}'}"
+                                                               TextColor="{Binding ImpactColor}"
+                                                               FontSize="12"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Promotional Pricing -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Grid>
+                                    <Label Text="Active Promotions" 
+                                           FontSize="18"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontAttributes="Bold"/>
+                                    <Button Text="Create Promotion"
+                                            Command="{Binding CreatePromotionCommand}"
+                                            HorizontalOptions="End"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{DynamicResource TextButtonColor}"/>
+                                </Grid>
+
+                                <CollectionView ItemsSource="{Binding ActivePromotions}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                                   Padding="15"
+                                                   CornerRadius="8"
+                                                   Margin="0,0,0,10">
+                                                <Grid ColumnDefinitions="*,Auto,Auto" 
+                                                      RowDefinitions="Auto,Auto,Auto"
+                                                      ColumnSpacing="15"
+                                                      RowSpacing="5">
+                                                    <!-- Promotion Name -->
+                                                    <Label Grid.Row="0" Grid.Column="0"
+                                                           Text="{Binding Name}"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                                           FontSize="16"/>
+
+                                                    <!-- Discount -->
+                                                    <Frame Grid.Row="0" Grid.Column="1"
+                                                           BackgroundColor="{DynamicResource AccentColor}"
+                                                           Padding="5,2"
+                                                           CornerRadius="4">
+                                                        <Label Text="{Binding Discount, StringFormat='{0:P0} OFF'}"
+                                                               TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                                               FontSize="11"/>
+                                                    </Frame>
+
+                                                    <!-- Status -->
+                                                    <HorizontalStackLayout Grid.Row="0" Grid.Column="2"
+                                                                           Spacing="5">
+                                                        <BoxView Color="{Binding StatusColor}"
+                                                                 WidthRequest="8"
+                                                                 HeightRequest="8"
+                                                                 VerticalOptions="Center"
+                                                                 CornerRadius="4"/>
+                                                        <Label Text="{Binding Status}"
+                                                               TextColor="{Binding StatusColor}"
+                                                               FontSize="11"/>
+                                                    </HorizontalStackLayout>
+
+                                                    <!-- Details -->
+                                                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                                           Text="{Binding Description}"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                                           FontSize="12"
+                                                           LineBreakMode="WordWrap"/>
+
+                                                    <!-- Duration & Impact -->
+                                                    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                                                          ColumnDefinitions="*,*,*">
+                                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                            <Label Text="Start Date"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                                   FontSize="10"/>
+                                                            <Label Text="{Binding StartDate, StringFormat='{0:MMM dd}'}"
+                                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+
+                                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                            <Label Text="End Date"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                                   FontSize="10"/>
+                                                            <Label Text="{Binding EndDate, StringFormat='{0:MMM dd}'}"
+                                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+
+                                                        <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                            <Label Text="Sales Impact"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                                   FontSize="10"/>
+                                                            <Label Text="{Binding SalesImpact, StringFormat='{0:P1}'}"
+                                                                   TextColor="{Binding ImpactColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+                                                    </Grid>
+                                                </Grid>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Bundle Pricing -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Grid>
+                                    <Label Text="Product Bundles" 
+                                           FontSize="18"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontAttributes="Bold"/>
+                                    <Button Text="Create Bundle"
+                                            Command="{Binding CreateBundleCommand}"
+                                            HorizontalOptions="End"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{DynamicResource TextButtonColor}"/>
+                                </Grid>
+
+                                <CollectionView ItemsSource="{Binding ProductBundles}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                                   Padding="15"
+                                                   CornerRadius="8"
+                                                   Margin="0,0,0,10">
+                                                <Grid ColumnDefinitions="Auto,*,Auto" 
+                                                      RowDefinitions="Auto,Auto"
+                                                      ColumnSpacing="15"
+                                                      RowSpacing="10">
+                                                    <!-- Bundle Icon -->
+                                                    <Label Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                                                           Text="📦"
+                                                           FontSize="24"
+                                                           VerticalOptions="Center"/>
+
+                                                    <!-- Bundle Details -->
+                                                    <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="5">
+                                                        <Label Text="{Binding BundleName}"
+                                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                                               FontSize="16"/>
+                                                        <Label Text="{Binding IncludedProducts}"
+                                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                                               FontSize="12"/>
+                                                    </VerticalStackLayout>
+
+                                                    <!-- Price & Savings -->
+                                                    <VerticalStackLayout Grid.Row="0" Grid.Column="2"
+                                                                         HorizontalOptions="End"
+                                                                         Spacing="5">
+                                                        <Label Text="{Binding BundlePrice, StringFormat='${0:F2}'}"
+                                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                                               FontSize="16"/>
+                                                        <Label Text="{Binding Savings, StringFormat='Save {0:P0}'}"
+                                                               TextColor="{DynamicResource SuccessColor}"
+                                                               FontSize="12"/>
+                                                    </VerticalStackLayout>
+
+                                                    <!-- Performance -->
+                                                    <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                                          ColumnDefinitions="*,*,*">
+                                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                            <Label Text="Units Sold"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                                   FontSize="10"/>
+                                                            <Label Text="{Binding UnitsSold}"
+                                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+
+                                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                            <Label Text="Popularity"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                                   FontSize="10"/>
+                                                            <ProgressBar Progress="{Binding Popularity}"
+                                                                         ProgressColor="{DynamicResource PrimaryColor}"
+                                                                         WidthRequest="50"
+                                                                         VerticalOptions="Center"/>
+                                                        </VerticalStackLayout>
+
+                                                        <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                            <Label Text="Profit Margin"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                                   FontSize="10"/>
+                                                            <Label Text="{Binding ProfitMargin, StringFormat='{0:P1}'}"
+                                                                   TextColor="{Binding MarginColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+                                                    </Grid>
+                                                </Grid>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Seasonal Adjustments -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Label Text="Seasonal Pricing Calendar" 
+                                       FontSize="18"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontAttributes="Bold"/>
+
+                                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
+                                    <Frame Grid.Column="0"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                           Padding="10"
+                                           CornerRadius="8">
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="Q1 (Jan-Mar)"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding Q1Adjustment, StringFormat='{0:P1}'}"
+                                                   TextColor="{Binding Q1Color}"
+                                                   FontSize="18"/>
+                                            <Label Text="Winter Sales"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="11"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+
+                                    <Frame Grid.Column="1"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                           Padding="10"
+                                           CornerRadius="8">
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="Q2 (Apr-Jun)"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding Q2Adjustment, StringFormat='{0:P1}'}"
+                                                   TextColor="{Binding Q2Color}"
+                                                   FontSize="18"/>
+                                            <Label Text="Spring Promo"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="11"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+
+                                    <Frame Grid.Column="2"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                           Padding="10"
+                                           CornerRadius="8">
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="Q3 (Jul-Sep)"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding Q3Adjustment, StringFormat='{0:P1}'}"
+                                                   TextColor="{Binding Q3Color}"
+                                                   FontSize="18"/>
+                                            <Label Text="Summer Sale"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="11"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+
+                                    <Frame Grid.Column="3"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                           Padding="10"
+                                           CornerRadius="8">
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="Q4 (Oct-Dec)"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding Q4Adjustment, StringFormat='{0:P1}'}"
+                                                   TextColor="{Binding Q4Color}"
+                                                   FontSize="18"/>
+                                            <Label Text="Holiday Season"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="11"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Frame>
+        </Grid>
+    </Grid>
 </ContentPage>

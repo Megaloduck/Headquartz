@@ -3,10 +3,510 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Production.FactorySchedulePage"
              Title="FactorySchedulePage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="{DynamicResource HeaderBackgroundColor}"
+               Padding="20"
+               CornerRadius="0">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="Factory Scheduling" 
+                           FontSize="24" 
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+                    <Label Text="Production planning, shift management, maintenance scheduling, capacity planning"
+                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="Generate Schedule"
+                            Command="{Binding GenerateScheduleCommand}"
+                            BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                            TextColor="{DynamicResource PrimaryButtonTextColor}"
+                            Padding="15,10"/>
+                    <Button Text="Optimize"
+                            Command="{Binding OptimizeScheduleCommand}"
+                            BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                            TextColor="{DynamicResource SecondaryButtonTextColor}"
+                            Padding="15,10"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Frame>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Padding="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Schedule Controls -->
+            <Frame Grid.Column="0"
+                   BackgroundColor="{DynamicResource SidebarBackgroundColor}"
+                   Padding="15"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="20">
+                    <!-- Date Selection -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Schedule Period"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="14"/>
+
+                        <DatePicker Date="{Binding ScheduleStartDate}"
+                                    TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="to"
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               HorizontalOptions="Center"/>
+                        <DatePicker Date="{Binding ScheduleEndDate}"
+                                    TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <!-- View Options -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="View Options"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="14"/>
+
+                        <RadioButton GroupName="ViewType" 
+                                     Content="Day View"
+                                     IsChecked="{Binding IsDayView}"/>
+                        <RadioButton GroupName="ViewType" 
+                                     Content="Week View"
+                                     IsChecked="{Binding IsWeekView}"/>
+                        <RadioButton GroupName="ViewType" 
+                                     Content="Month View"
+                                     IsChecked="{Binding IsMonthView}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Production Lines -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Production Lines"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="14"/>
+
+                        <CollectionView ItemsSource="{Binding ProductionLines}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="Auto,*" Padding="10">
+                                        <BoxView Grid.Column="0"
+                                                 Color="{Binding LineColor}"
+                                                 WidthRequest="12"
+                                                 HeightRequest="12"
+                                                 VerticalOptions="Center"
+                                                 CornerRadius="6"/>
+                                        <Label Grid.Column="1"
+                                               Text="{Binding LineName}"
+                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                               FontSize="12"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <!-- Capacity Overview -->
+                    <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                           Padding="15"
+                           CornerRadius="8">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Capacity Overview"
+                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"/>
+
+                            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="8">
+                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Utilization:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding CapacityUtilization, StringFormat='{0:P1}'}"
+                                           TextColor="{Binding UtilizationColor}"
+                                           FontSize="12"/>
+                                </Grid>
+
+                                <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Available Hours:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding AvailableHours}"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="12"/>
+                                </Grid>
+
+                                <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Scheduled Hours:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding ScheduledHours}"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="12"/>
+                                </Grid>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Schedule Calendar -->
+            <Frame Grid.Column="1"
+                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                   Padding="20"
+                   CornerRadius="10"
+                   Margin="20,0,0,0">
+                <ScrollView>
+                    <VerticalStackLayout Spacing="20">
+                        <!-- Calendar Header -->
+                        <Grid>
+                            <HorizontalStackLayout Spacing="20">
+                                <Button Text="◀"
+                                        Command="{Binding PreviousPeriodCommand}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource TextButtonColor}"
+                                        FontSize="20"/>
+                                <Label Text="{Binding CurrentPeriod}"
+                                       FontSize="20"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontAttributes="Bold"/>
+                                <Button Text="▶"
+                                        Command="{Binding NextPeriodCommand}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource TextButtonColor}"
+                                        FontSize="20"/>
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                                <Button Text="Today"
+                                        Command="{Binding GoToTodayCommand}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource TextButtonColor}"/>
+                                <Button Text="Print"
+                                        Command="{Binding PrintScheduleCommand}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource TextButtonColor}"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+
+                        <!-- Schedule Grid -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="0"
+                               CornerRadius="8">
+                            <Grid RowDefinitions="Auto,*">
+                                <!-- Time Headers -->
+                                <Grid Grid.Row="0"
+                                      BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                      Padding="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0"
+                                           Text="Time"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="14"/>
+                                    <Label Grid.Column="1"
+                                           Text="Production Schedule"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="14"/>
+                                </Grid>
+
+                                <!-- Schedule Body -->
+                                <ScrollView Grid.Row="1">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Time Slots -->
+                                        <BoxView Grid.Row="0" Grid.Column="0" Grid.RowSpan="8"
+                                                 Color="{DynamicResource SurfaceColor}"/>
+
+                                        <Label Grid.Row="0" Grid.Column="0"
+                                               Text="06:00 - 08:00"
+                                               Padding="10"
+                                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                                        <Label Grid.Row="1" Grid.Column="0"
+                                               Text="08:00 - 10:00"
+                                               Padding="10"
+                                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                                        <Label Grid.Row="2" Grid.Column="0"
+                                               Text="10:00 - 12:00"
+                                               Padding="10"
+                                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                                        <Label Grid.Row="3" Grid.Column="0"
+                                               Text="12:00 - 14:00"
+                                               Padding="10"
+                                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                                        <Label Grid.Row="4" Grid.Column="0"
+                                               Text="14:00 - 16:00"
+                                               Padding="10"
+                                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                                        <Label Grid.Row="5" Grid.Column="0"
+                                               Text="16:00 - 18:00"
+                                               Padding="10"
+                                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                                        <Label Grid.Row="6" Grid.Column="0"
+                                               Text="18:00 - 20:00"
+                                               Padding="10"
+                                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                                        <Label Grid.Row="7" Grid.Column="0"
+                                               Text="20:00 - 22:00"
+                                               Padding="10"
+                                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                                        <!-- Schedule Items -->
+                                        <AbsoluteLayout Grid.Row="0" Grid.Column="1" Grid.RowSpan="8">
+                                            <!-- Example scheduled items -->
+                                            <Frame AbsoluteLayout.LayoutBounds="0.1,0.1,0.3,0.8"
+                                                   AbsoluteLayout.LayoutFlags="All"
+                                                   BackgroundColor="{DynamicResource PrimaryColor}"
+                                                   Padding="10"
+                                                   CornerRadius="4">
+                                                <VerticalStackLayout>
+                                                    <Label Text="Product A"
+                                                           TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                                           FontSize="12"/>
+                                                    <Label Text="Line 1"
+                                                           TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                                           FontSize="10"/>
+                                                </VerticalStackLayout>
+                                            </Frame>
+
+                                            <Frame AbsoluteLayout.LayoutBounds="0.5,0.3,0.4,0.6"
+                                                   AbsoluteLayout.LayoutFlags="All"
+                                                   BackgroundColor="{DynamicResource SecondaryColor}"
+                                                   Padding="10"
+                                                   CornerRadius="4">
+                                                <VerticalStackLayout>
+                                                    <Label Text="Product B"
+                                                           TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                                           FontSize="12"/>
+                                                    <Label Text="Line 2"
+                                                           TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                                           FontSize="10"/>
+                                                </VerticalStackLayout>
+                                            </Frame>
+                                        </AbsoluteLayout>
+                                    </Grid>
+                                </ScrollView>
+                            </Grid>
+                        </Frame>
+
+                        <!-- Shift Management -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Grid>
+                                    <Label Text="Shift Schedule" 
+                                           FontSize="18"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontAttributes="Bold"/>
+                                    <Button Text="Manage Shifts"
+                                            Command="{Binding ManageShiftsCommand}"
+                                            HorizontalOptions="End"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{DynamicResource TextButtonColor}"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                                    <Frame Grid.Column="0"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                           Padding="15"
+                                           CornerRadius="8">
+                                        <VerticalStackLayout Spacing="10">
+                                            <Label Text="Morning Shift"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="06:00 - 14:00"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="12"/>
+                                            <Label Text="{Binding MorningShiftStaff, StringFormat='Staff: {0}'}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="12"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+
+                                    <Frame Grid.Column="1"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                           Padding="15"
+                                           CornerRadius="8">
+                                        <VerticalStackLayout Spacing="10">
+                                            <Label Text="Afternoon Shift"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="14:00 - 22:00"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="12"/>
+                                            <Label Text="{Binding AfternoonShiftStaff, StringFormat='Staff: {0}'}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="12"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+
+                                    <Frame Grid.Column="2"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                           Padding="15"
+                                           CornerRadius="8">
+                                        <VerticalStackLayout Spacing="10">
+                                            <Label Text="Night Shift"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="22:00 - 06:00"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="12"/>
+                                            <Label Text="{Binding NightShiftStaff, StringFormat='Staff: {0}'}"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="12"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+
+                                    <Frame Grid.Column="3"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                           Padding="15"
+                                           CornerRadius="8">
+                                        <VerticalStackLayout Spacing="10">
+                                            <Label Text="Total Staff"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding TotalStaff}"
+                                                   TextColor="{DynamicResource PrimaryColor}"
+                                                   FontSize="24"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="Active Today"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   FontSize="12"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Maintenance Schedule -->
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="15">
+                                <Grid>
+                                    <Label Text="Maintenance Schedule" 
+                                           FontSize="18"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontAttributes="Bold"/>
+                                    <Button Text="Schedule Maintenance"
+                                            Command="{Binding ScheduleMaintenanceCommand}"
+                                            HorizontalOptions="End"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{DynamicResource TextButtonColor}"/>
+                                </Grid>
+
+                                <CollectionView ItemsSource="{Binding MaintenanceSchedule}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                                   Padding="15"
+                                                   CornerRadius="8"
+                                                   Margin="0,0,0,10">
+                                                <Grid ColumnDefinitions="Auto,*,Auto" 
+                                                      RowDefinitions="Auto,Auto"
+                                                      ColumnSpacing="15"
+                                                      RowSpacing="5">
+                                                    <!-- Machine Info -->
+                                                    <VerticalStackLayout Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                                                                         WidthRequest="50">
+                                                        <Label Text="⚙️"
+                                                               FontSize="24"
+                                                               HorizontalOptions="Center"/>
+                                                        <Label Text="{Binding MachineCode}"
+                                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                                               FontSize="11"
+                                                               HorizontalOptions="Center"/>
+                                                    </VerticalStackLayout>
+
+                                                    <!-- Maintenance Details -->
+                                                    <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="5">
+                                                        <Label Text="{Binding MaintenanceType}"
+                                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                                               FontSize="16"/>
+                                                        <Label Text="{Binding Description}"
+                                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                                               FontSize="12"/>
+                                                    </VerticalStackLayout>
+
+                                                    <!-- Status -->
+                                                    <Frame Grid.Row="0" Grid.Column="2"
+                                                           BackgroundColor="{Binding StatusColor}"
+                                                           Padding="5,2"
+                                                           CornerRadius="4">
+                                                        <Label Text="{Binding Status}"
+                                                               TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                                               FontSize="11"/>
+                                                    </Frame>
+
+                                                    <!-- Schedule -->
+                                                    <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                                          ColumnDefinitions="*,*,*">
+                                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                            <Label Text="Scheduled Date"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                                   FontSize="11"/>
+                                                            <Label Text="{Binding ScheduledDate, StringFormat='{0:MMM dd}'}"
+                                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+
+                                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                            <Label Text="Duration"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                               FontSize="11"/>
+                                                            <Label Text="{Binding Duration, StringFormat='{0} hours'}"
+                                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+
+                                                        <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                            <Label Text="Technician"
+                                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                               FontSize="11"/>
+                                                            <Label Text="{Binding Technician}"
+                                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                                   FontSize="12"/>
+                                                        </VerticalStackLayout>
+                                                    </Grid>
+                                                </Grid>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Frame>
+        </Grid>
+    </Grid>
 </ContentPage>

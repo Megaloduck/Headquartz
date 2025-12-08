@@ -3,10 +3,334 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Logistics.DeliveryTrackingPage"
              Title="DeliveryTrackingPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="{DynamicResource HeaderBackgroundColor}"
+               Padding="20"
+               CornerRadius="0">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="Delivery Tracking" 
+                           FontSize="24" 
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold"/>
+                    <Label Text="Real-time tracking, delivery ETAs, exception handling, proof of delivery"
+                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="Live Map"
+                            Command="{Binding ViewLiveMapCommand}"
+                            BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                            TextColor="{DynamicResource PrimaryButtonTextColor}"
+                            Padding="15,10"/>
+                    <Button Text="Refresh All"
+                            Command="{Binding RefreshAllCommand}"
+                            BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                            TextColor="{DynamicResource SecondaryButtonTextColor}"
+                            Padding="15,10"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Frame>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Padding="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Tracking Controls -->
+            <Frame Grid.Column="0"
+                   BackgroundColor="{DynamicResource SidebarBackgroundColor}"
+                   Padding="15"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="20">
+                    <!-- Track Shipment -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Track Shipment"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+
+                        <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                               Padding="15"
+                               CornerRadius="8">
+                            <VerticalStackLayout Spacing="10">
+                                <Entry Placeholder="Enter tracking number"
+                                       Text="{Binding TrackingNumber}"
+                                       BackgroundColor="{DynamicResource InputBackgroundColor}"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                <Button Text="Track"
+                                        Command="{Binding TrackByNumberCommand}"
+                                        BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                                        TextColor="{DynamicResource PrimaryButtonTextColor}"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Filter Options -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Filter Deliveries"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="14"/>
+
+                        <RadioButton IsChecked="{Binding FilterOnTime}" 
+                                  Content="On Time"
+                                  TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <RadioButton IsChecked="{Binding FilterDelayed}" 
+                                  Content="Delayed"
+                                  TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <RadioButton IsChecked="{Binding FilterException}" 
+                                  Content="Exceptions"
+                                  TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <RadioButton IsChecked="{Binding FilterDelivered}" 
+                                  Content="Delivered"
+                                  TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Delivery Stats -->
+                    <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                           Padding="15"
+                           CornerRadius="8">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Delivery Stats"
+                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"/>
+
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="8">
+                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Today's Deliveries:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding TodaysDeliveries}"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="12"/>
+                                </Grid>
+
+                                <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="On Time:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding OnTimePercentage, StringFormat='{0:P1}'}"
+                                           TextColor="{DynamicResource SuccessColor}"
+                                           FontSize="12"/>
+                                </Grid>
+
+                                <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Exceptions:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding ExceptionCount}"
+                                           TextColor="{DynamicResource DangerColor}"
+                                           FontSize="12"/>
+                                </Grid>
+
+                                <Grid Grid.Row="3" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="Avg Delivery Time:"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding AverageDeliveryTime, StringFormat='{0:F1} hours'}"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="12"/>
+                                </Grid>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Quick Actions -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Quick Actions"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="14"
+                               FontAttributes="Bold"/>
+
+                        <Button Text="Report Exception"
+                                Command="{Binding ReportExceptionCommand}"
+                                BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                        <Button Text="Update ETA"
+                                Command="{Binding UpdateETACommand}"
+                                BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                        <Button Text="Proof of Delivery"
+                                Command="{Binding ViewProofOfDeliveryCommand}"
+                                BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                TextColor="{DynamicResource SecondaryButtonTextColor}"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Tracking Dashboard -->
+            <Frame Grid.Column="1"
+                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                   Padding="20"
+                   CornerRadius="10"
+                   Margin="20,0,0,0">
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Map View -->
+                    <Frame Grid.Row="0"
+                           BackgroundColor="{DynamicResource SurfaceColor}"
+                           HeightRequest="300"
+                           CornerRadius="8"
+                           Padding="0"
+                           Margin="0,0,0,20">
+                        <Grid>
+                            <!-- Map Placeholder -->
+                            <BoxView Color="{DynamicResource BorderColor}"/>
+                            <Label Text="Live Delivery Map"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+
+                            <!-- Delivery Markers -->
+                            <AbsoluteLayout>
+                                <!-- Example delivery markers -->
+                                <Frame AbsoluteLayout.LayoutBounds="0.3,0.4,40,40"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       BackgroundColor="{DynamicResource PrimaryColor}"
+                                       Padding="0"
+                                       CornerRadius="20"
+                                       HasShadow="True">
+                                    <Label Text="🚚"
+                                           FontSize="20"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Frame>
+
+                                <Frame AbsoluteLayout.LayoutBounds="0.6,0.6,40,40"
+                                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                                       BackgroundColor="{DynamicResource SuccessColor}"
+                                       Padding="0"
+                                       CornerRadius="20"
+                                       HasShadow="True">
+                                    <Label Text="✓"
+                                           FontSize="20"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Frame>
+                            </AbsoluteLayout>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Active Deliveries -->
+                    <VerticalStackLayout Grid.Row="1" Spacing="15">
+                        <Label Text="Active Deliveries" 
+                               FontSize="18"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontAttributes="Bold"/>
+
+                        <CollectionView ItemsSource="{Binding ActiveDeliveries}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BackgroundColor="{DynamicResource SurfaceColor}"
+                                           Padding="15"
+                                           CornerRadius="8"
+                                           Margin="0,0,0,10">
+                                        <Grid ColumnDefinitions="Auto,*,Auto" 
+                                              RowDefinitions="Auto,Auto,Auto"
+                                              ColumnSpacing="15"
+                                              RowSpacing="5">
+                                            <!-- Delivery Icon -->
+                                            <Label Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
+                                                   Text="📦"
+                                                   FontSize="24"
+                                                   VerticalOptions="Center"/>
+
+                                            <!-- Delivery Details -->
+                                            <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding TrackingNumber}"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       FontSize="16"/>
+                                                <Label Text="{Binding Destination}"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                                       FontSize="12"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Status -->
+                                            <HorizontalStackLayout Grid.Row="0" Grid.Column="2"
+                                                                   Spacing="5">
+                                                <BoxView Color="{Binding StatusColor}"
+                                                         WidthRequest="8"
+                                                         HeightRequest="8"
+                                                         VerticalOptions="Center"
+                                                         CornerRadius="4"/>
+                                                <Label Text="{Binding Status}"
+                                                       TextColor="{Binding StatusColor}"
+                                                       FontSize="12"/>
+                                            </HorizontalStackLayout>
+
+                                            <!-- Driver & Vehicle -->
+                                            <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                                  ColumnDefinitions="*,*" ColumnSpacing="10">
+                                                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                    <Label Text="Driver"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                                           FontSize="11"/>
+                                                    <Label Text="{Binding DriverName}"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                                           FontSize="12"/>
+                                                </VerticalStackLayout>
+
+                                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                    <Label Text="Vehicle"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                                           FontSize="11"/>
+                                                    <Label Text="{Binding VehicleId}"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                                           FontSize="12"/>
+                                                </VerticalStackLayout>
+                                            </Grid>
+
+                                            <!-- Progress & ETA -->
+                                            <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
+                                                <!-- Progress Bar -->
+                                                <ProgressBar Progress="{Binding Progress}"
+                                                             ProgressColor="{DynamicResource PrimaryColor}"/>
+                                                <Label Text="{Binding Progress, StringFormat='{0:P0}'}"
+                                                       HorizontalOptions="Center"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       BackgroundColor="{DynamicResource SurfaceColor}"
+                                                       Padding="10,0"/>
+
+                                                <!-- ETA & Actions -->
+                                                <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                                                    <Label Text="{Binding ETA, StringFormat='ETA: {0:HH:mm}'}"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                                           FontSize="12"/>
+                                                    <Button Text="Track"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, 
+                                                                    Path=BindingContext.TrackDeliveryCommand}"
+                                                            CommandParameter="{Binding}"
+                                                            BackgroundColor="Transparent"
+                                                            TextColor="{DynamicResource TextButtonColor}"/>
+                                                    <Button Text="Update"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, 
+                                                                    Path=BindingContext.UpdateDeliveryCommand}"
+                                                            CommandParameter="{Binding}"
+                                                            BackgroundColor="Transparent"
+                                                            TextColor="{DynamicResource TextButtonColor}"/>
+                                                </HorizontalStackLayout>
+                                            </Grid>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+        </Grid>
+    </Grid>
 </ContentPage>
