@@ -3,45 +3,486 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Sales.SalesDashboardPage"
              Title="SalesDashboardPage">
-    <VerticalStackLayout Padding="12" Spacing="10">
-        <Label Text="Sales Dashboard" FontAttributes="Bold" FontSize="18"/>
+    <Grid RowDefinitions="Auto,*,Auto">
 
-        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10">
-            <Frame CornerRadius="8" Padding="10">
-                <VerticalStackLayout>
-                    <Label Text="Active Leads"/>
-                    <Label Text="{Binding ActiveLeadsCount}" FontSize="20"/>
-                </VerticalStackLayout>
-            </Frame>
+        <!-- Sales Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Sales Performance Dashboard" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Sales targets, team performance, and pipeline analysis" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
 
-            <Frame CornerRadius="8" Padding="10">
-                <VerticalStackLayout>
-                    <Label Text="Open Orders"/>
-                    <Label Text="{Binding OpenOrdersCount}" FontSize="20"/>
-                </VerticalStackLayout>
-            </Frame>
-        </Grid>
+                    <Border Background="{DynamicResource SuccessColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="💰" FontSize="18"/>
+                            <Label Text="{Binding TotalRevenue, StringFormat='${0:N0}K'}" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
 
-        <Label Text="Leads" FontAttributes="Bold"/>
-        <CollectionView ItemsSource="{Binding Leads}" HeightRequest="280">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Padding="10" CornerRadius="6" Margin="0,6">
-                        <Grid ColumnDefinitions="*,auto">
-                            <StackLayout>
-                                <Label Text="{Binding CustomerName}" FontAttributes="Bold"/>
-                                <Label Text="{Binding Stage}" FontSize="12"/>
-                            </StackLayout>
-                            <Button Text="Open" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenLeadCommand}" CommandParameter="{Binding .}" Grid.Column="1"/>
+                <!-- Sales Period -->
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="15">
+                    <Border Grid.Column="0" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="Sales Period" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Picker ItemsSource="{Binding SalesPeriods}"
+                                        SelectedItem="{Binding SelectedPeriod}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="Target Achievement" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Label Text="{Binding TargetAchievement, StringFormat='{0:P0}'}" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{Binding AchievementColor}"/>
+                            </VerticalStackLayout>
                         </Grid>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                    </Border>
 
-        <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
-            <Button Text="New Order" Command="{Binding CreateOrderCommand}" />
-            <Button Text="Pricing" Command="{Binding OpenPricingCommand}" />
-        </HorizontalStackLayout>
-    </VerticalStackLayout>
+                    <Button Grid.Column="1" 
+                            Text="📊 View Pipeline"
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding ViewPipelineCommand}"/>
+
+                    <Button Grid.Column="2" 
+                            Text="➕ New Deal"
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding NewDealCommand}"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Sales Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Key Metrics -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                    <!-- Monthly Sales -->
+                    <Border Grid.Column="0" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding MonthlySales, StringFormat='${0:N0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource SuccessColor}"/>
+                            <Label Text="Monthly Sales" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Text="{Binding MonthlyGrowth, StringFormat='{0:P1} vs last month'}" 
+                                   FontSize="11"
+                                   TextColor="{Binding MonthlyGrowthColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Pipeline Value -->
+                    <Border Grid.Column="1" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding PipelineValue, StringFormat='${0:N0}K'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryColor}"/>
+                            <Label Text="Pipeline Value" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <ProgressBar Progress="{Binding PipelineProgress}"
+                                        ProgressColor="{DynamicResource PrimaryColor}"
+                                        HeightRequest="6"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Conversion Rate -->
+                    <Border Grid.Column="2" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding ConversionRate, StringFormat='{0:P1}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource AccentColor}"/>
+                            <Label Text="Conversion Rate" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Text="{Binding ConversionTrend}" 
+                                   FontSize="11"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Avg Deal Size -->
+                    <Border Grid.Column="3" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding AvgDealSize, StringFormat='${0:N0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource WarningColor}"/>
+                            <Label Text="Avg Deal Size" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Text="{Binding DealSizeTrend}" 
+                                   FontSize="11"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Sales Pipeline -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Sales Pipeline" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="10">
+                            <!-- Prospecting -->
+                            <Border Grid.Column="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="👤" FontSize="24"/>
+                                    <Label Text="Prospecting" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ProspectingCount}" 
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryColor}"/>
+                                    <Label Text="{Binding ProspectingValue, StringFormat='${0:N0}K'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Qualification -->
+                            <Border Grid.Column="1" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="📋" FontSize="24"/>
+                                    <Label Text="Qualification" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding QualificationCount}" 
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource AccentColor}"/>
+                                    <Label Text="{Binding QualificationValue, StringFormat='${0:N0}K'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Proposal -->
+                            <Border Grid.Column="2" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="📄" FontSize="24"/>
+                                    <Label Text="Proposal" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ProposalCount}" 
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource WarningColor}"/>
+                                    <Label Text="{Binding ProposalValue, StringFormat='${0:N0}K'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Negotiation -->
+                            <Border Grid.Column="3" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="🤝" FontSize="24"/>
+                                    <Label Text="Negotiation" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding NegotiationCount}" 
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource DangerColor}"/>
+                                    <Label Text="{Binding NegotiationValue, StringFormat='${0:N0}K'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Closed Won -->
+                            <Border Grid.Column="4" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="✅" FontSize="24"/>
+                                    <Label Text="Closed Won" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ClosedWonCount}" 
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource SuccessColor}"/>
+                                    <Label Text="{Binding ClosedWonValue, StringFormat='${0:N0}K'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Top Performers -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="🏆 Top Sales Performers" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <CollectionView ItemsSource="{Binding TopPerformers}" HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="15" 
+                                            Margin="0,0,0,10"
+                                            Background="{DynamicResource HeaderBackgroundColor}"
+                                            StrokeShape="RoundRectangle 8">
+                                        <Grid ColumnDefinitions="Auto,*,100,100,80" ColumnSpacing="15">
+                                            <!-- Rank -->
+                                            <Border Grid.Column="0" 
+                                                    Background="{Binding RankColor}"
+                                                    WidthRequest="30"
+                                                    HeightRequest="30"
+                                                    StrokeShape="RoundRectangle 15">
+                                                <Label Text="{Binding Rank}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+
+                                            <!-- Sales Rep -->
+                                            <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                                                <Border Background="{DynamicResource PrimaryColor}"
+                                                        WidthRequest="40"
+                                                        HeightRequest="40"
+                                                        StrokeShape="RoundRectangle 20">
+                                                    <Label Text="{Binding Initials}" 
+                                                           FontSize="14"
+                                                           FontAttributes="Bold"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center"/>
+                                                </Border>
+                                                <VerticalStackLayout Spacing="2">
+                                                    <Label Text="{Binding Name}" 
+                                                           FontSize="14"
+                                                           FontAttributes="Bold"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                    <Label Text="{Binding Region}" 
+                                                           FontSize="11"
+                                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                                </VerticalStackLayout>
+                                            </HorizontalStackLayout>
+
+                                            <!-- Revenue -->
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Text="Revenue" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding Revenue, StringFormat='${0:N0}'}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource SuccessColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Deals -->
+                                            <VerticalStackLayout Grid.Column="3" Spacing="2">
+                                                <Label Text="Deals Closed" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding DealsClosed}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Achievement -->
+                                            <VerticalStackLayout Grid.Column="4" Spacing="2">
+                                                <Label Text="Target" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding TargetAchievement, StringFormat='{0:P0}'}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{Binding AchievementColor}"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Recent Deals -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <HorizontalStackLayout>
+                            <Label Text="Recent Deals" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding RecentDeals.Count}" 
+                                   BackgroundColor="{DynamicResource PrimaryColor}"
+                                   TextColor="White"
+                                   Padding="8,4"
+                                   Margin="10,0,0,0"/>
+
+                        </HorizontalStackLayout>
+
+                        <CollectionView ItemsSource="{Binding RecentDeals}" HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="12" 
+                                            Margin="0,0,0,5"
+                                            Background="{DynamicResource HeaderBackgroundColor}"
+                                            StrokeShape="RoundRectangle 8">
+                                        <Grid ColumnDefinitions="Auto,*,100,100,80" ColumnSpacing="10">
+                                            <Border Grid.Column="0" 
+                                                    Background="{Binding StatusColor}"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"
+                                                    StrokeShape="RoundRectangle 8">
+                                                <Label Text="{Binding Icon}" 
+                                                       FontSize="18"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding CustomerName}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding Product}" 
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="End">
+                                                <Label Text="Amount" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding Amount, StringFormat='${0:N0}'}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource SuccessColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="3" Spacing="2" HorizontalOptions="End">
+                                                <Label Text="Close Date" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding CloseDate, StringFormat='{0:MMM dd}'}" 
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <Border Grid.Column="4" 
+                                                    Background="{Binding StageColor}"
+                                                    Padding="8,4"
+                                                    StrokeShape="RoundRectangle 5">
+                                                <Label Text="{Binding Stage}" 
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"
+                                                       HorizontalOptions="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Quick Actions -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <Button Grid.Column="0" 
+                            Text="➕ New Lead"
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding NewLeadCommand}"/>
+
+                    <Button Grid.Column="1" 
+                            Text="📊 Sales Report"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding SalesReportCommand}"/>
+
+                    <Button Grid.Column="2" 
+                            Text="🎯 Set Targets"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding SetTargetsCommand}"/>
+                </Grid>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+
 </ContentPage>

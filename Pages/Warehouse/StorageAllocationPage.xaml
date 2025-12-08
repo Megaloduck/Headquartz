@@ -3,10 +3,539 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Warehouse.StorageAllocationPage"
              Title="StorageAllocationPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Storage Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Storage Space Management" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Bin management, space optimization, and storage location planning" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <Border Background="{DynamicResource PrimaryColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="🗄️" FontSize="18"/>
+                            <Label Text="{Binding TotalBins}" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Storage Stats -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                    <!-- Total Space -->
+                    <Border Grid.Column="0" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label Text="Total Space" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Text="{Binding TotalSpace, StringFormat='{0} sqm'}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Utilization -->
+                    <Border Grid.Column="1" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label Text="Space Utilization" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Text="{Binding SpaceUtilization, StringFormat='{0:P0}'}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold"
+                                   TextColor="{Binding UtilizationColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Empty Bins -->
+                    <Border Grid.Column="2" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label Text="Empty Bins" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Text="{Binding EmptyBins}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource SuccessColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Avg Occupancy -->
+                    <Border Grid.Column="3" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label Text="Avg Bin Occupancy" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Text="{Binding AvgBinOccupancy, StringFormat='{0:P0}'}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource InfoColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Storage Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Warehouse Layout -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="🏢 Warehouse Layout" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15" RowDefinitions="Auto,Auto,Auto" RowSpacing="15">
+                            <!-- Zone A -->
+                            <Border Grid.Column="0" Grid.Row="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="A" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryColor}"/>
+                                    <Label Text="Bulk Storage" 
+                                           FontSize="14"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ZoneAUsage, StringFormat='{0:P0}'}" 
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding ZoneAColor}"/>
+                                    <Label Text="{Binding ZoneABins, StringFormat='{0} bins'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Zone B -->
+                            <Border Grid.Column="1" Grid.Row="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="B" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource AccentColor}"/>
+                                    <Label Text="Picking Zone" 
+                                           FontSize="14"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ZoneBUsage, StringFormat='{0:P0}'}" 
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding ZoneBColor}"/>
+                                    <Label Text="{Binding ZoneBBins, StringFormat='{0} bins'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Zone C -->
+                            <Border Grid.Column="2" Grid.Row="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="C" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource SuccessColor}"/>
+                                    <Label Text="Cold Storage" 
+                                           FontSize="14"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ZoneCUsage, StringFormat='{0:P0}'}" 
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding ZoneCColor}"/>
+                                    <Label Text="{Binding ZoneCBins, StringFormat='{0} bins'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Zone D -->
+                            <Border Grid.Column="3" Grid.Row="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="D" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource WarningColor}"/>
+                                    <Label Text="Hazardous" 
+                                           FontSize="14"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ZoneDUsage, StringFormat='{0:P0}'}" 
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding ZoneDColor}"/>
+                                    <Label Text="{Binding ZoneDBins, StringFormat='{0} bins'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Zone Map Visualization -->
+                            <Border Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1" Grid.RowSpan="2"
+                                    Background="#1AFFFFFF"
+                                    HeightRequest="300"
+                                    StrokeShape="RoundRectangle 8">
+                                <Label Text="🗺️ Warehouse Map Visualization" 
+                                       FontSize="16"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Bin Allocation -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <HorizontalStackLayout>
+                            <Label Text="🗄️ Bin Allocation Manager" 
+                                   FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding ShowingBins, StringFormat='{0} bins'}" 
+                                   BackgroundColor="{DynamicResource PrimaryColor}"
+                                   TextColor="White"
+                                   Padding="8,4"
+                                   Margin="10,0,0,0"/>
+
+                        </HorizontalStackLayout>
+
+                        <!-- Bin Filters -->
+                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                            <Border Grid.Column="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15,12"
+                                    StrokeShape="RoundRectangle 10">
+                                <HorizontalStackLayout Spacing="10">
+                                    <Label Text="🔍" 
+                                           FontSize="16"
+                                           VerticalOptions="Center"/>
+                                    <Entry Placeholder="Search bins..." 
+                                           Text="{Binding BinSearchText}"
+                                           HorizontalOptions="FillAndExpand"
+                                           PlaceholderColor="{DynamicResource TertiaryTextColor}"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                </HorizontalStackLayout>
+                            </Border>
+
+                            <Picker Grid.Column="1" 
+                                    Title="Filter Zone"
+                                    ItemsSource="{Binding Zones}"
+                                    SelectedItem="{Binding SelectedZone}"
+                                    WidthRequest="150"
+                                    BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                    TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                            <Picker Grid.Column="2" 
+                                    Title="Filter Status"
+                                    ItemsSource="{Binding BinStatuses}"
+                                    SelectedItem="{Binding SelectedStatus}"
+                                    WidthRequest="150"
+                                    BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                    TextColor="{DynamicResource PrimaryTextColor}"/>
+                        </Grid>
+
+                        <!-- Bins Grid -->
+                        <CollectionView ItemsSource="{Binding Bins}" 
+                                       ItemsLayout="GridItemsLayout, Orientation=Vertical, Span=4">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="15" 
+                                            Margin="5"
+                                            Background="{Binding StatusColor}"
+                                            StrokeShape="RoundRectangle 8">
+                                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                            <Label Text="{Binding BinCode}" 
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   HorizontalOptions="Center"/>
+
+                                            <Label Text="{Binding Zone}" 
+                                                   FontSize="12"
+                                                   TextColor="#FFFFFFAA"
+                                                   HorizontalOptions="Center"/>
+
+                                            <Label Text="{Binding Occupancy, StringFormat='{0:P0}'}" 
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   HorizontalOptions="Center"/>
+
+                                            <Label Text="{Binding ProductCount, StringFormat='{0} items'}" 
+                                                   FontSize="11"
+                                                   TextColor="#FFFFFFAA"
+                                                   HorizontalOptions="Center"/>
+
+                                            <!-- Quick Actions -->
+                                            <Grid ColumnDefinitions="*,*" ColumnSpacing="5">
+                                                <Button Grid.Column="0" 
+                                                        Text="👁️"
+                                                        BackgroundColor="#FFFFFF40"
+                                                        TextColor="White"
+                                                        Padding="0"
+                                                        WidthRequest="30"
+                                                        HeightRequest="30"
+                                                        CornerRadius="15"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewBinCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+
+                                                <Button Grid.Column="1" 
+                                                        Text="📋"
+                                                        BackgroundColor="#FFFFFF40"
+                                                        TextColor="White"
+                                                        Padding="0"
+                                                        WidthRequest="30"
+                                                        HeightRequest="30"
+                                                        CornerRadius="15"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditBinCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+                                            </Grid>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Space Optimization -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="⚡ Space Optimization Suggestions" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <CollectionView ItemsSource="{Binding OptimizationSuggestions}" HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="15" 
+                                            Margin="0,0,0,10"
+                                            Background="{DynamicResource HeaderBackgroundColor}"
+                                            StrokeShape="RoundRectangle 8">
+                                        <Grid ColumnDefinitions="Auto,*,100,100,80" ColumnSpacing="15">
+                                            <Label Grid.Column="0" 
+                                                   Text="{Binding Icon}" 
+                                                   FontSize="20"/>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding Title}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding Description}" 
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Text="Impact" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding Impact, StringFormat='{0:P0}'}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{Binding ImpactColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="3" Spacing="2">
+                                                <Label Text="Effort" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding Effort}" 
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <Button Grid.Column="4" 
+                                                    Text="Apply"
+                                                    BackgroundColor="{DynamicResource PrimaryColor}"
+                                                    TextColor="White"
+                                                    Padding="10,5"
+                                                    CornerRadius="6"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ApplyOptimizationCommand}"
+                                                    CommandParameter="{Binding Id}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Create New Bin -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="➕ Create New Storage Bin" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20" RowDefinitions="Auto,Auto,Auto" RowSpacing="15">
+                            <!-- Bin Code -->
+                            <VerticalStackLayout Grid.Column="0" Grid.Row="0" Spacing="5">
+                                <Label Text="Bin Code" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                <Entry Text="{Binding NewBinCode}"
+                                       Placeholder="e.g., A-01-02"
+                                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+
+                            <!-- Zone -->
+                            <VerticalStackLayout Grid.Column="1" Grid.Row="0" Spacing="5">
+                                <Label Text="Zone" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                <Picker ItemsSource="{Binding ZoneOptions}"
+                                        SelectedItem="{Binding NewBinZone}"
+                                        BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                        TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+
+                            <!-- Size -->
+                            <VerticalStackLayout Grid.Column="0" Grid.Row="1" Spacing="5">
+                                <Label Text="Size (cubic meters)" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                <Entry Text="{Binding NewBinSize}"
+                                       Placeholder="Enter size"
+                                       Keyboard="Numeric"
+                                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+
+                            <!-- Weight Capacity -->
+                            <VerticalStackLayout Grid.Column="1" Grid.Row="1" Spacing="5">
+                                <Label Text="Weight Capacity (kg)" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                <Entry Text="{Binding NewBinWeightCapacity}"
+                                       Placeholder="Enter capacity"
+                                       Keyboard="Numeric"
+                                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+
+                            <!-- Type -->
+                            <VerticalStackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Spacing="5">
+                                <Label Text="Bin Type" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                <Picker ItemsSource="{Binding BinTypes}"
+                                        SelectedItem="{Binding NewBinType}"
+                                        BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                        TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Button Text="🗄️ Create Bin"
+                                BackgroundColor="{DynamicResource PrimaryColor}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                HeightRequest="50"
+                                FontSize="16"
+                                Command="{Binding CreateBinCommand}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Storage Actions -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="15">
+            <Grid ColumnDefinitions="*,Auto">
+                <HorizontalStackLayout Grid.Column="0" Spacing="15">
+                    <Button Text="📊 Space Report" 
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding SpaceReportCommand}"/>
+
+                    <Button Text="🔄 Reorganize" 
+                            BackgroundColor="{DynamicResource WarningColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ReorganizeCommand}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="📥 Export Layout" 
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ExportLayoutCommand}"/>
+
+                    <Button Text="🗺️ 3D View" 
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ThreeDViewCommand}"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+    </Grid>
+
 </ContentPage>

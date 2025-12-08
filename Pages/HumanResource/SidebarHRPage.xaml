@@ -235,7 +235,7 @@
                                            VerticalOptions="Center"/>
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                                    <Label Text="Recruitment    " 
+                                    <Label Text="Recruitment" 
                                            FontSize="14"
                                            FontAttributes="Bold"
                                            TextColor="{DynamicResource PrimaryTextColor}"/>
@@ -305,7 +305,6 @@
                         </Border>
 
                         <!-- HR Policies -->
-
                         <Border Style="{StaticResource SidebarItemStyle}">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding NavigateToHRPoliciesCommand}"/>

@@ -3,10 +3,485 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Sales.CustomersPage"
              Title="CustomersPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Customers Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Customer Relationship Management" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Customer database, relationship management, support tickets, and feedback" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <Border Background="{DynamicResource PrimaryColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="👥" FontSize="18"/>
+                            <Label Text="{Binding TotalCustomers}" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Customer Tabs -->
+                <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Center">
+                    <Button Text="📋 All Customers ({Binding AllCustomersCount})" 
+                            BackgroundColor="{Binding IsAllTabActive, Converter={StaticResource TabActiveConverter}}"
+                            TextColor="{Binding IsAllTabActive, Converter={StaticResource TabTextColorConverter}}"
+                            CornerRadius="20"
+                            Padding="20,10"
+                            Margin="0,0,10,0"
+                            Command="{Binding SwitchToAllCommand}"/>
+
+                    <Button Text="⭐ VIP ({Binding VIPCount})" 
+                            BackgroundColor="{Binding IsVIPTabActive, Converter={StaticResource TabActiveConverter}}"
+                            TextColor="{Binding IsVIPTabActive, Converter={StaticResource TabTextColorConverter}}"
+                            CornerRadius="20"
+                            Padding="20,10"
+                            Margin="0,0,10,0"
+                            Command="{Binding SwitchToVIPCommand}"/>
+
+                    <Button Text="⏰ Recent ({Binding RecentCount})" 
+                            BackgroundColor="{Binding IsRecentTabActive, Converter={StaticResource TabActiveConverter}}"
+                            TextColor="{Binding IsRecentTabActive, Converter={StaticResource TabTextColorConverter}}"
+                            CornerRadius="20"
+                            Padding="20,10"
+                            Margin="0,0,10,0"
+                            Command="{Binding SwitchToRecentCommand}"/>
+
+                    <Button Text="➕ Add Customer"
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="20,10"
+                            CornerRadius="20"
+                            Command="{Binding AddCustomerCommand}"/>
+                </FlexLayout>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Customers Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Customer Stats -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                    <!-- New This Month -->
+                    <Border Grid.Column="0" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding NewCustomersThisMonth}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryColor}"/>
+                            <Label Text="New This Month" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Avg Lifetime -->
+                    <Border Grid.Column="1" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding AverageLifetimeValue, StringFormat='${0:N0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource SuccessColor}"/>
+                            <Label Text="Avg Lifetime Value" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Satisfaction -->
+                    <Border Grid.Column="2" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding SatisfactionScore, StringFormat='{0:F1}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource AccentColor}"/>
+                            <Label Text="Satisfaction Score" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <ProgressBar Progress="{Binding SatisfactionProgress}"
+                                        ProgressColor="{DynamicResource AccentColor}"
+                                        HeightRequest="6"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Retention -->
+                    <Border Grid.Column="3" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding RetentionRate, StringFormat='{0:P0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource InfoColor}"/>
+                            <Label Text="Retention Rate" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Add Customer Button -->
+                <Border Background="{DynamicResource PrimaryColor}"
+                        Padding="20,15"
+                        StrokeShape="RoundRectangle 10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="➕ Add New Customer" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryColor}"/>
+                            <Label Text="Add individual or corporate customers to the database" 
+                                   FontSize="13"
+                                   TextColor="{DynamicResource SecondaryTextColor}"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="1" 
+                                Text="Add Customer"
+                                BackgroundColor="{DynamicResource PrimaryColor}"
+                                TextColor="White"
+                                Padding="20,10"
+                                CornerRadius="8"
+                                Command="{Binding AddCustomerCommand}"/>
+                    </Grid>
+                </Border>
+
+                <!-- Customer Segments -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Customer Segments" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                            <!-- Corporate -->
+                            <Border Grid.Column="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="🏢" FontSize="24"/>
+                                    <Label Text="Corporate" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding CorporateCount}" 
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryColor}"/>
+                                    <Label Text="{Binding CorporatePercentage, StringFormat='{0:P0}'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- SME -->
+                            <Border Grid.Column="1" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="🏪" FontSize="24"/>
+                                    <Label Text="Small Business" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding SMECount}" 
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource AccentColor}"/>
+                                    <Label Text="{Binding SMEPercentage, StringFormat='{0:P0}'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Individual -->
+                            <Border Grid.Column="2" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="👤" FontSize="24"/>
+                                    <Label Text="Individual" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding IndividualCount}" 
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource SuccessColor}"/>
+                                    <Label Text="{Binding IndividualPercentage, StringFormat='{0:P0}'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Government -->
+                            <Border Grid.Column="3" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="🏛️" FontSize="24"/>
+                                    <Label Text="Government" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding GovernmentCount}" 
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource WarningColor}"/>
+                                    <Label Text="{Binding GovernmentPercentage, StringFormat='{0:P0}'}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Customers List -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <HorizontalStackLayout>
+                            <Label Text="Customer Directory" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding ShowingCount, StringFormat='Showing {0}'}" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"
+                                   Margin="10,0,0,0"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Customer Table -->
+                        <CollectionView ItemsSource="{Binding Customers}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="15" 
+                                            Margin="0,0,0,10"
+                                            Background="{DynamicResource HeaderBackgroundColor}"
+                                            StrokeShape="RoundRectangle 8">
+                                        <Grid ColumnDefinitions="Auto,*,100,100,100,80" ColumnSpacing="15">
+                                            <!-- Customer Avatar -->
+                                            <Border Grid.Column="0" 
+                                                    Background="{DynamicResource PrimaryColor}"
+                                                    WidthRequest="50"
+                                                    HeightRequest="50"
+                                                    StrokeShape="RoundRectangle 25">
+                                                <Label Text="{Binding Initials}" 
+                                                       FontSize="16"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+
+                                            <!-- Customer Info -->
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding CompanyName}" 
+                                                       FontSize="16"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding ContactPerson}" 
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                                <Label Text="{Binding Email}" 
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Segment -->
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Text="Segment" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Border Background="{Binding SegmentColor}"
+                                                        Padding="8,4"
+                                                        StrokeShape="RoundRectangle 5">
+                                                    <Label Text="{Binding Segment}" 
+                                                           FontSize="11"
+                                                           FontAttributes="Bold"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center"/>
+                                                </Border>
+                                            </VerticalStackLayout>
+
+                                            <!-- Lifetime Value -->
+                                            <VerticalStackLayout Grid.Column="3" Spacing="2">
+                                                <Label Text="Lifetime Value" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding LifetimeValue, StringFormat='${0:N0}'}" 
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource SuccessColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Last Purchase -->
+                                            <VerticalStackLayout Grid.Column="4" Spacing="2">
+                                                <Label Text="Last Purchase" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding LastPurchaseDate, StringFormat='{0:MMM dd}'}" 
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Actions -->
+                                            <VerticalStackLayout Grid.Column="5" Spacing="5">
+                                                <Button Text="👁️"
+                                                        BackgroundColor="Transparent"
+                                                        TextColor="{DynamicResource PrimaryColor}"
+                                                        Padding="0"
+                                                        HeightRequest="30"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewCustomerCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+
+                                                <Button Text="✉️"
+                                                        BackgroundColor="Transparent"
+                                                        TextColor="{DynamicResource SuccessColor}"
+                                                        Padding="0"
+                                                        HeightRequest="30"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ContactCustomerCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Support Tickets -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <HorizontalStackLayout>
+                            <Label Text="📋 Open Support Tickets" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding OpenTickets}" 
+                                   BackgroundColor="{DynamicResource WarningColor}"
+                                   TextColor="White"
+                                   Padding="8,4"
+                                   Margin="10,0,0,0"/>
+
+                        </HorizontalStackLayout>
+
+                        <CollectionView ItemsSource="{Binding SupportTickets}" HeightRequest="150">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="12" 
+                                            Margin="0,0,0,5"
+                                            Background="{DynamicResource HeaderBackgroundColor}"
+                                            StrokeShape="RoundRectangle 8">
+                                        <Grid ColumnDefinitions="Auto,*,100,80" ColumnSpacing="10">
+                                            <Label Grid.Column="0" 
+                                                   Text="{Binding PriorityIcon}" 
+                                                   FontSize="16"/>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding Subject}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding CustomerName}" 
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Text="Opened" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding OpenedDate, StringFormat='{0:MMM dd}'}" 
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <Border Grid.Column="3" 
+                                                    Background="{Binding StatusColor}"
+                                                    Padding="8,4"
+                                                    StrokeShape="RoundRectangle 5">
+                                                <Label Text="{Binding Status}" 
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"
+                                                       HorizontalOptions="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Customer Actions -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="15">
+            <Grid ColumnDefinitions="*,Auto">
+                <HorizontalStackLayout Grid.Column="0" Spacing="15">
+                    <Button Text="📊 Customer Analytics" 
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding CustomerAnalyticsCommand}"/>
+
+                    <Button Text="📧 Email Campaign" 
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding EmailCampaignCommand}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="📥 Export Customers" 
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ExportCustomersCommand}"/>
+
+                    <Button Text="👥 Segment Analysis" 
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding SegmentAnalysisCommand}"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+    </Grid>
+
 </ContentPage>

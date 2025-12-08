@@ -2,11 +2,233 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Warehouse.ShipmentsPage"
-             Title="ShipmentsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Shipments">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- ================= Header ================= -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+
+            <VerticalStackLayout Spacing="15">
+
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Shipping Operations"
+                               FontSize="24"
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}" />
+                        <Label Text="Shipping schedule, carrier management, tracking numbers, and delivery confirmations"
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}" />
+                    </VerticalStackLayout>
+
+                    <Border Background="{DynamicResource PrimaryColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0"
+                            HorizontalOptions="EndAndExpand">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="🚚" FontSize="18"/>
+                            <Label Text="{Binding TodayShipments}"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Shipping Stats -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+
+                    <Border>
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <Label Text="To Ship Today" FontSize="12"/>
+                            <Label Text="{Binding ToShipToday}"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource WarningColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1">
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <Label Text="In Transit" FontSize="12"/>
+                            <Label Text="{Binding InTransit}"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="2">
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <Label Text="On-Time Rate" FontSize="12"/>
+                            <Label Text="{Binding OnTimeRate, StringFormat='{0:P0}'}"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource SuccessColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="3">
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <Label Text="Avg Delivery Time" FontSize="12"/>
+                            <Label Text="{Binding AvgDeliveryTime, StringFormat='{0} days'}"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource InfoColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                </Grid>
+
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- ================= Content ================= -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Today's Shipping Schedule -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+
+                    <VerticalStackLayout Spacing="15">
+
+                        <HorizontalStackLayout>
+                            <Label Text="📅 Today's Shipping Schedule"
+                                   FontSize="18"
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding TodaysSchedule.Count}"
+                                   BackgroundColor="{DynamicResource PrimaryColor}"
+                                   TextColor="White"
+                                   Padding="8,4"
+                                   Margin="10,0,0,0"/>
+                        </HorizontalStackLayout>
+
+                        <CollectionView ItemsSource="{Binding TodaysSchedule}" HeightRequest="250">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+
+                                    <Border Padding="15" Margin="0,0,0,10">
+                                        <Grid ColumnDefinitions="80,*,100,100,100,80" ColumnSpacing="10">
+
+                                            <VerticalStackLayout Grid.Column="0">
+                                                <Label Text="{Binding TimeSlot}" FontAttributes="Bold"/>
+                                                <Label Text="{Binding Carrier}" FontSize="11"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="1">
+                                                <Label Text="{Binding OrdersCount, StringFormat='{0} Orders'}"
+                                                       FontAttributes="Bold"/>
+                                                <Label Text="{Binding Destination}" FontSize="12"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="2">
+                                                <Label Text="Packages" FontSize="11"/>
+                                                <Label Text="{Binding PackageCount}" FontAttributes="Bold"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="3">
+                                                <Label Text="Weight" FontSize="11"/>
+                                                <Label Text="{Binding TotalWeight, StringFormat='{0} kg'}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="4">
+                                                <Label Text="Status" FontSize="11"/>
+                                                <Border Background="{Binding StatusColor}" Padding="8,4">
+                                                    <Label Text="{Binding Status}" TextColor="White"/>
+                                                </Border>
+                                            </VerticalStackLayout>
+
+                                            <Button Grid.Column="5"
+                                                    Text="Prepare"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.PrepareShipmentCommand}"
+                                                    CommandParameter="{Binding Id}"/>
+                                        </Grid>
+                                    </Border>
+
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Create Shipment -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+
+                    <VerticalStackLayout Spacing="15">
+
+                        <Label Text="🚀 Create New Shipment"
+                               FontSize="18"
+                               FontAttributes="Bold"/>
+
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="20" RowSpacing="15">
+
+                            <VerticalStackLayout>
+                                <Label Text="Carrier" FontAttributes="Bold"/>
+                                <Picker ItemsSource="{Binding Carriers}" SelectedItem="{Binding SelectedCarrier}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="Service Type" FontAttributes="Bold"/>
+                                <Picker ItemsSource="{Binding ServiceTypes}" SelectedItem="{Binding SelectedServiceType}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="1">
+                                <Label Text="Shipping Date" FontAttributes="Bold"/>
+                                <DatePicker Date="{Binding ShippingDate}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Grid.Row="1">
+                                <Label Text="Packaging" FontAttributes="Bold"/>
+                                <Picker ItemsSource="{Binding PackagingTypes}" SelectedItem="{Binding SelectedPackaging}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="2" Grid.ColumnSpan="2">
+                                <Label Text="Notes" FontAttributes="Bold"/>
+                                <Editor Text="{Binding ShippingNotes}" HeightRequest="60"/>
+                            </VerticalStackLayout>
+
+                        </Grid>
+
+                        <Button Text="📦 Create Shipment"
+                                BackgroundColor="{DynamicResource PrimaryColor}"
+                                TextColor="White"
+                                Command="{Binding CreateShipmentCommand}"/>
+
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ================= Footer ================= -->
+        <Border Grid.Row="2"
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="15">
+
+            <Grid ColumnDefinitions="*,Auto">
+
+                <HorizontalStackLayout Spacing="10">
+                    <Button Text="📊 Shipping Report" Command="{Binding ShippingReportCommand}"/>
+                    <Button Text="🔄 Update Tracking" Command="{Binding UpdateTrackingCommand}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="📱 Print Labels" Command="{Binding PrintLabelsCommand}"/>
+                    <Button Text="📦 Schedule Pickups" Command="{Binding SchedulePickupsCommand}"/>
+                </HorizontalStackLayout>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
 </ContentPage>

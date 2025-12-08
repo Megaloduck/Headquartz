@@ -3,10 +3,432 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Sales.OrdersPage"
              Title="OrdersPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Orders Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Order Processing and Management" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Order processing, tracking, returns, and order history" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <Border Background="{DynamicResource SuccessColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="📦" FontSize="18"/>
+                            <Label Text="{Binding TotalOrders}" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Order Tabs -->
+                <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Center">
+                    <Button Text="📋 All Orders ({Binding AllOrdersCount})" 
+                            BackgroundColor="{Binding IsAllTabActive, Converter={StaticResource TabActiveConverter}}"
+                            TextColor="{Binding IsAllTabActive, Converter={StaticResource TabTextColorConverter}}"
+                            CornerRadius="20"
+                            Padding="20,10"
+                            Margin="0,0,10,0"
+                            Command="{Binding SwitchToAllCommand}"/>
+
+                    <Button Text="⏳ Pending ({Binding PendingCount})" 
+                            BackgroundColor="{Binding IsPendingTabActive, Converter={StaticResource TabActiveConverter}}"
+                            TextColor="{Binding IsPendingTabActive, Converter={StaticResource TabTextColorConverter}}"
+                            CornerRadius="20"
+                            Padding="20,10"
+                            Margin="0,0,10,0"
+                            Command="{Binding SwitchToPendingCommand}"/>
+
+                    <Button Text="🚚 Processing ({Binding ProcessingCount})" 
+                            BackgroundColor="{Binding IsProcessingTabActive, Converter={StaticResource TabActiveConverter}}"
+                            TextColor="{Binding IsProcessingTabActive, Converter={StaticResource TabTextColorConverter}}"
+                            CornerRadius="20"
+                            Padding="20,10"
+                            Margin="0,0,10,0"
+                            Command="{Binding SwitchToProcessingCommand}"/>
+
+                    <Button Text="✅ Completed ({Binding CompletedCount})" 
+                            BackgroundColor="{Binding IsCompletedTabActive, Converter={StaticResource TabActiveConverter}}"
+                            TextColor="{Binding IsCompletedTabActive, Converter={StaticResource TabTextColorConverter}}"
+                            CornerRadius="20"
+                            Padding="20,10"
+                            Command="{Binding SwitchToCompletedCommand}"/>
+                </FlexLayout>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Orders Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Order Stats -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                    <!-- Today's Orders -->
+                    <Border Grid.Column="0" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding TodaysOrders}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryColor}"/>
+                            <Label Text="Today's Orders" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Total Value -->
+                    <Border Grid.Column="1" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding TotalOrderValue, StringFormat='${0:N0}K'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource SuccessColor}"/>
+                            <Label Text="Total Value" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Avg Order -->
+                    <Border Grid.Column="2" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding AverageOrderValue, StringFormat='${0:N0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource AccentColor}"/>
+                            <Label Text="Avg Order Value" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Fulfillment Rate -->
+                    <Border Grid.Column="3" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding FulfillmentRate, StringFormat='{0:P0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource InfoColor}"/>
+                            <Label Text="Fulfillment Rate" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Create Order Button -->
+                <Border Background="{DynamicResource PrimaryColor}"
+                        Padding="20,15"
+                        StrokeShape="RoundRectangle 10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="➕ Create New Order" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryColor}"/>
+                            <Label Text="Process manual orders or import from sales" 
+                                   FontSize="13"
+                                   TextColor="{DynamicResource SecondaryTextColor}"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="1" 
+                                Text="Create Order"
+                                BackgroundColor="{DynamicResource PrimaryColor}"
+                                TextColor="White"
+                                Padding="20,10"
+                                CornerRadius="8"
+                                Command="{Binding CreateOrderCommand}"/>
+                    </Grid>
+                </Border>
+
+                <!-- Orders List -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <HorizontalStackLayout>
+                            <Label Text="Order List" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding ShowingCount, StringFormat='Showing {0}'}" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"
+                                   Margin="10,0,0,0"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Order Table Header -->
+                        <Grid ColumnDefinitions="100,*,100,100,100,80" 
+                              Padding="10"
+                              BackgroundColor="{DynamicResource HeaderBackgroundColor}">
+                            <Label Grid.Column="0" Text="Order #" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Grid.Column="1" Text="Customer" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Grid.Column="2" Text="Date" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Grid.Column="3" Text="Amount" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Grid.Column="4" Text="Status" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Grid.Column="5" Text="Actions" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </Grid>
+
+                        <!-- Order Items -->
+                        <CollectionView ItemsSource="{Binding Orders}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="15,10" 
+                                            Margin="0,0,0,1"
+                                            Background="{DynamicResource CardBackgroundColor}">
+                                        <Grid ColumnDefinitions="100,*,100,100,100,80" ColumnSpacing="10">
+                                            <!-- Order Number -->
+                                            <Label Grid.Column="0" 
+                                                   Text="{Binding OrderNumber}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryColor}"
+                                                   VerticalOptions="Center"/>
+
+                                            <!-- Customer -->
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding CustomerName}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding CustomerEmail}" 
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Date -->
+                                            <Label Grid.Column="2" 
+                                                   Text="{Binding OrderDate, StringFormat='{0:MMM dd}'}"
+                                                   FontSize="13"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   VerticalOptions="Center"/>
+
+                                            <!-- Amount -->
+                                            <Label Grid.Column="3" 
+                                                   Text="{Binding TotalAmount, StringFormat='${0:N2}'}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource SuccessColor}"
+                                                   VerticalOptions="Center"/>
+
+                                            <!-- Status -->
+                                            <Border Grid.Column="4" 
+                                                    Background="{Binding StatusColor}"
+                                                    Padding="8,4"
+                                                    StrokeShape="RoundRectangle 5"
+                                                    VerticalOptions="Center">
+                                                <Label Text="{Binding Status}" 
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"
+                                                       HorizontalOptions="Center"/>
+                                            </Border>
+
+                                            <!-- Actions -->
+                                            <HorizontalStackLayout Grid.Column="5" Spacing="5">
+                                                <Button Text="👁️"
+                                                        BackgroundColor="Transparent"
+                                                        TextColor="{DynamicResource PrimaryColor}"
+                                                        Padding="0"
+                                                        WidthRequest="30"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewOrderCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+
+                                                <Button Text="📋"
+                                                        BackgroundColor="Transparent"
+                                                        TextColor="{DynamicResource SuccessColor}"
+                                                        Padding="0"
+                                                        WidthRequest="30"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ProcessOrderCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Order Details Panel -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10"
+                        IsVisible="{Binding ShowOrderDetails}">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Order Details: #{Binding SelectedOrder.OrderNumber}" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                            <!-- Customer Info -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                <Label Text="Customer Information" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="{Binding SelectedOrder.CustomerName}" 
+                                           FontSize="14"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding SelectedOrder.CustomerEmail}" 
+                                           FontSize="13"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="{Binding SelectedOrder.CustomerPhone}" 
+                                           FontSize="13"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                    <Label Text="{Binding SelectedOrder.ShippingAddress}" 
+                                           FontSize="13"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+
+                            <!-- Order Info -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                <Label Text="Order Information" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto" 
+                                      ColumnSpacing="10" RowSpacing="8">
+                                    <Label Grid.Column="0" Grid.Row="0" Text="Order Date:" FontSize="13" TextColor="{DynamicResource TertiaryTextColor}"/>
+                                    <Label Grid.Column="1" Grid.Row="0" Text="{Binding SelectedOrder.OrderDate, StringFormat='{0:MMM dd, yyyy}'}" FontSize="13" TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                                    <Label Grid.Column="0" Grid.Row="1" Text="Status:" FontSize="13" TextColor="{DynamicResource TertiaryTextColor}"/>
+                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding SelectedOrder.Status}" FontSize="13" FontAttributes="Bold" TextColor="{Binding SelectedOrder.StatusColor}"/>
+
+                                    <Label Grid.Column="0" Grid.Row="2" Text="Total Amount:" FontSize="13" TextColor="{DynamicResource TertiaryTextColor}"/>
+                                    <Label Grid.Column="1" Grid.Row="2" Text="{Binding SelectedOrder.TotalAmount, StringFormat='${0:N2}'}" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource SuccessColor}"/>
+
+                                    <Label Grid.Column="0" Grid.Row="3" Text="Payment Method:" FontSize="13" TextColor="{DynamicResource TertiaryTextColor}"/>
+                                    <Label Grid.Column="1" Grid.Row="3" Text="{Binding SelectedOrder.PaymentMethod}" FontSize="13" TextColor="{DynamicResource PrimaryTextColor}"/>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Order Items -->
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Order Items" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                            <CollectionView ItemsSource="{Binding SelectedOrder.Items}" HeightRequest="150">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="10,8" 
+                                                Margin="0,0,0,2"
+                                                Background="{DynamicResource HeaderBackgroundColor}">
+                                            <Grid ColumnDefinitions="*,100,100,100" ColumnSpacing="10">
+                                                <Label Grid.Column="0" 
+                                                       Text="{Binding ProductName}"
+                                                       FontSize="14"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Grid.Column="1" 
+                                                       Text="{Binding Quantity}"
+                                                       FontSize="14"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       HorizontalOptions="Center"/>
+                                                <Label Grid.Column="2" 
+                                                       Text="{Binding UnitPrice, StringFormat='${0:N2}'}"
+                                                       FontSize="14"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                                       HorizontalOptions="End"/>
+                                                <Label Grid.Column="3" 
+                                                       Text="{Binding TotalPrice, StringFormat='${0:N2}'}"
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource SuccessColor}"
+                                                       HorizontalOptions="End"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+
+                        <!-- Order Actions -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Grid.Column="0" 
+                                    Text="📧 Send Invoice"
+                                    BackgroundColor="{DynamicResource PrimaryColor}"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    HeightRequest="40"
+                                    Command="{Binding SendInvoiceCommand}"/>
+
+                            <Button Grid.Column="1" 
+                                    Text="🚚 Process Shipping"
+                                    BackgroundColor="{DynamicResource SuccessColor}"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    HeightRequest="40"
+                                    Command="{Binding ProcessShippingCommand}"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Order Actions -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="15">
+            <Grid ColumnDefinitions="*,Auto">
+                <HorizontalStackLayout Grid.Column="0" Spacing="15">
+                    <Button Text="📊 Order Analytics" 
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding OrderAnalyticsCommand}"/>
+
+                    <Button Text="🔄 Process Batch" 
+                            BackgroundColor="{DynamicResource WarningColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ProcessBatchCommand}"
+                            IsEnabled="{Binding HasPendingOrders}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="📥 Export Orders" 
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ExportOrdersCommand}"/>
+
+                    <Button Text="📋 Generate Invoices" 
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding GenerateInvoicesCommand}"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+    </Grid>
+
 </ContentPage>

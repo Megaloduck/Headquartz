@@ -3,283 +3,496 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Warehouse.WarehouseDashboardPage"
              Title="WarehouseDashboardPage">
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
+    <Grid RowDefinitions="Auto,*,Auto">
 
-            <!-- Header Section -->
-            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
-                <VerticalStackLayout Grid.Column="0" Spacing="4">
-                    <Label Text="Warehouse Management"
-                           Style="{DynamicResource PageTitle}"/>
-                    <Label Text="Monitor inventory, track movements, and manage stock levels"
-                           Style="{StaticResource PageSubtitle}"/>
-                </VerticalStackLayout>
+        <!-- Warehouse Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Warehouse Operations Dashboard" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Inventory overview, inbound/outbound status, and warehouse utilization" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
 
-                <Border Grid.Column="1"
-                        Style="{StaticResource CardStyle}"
-                        Padding="16,8"
-                        BackgroundColor="{StaticResource Primary}">
-                    <HorizontalStackLayout Spacing="8">
-                        <Label Text="📊" FontSize="20" VerticalOptions="Center"/>
-                        <VerticalStackLayout Spacing="0">
-                            <Label Text="Accuracy"
-                                   FontSize="11"
-                                   TextColor="White"
-                                   Opacity="0.9"/>
-                            <Label Text="{Binding Metrics.InventoryAccuracy, StringFormat='{0:F1}%'}"
-                                   FontSize="20"
+                    <Border Background="{DynamicResource PrimaryColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="📦" FontSize="18"/>
+                            <Label Text="{Binding TotalSKUs}" 
+                                   FontSize="18"
                                    FontAttributes="Bold"
                                    TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Warehouse Stats -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                    <!-- Total Inventory -->
+                    <Border Grid.Column="0" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label Text="Total Inventory" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Text="{Binding TotalInventoryValue, StringFormat='${0:N0}K'}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
                         </VerticalStackLayout>
-                    </HorizontalStackLayout>
-                </Border>
-            </Grid>
+                    </Border>
 
-            <!-- Key Metrics Cards -->
-            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="12">
+                    <!-- Utilization -->
+                    <Border Grid.Column="1" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label Text="Space Utilization" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Text="{Binding SpaceUtilization, StringFormat='{0:P0}'}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold"
+                                   TextColor="{Binding UtilizationColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
 
-                <!-- Stock Items -->
-                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
-                    <VerticalStackLayout Spacing="8" Padding="16">
-                        <Label Text="📦" FontSize="24"/>
-                        <Label Text="Stock Items"
-                               FontSize="12"
-                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}"/>
-                        <Label Text="{Binding TotalStockItems}"
-                               FontSize="28"
-                               FontAttributes="Bold"
-                               TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}"/>
+                    <!-- Today's Movements -->
+                    <Border Grid.Column="2" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label Text="Today's Movements" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Text="{Binding TodaysMovements}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource AccentColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Pending Orders -->
+                    <Border Grid.Column="3" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label Text="Pending Orders" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                            <Label Text="{Binding PendingOrders}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource WarningColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Warehouse Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Quick Status -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
+                    <!-- Receiving -->
+                    <Border Grid.Column="0" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="20"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Border Background="#4ECDC4"
+                                    WidthRequest="50"
+                                    HeightRequest="50"
+                                    StrokeShape="RoundRectangle 12">
+                                <Label Text="⬇️" 
+                                       FontSize="24"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+                            <Label Text="Receiving" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding ReceivingCount}" 
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#4ECDC4"/>
+                            <Label Text="inbound items" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Storage -->
+                    <Border Grid.Column="1" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="20"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Border Background="#FFD166"
+                                    WidthRequest="50"
+                                    HeightRequest="50"
+                                    StrokeShape="RoundRectangle 12">
+                                <Label Text="📦" 
+                                       FontSize="24"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+                            <Label Text="Storage" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding StorageCount}" 
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#FFD166"/>
+                            <Label Text="items in stock" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Shipping -->
+                    <Border Grid.Column="2" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="20"
+                            StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Border Background="#06D6A0"
+                                    WidthRequest="50"
+                                    HeightRequest="50"
+                                    StrokeShape="RoundRectangle 12">
+                                <Label Text="⬆️" 
+                                       FontSize="24"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+                            <Label Text="Shipping" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding ShippingCount}" 
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#06D6A0"/>
+                            <Label Text="outbound items" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Low Stock Alerts -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <HorizontalStackLayout>
+                            <Label Text="⚠️ Low Stock Alerts" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource WarningColor}"/>
+                            <Label Text="{Binding LowStockCount}" 
+                                   BackgroundColor="{DynamicResource WarningColor}"
+                                   TextColor="White"
+                                   Padding="8,4"
+                                   Margin="10,0,0,0"/>
+
+                        </HorizontalStackLayout>
+
+                        <CollectionView ItemsSource="{Binding LowStockItems}" HeightRequest="150">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="12" 
+                                            Margin="0,0,0,5"
+                                            Background="{DynamicResource HeaderBackgroundColor}"
+                                            StrokeShape="RoundRectangle 8">
+                                        <Grid ColumnDefinitions="Auto,*,100,100,80" ColumnSpacing="10">
+                                            <Label Grid.Column="0" 
+                                                   Text="{Binding Icon}" 
+                                                   FontSize="16"/>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding ProductName}" 
+                                                       FontSize="14" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding SKU}" 
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Text="Current Stock" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding CurrentStock}" 
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource DangerColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="3" Spacing="2">
+                                                <Label Text="Reorder Level" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding ReorderLevel}" 
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <Button Grid.Column="4" 
+                                                    Text="Reorder"
+                                                    BackgroundColor="{DynamicResource PrimaryColor}"
+                                                    TextColor="White"
+                                                    Padding="10,5"
+                                                    CornerRadius="6"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ReorderCommand}"
+                                                    CommandParameter="{Binding Id}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Space Utilization -->
-                <Border Grid.Column="1" Style="{StaticResource CardStyle}">
-                    <VerticalStackLayout Spacing="8" Padding="16">
-                        <Label Text="📏" FontSize="24"/>
-                        <Label Text="Space Used"
-                               FontSize="12"
-                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}"/>
-                        <Label Text="{Binding Metrics.SpaceUtilization, StringFormat='{0:F1}%'}"
-                               FontSize="28"
-                               FontAttributes="Bold"
-                               TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}"/>
+                <!-- Recent Movements -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <HorizontalStackLayout>
+                            <Label Text="Recent Warehouse Movements" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding RecentMovements.Count}" 
+                                   BackgroundColor="{DynamicResource PrimaryColor}"
+                                   TextColor="White"
+                                   Padding="8,4"
+                                   Margin="10,0,0,0"/>
+
+                        </HorizontalStackLayout>
+
+                        <CollectionView ItemsSource="{Binding RecentMovements}" HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="12" 
+                                            Margin="0,0,0,5"
+                                            Background="{DynamicResource HeaderBackgroundColor}"
+                                            StrokeShape="RoundRectangle 8">
+                                        <Grid ColumnDefinitions="Auto,*,100,100,80" ColumnSpacing="10">
+                                            <Border Grid.Column="0" 
+                                                    Background="{Binding TypeColor}"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"
+                                                    StrokeShape="RoundRectangle 8">
+                                                <Label Text="{Binding Icon}" 
+                                                       FontSize="18"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding ProductName}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding MovementType}" 
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="End">
+                                                <Label Text="Quantity" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding Quantity}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{Binding QuantityColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Grid.Column="3" Spacing="2" HorizontalOptions="End">
+                                                <Label Text="Time" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding MovementTime, StringFormat='{0:HH:mm}'}" 
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <Border Grid.Column="4" 
+                                                    Background="{Binding StatusColor}"
+                                                    Padding="8,4"
+                                                    StrokeShape="RoundRectangle 5">
+                                                <Label Text="{Binding Status}" 
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"
+                                                       HorizontalOptions="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Active Alerts -->
-                <Border Grid.Column="2" Style="{StaticResource CardStyle}">
-                    <VerticalStackLayout Spacing="8" Padding="16">
-                        <Label Text="⚠️" FontSize="24"/>
-                        <Label Text="Active Alerts"
-                               FontSize="12"
-                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}"/>
-                        <Label Text="{Binding Metrics.ActiveAlerts}"
-                               FontSize="28"
+                <!-- Warehouse Zones -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Warehouse Zones" 
+                               FontSize="18" 
                                FontAttributes="Bold"
-                               TextColor="{StaticResource Warning}"/>
-                    </VerticalStackLayout>
-                </Border>
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
 
-                <!-- Transactions Today -->
-                <Border Grid.Column="3" Style="{StaticResource CardStyle}">
-                    <VerticalStackLayout Spacing="8" Padding="16">
-                        <Label Text="🔄" FontSize="24"/>
-                        <Label Text="Transactions"
-                               FontSize="12"
-                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}"/>
-                        <Label Text="{Binding TodayTransactions}"
-                               FontSize="28"
-                               FontAttributes="Bold"
-                               TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}"/>
-                    </VerticalStackLayout>
-                </Border>
-            </Grid>
-
-            <!-- Quick Actions -->
-            <Border Style="{StaticResource CardStyle}">
-                <VerticalStackLayout Spacing="12" Padding="20">
-                    <Label Text="Quick Actions"
-                           FontSize="16"
-                           FontAttributes="Bold"/>
-
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
-                        <Button Grid.Column="0"
-                                Text="📥 Receive Goods"
-                                Style="{StaticResource PrimaryButtonStyle}"
-                                Command="{Binding ReceiveGoodsCommand}"/>
-
-                        <Button Grid.Column="1"
-                                Text="📤 Issue Stock"
-                                Style="{StaticResource SecondaryButtonStyle}"
-                                Command="{Binding IssueStockCommand}"/>
-
-                        <Button Grid.Column="2"
-                                Text="🔄 Transfer Stock"
-                                Style="{StaticResource SecondaryButtonStyle}"
-                                Command="{Binding TransferStockCommand}"/>
-                    </Grid>
-
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
-                        <Button Grid.Column="0"
-                                Text="🔍 Cycle Count"
-                                Style="{StaticResource SecondaryButtonStyle}"
-                                Command="{Binding CycleCountCommand}"/>
-
-                        <Button Grid.Column="1"
-                                Text="📋 View Transactions"
-                                Style="{StaticResource SecondaryButtonStyle}"
-                                Command="{Binding ViewTransactionsCommand}"/>
-
-                        <Button Grid.Column="2"
-                                Text="⚠️ View Alerts"
-                                Style="{StaticResource SecondaryButtonStyle}"
-                                Command="{Binding ViewAlertsCommand}"/>
-                    </Grid>
-                </VerticalStackLayout>
-            </Border>
-
-            <!-- Stock Alerts Section -->
-            <Border Style="{StaticResource CardStyle}" IsVisible="{Binding HasAlerts}">
-                <VerticalStackLayout Spacing="12" Padding="20">
-                    <HorizontalStackLayout Spacing="8">
-                        <Label Text="⚠️" FontSize="20"/>
-                        <Label Text="Stock Alerts"
-                               FontSize="16"
-                               FontAttributes="Bold"
-                               VerticalOptions="Center"/>
-                        <Label Text="{Binding Alerts.Count, StringFormat='({0})'}"
-                               FontSize="14"
-                               TextColor="{StaticResource Warning}"
-                               VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
-
-                    <CollectionView ItemsSource="{Binding Alerts}" MaximumHeightRequest="300">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Border Style="{StaticResource CardStyle}"
-                                        Padding="12"
-                                        Margin="0,4"
-                                        BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource DarkBackground}}">
-                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
-                                        <Label Grid.Column="0"
-                                               Text="{Binding Type, Converter={StaticResource AlertIconConverter}}"
-                                               FontSize="20"
-                                               VerticalOptions="Center"/>
-
-                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                            <Label Text="{Binding ProductName}"
-                                                   FontSize="14"
-                                                   FontAttributes="Bold"/>
-                                            <Label Text="{Binding Message}"
-                                                   FontSize="12"
-                                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}"/>
-                                        </VerticalStackLayout>
-
-                                        <Label Grid.Column="2"
-                                               Text="{Binding Priority}"
-                                               FontSize="10"
-                                               TextColor="{Binding Priority, Converter={StaticResource PriorityColorConverter}}"
-                                               BackgroundColor="{Binding Priority, Converter={StaticResource PriorityBackgroundConverter}}"
-                                               Padding="8,4"
-                                               VerticalOptions="Center">
-                                            <Label.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ResolveAlertCommand}"
-                                                                    CommandParameter="{Binding .}"/>
-                                            </Label.GestureRecognizers>
-                                        </Label>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-            </Border>
-
-            <!-- Current Stock Overview -->
-            <Border Style="{StaticResource CardStyle}">
-                <VerticalStackLayout Spacing="12" Padding="20">
-                    <HorizontalStackLayout Spacing="8" HorizontalOptions="FillAndExpand">
-                        <Label Text="Current Inventory"
-                               FontSize="16"
-                               FontAttributes="Bold"
-                               HorizontalOptions="StartAndExpand"/>
-
-                        <SearchBar Placeholder="Search products..."
-                                   WidthRequest="300"
-                                   Text="{Binding SearchText}"
-                                   HorizontalOptions="End"/>
-                    </HorizontalStackLayout>
-
-                    <!-- Inventory List -->
-                    <CollectionView ItemsSource="{Binding FilteredInventory}"
-                                    MaximumHeightRequest="400">
-                        <CollectionView.Header>
-                            <Grid ColumnDefinitions="2*,*,*,*,*" 
-                                  Padding="12,8"
-                                  BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource DarkBackground}}">
-                                <Label Grid.Column="0" Text="Product" FontAttributes="Bold" FontSize="12"/>
-                                <Label Grid.Column="1" Text="On Hand" FontAttributes="Bold" FontSize="12" HorizontalTextAlignment="Center"/>
-                                <Label Grid.Column="2" Text="Reorder Point" FontAttributes="Bold" FontSize="12" HorizontalTextAlignment="Center"/>
-                                <Label Grid.Column="3" Text="Status" FontAttributes="Bold" FontSize="12" HorizontalTextAlignment="Center"/>
-                                <Label Grid.Column="4" Text="Actions" FontAttributes="Bold" FontSize="12" HorizontalTextAlignment="Center"/>
-                            </Grid>
-                        </CollectionView.Header>
-
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid ColumnDefinitions="2*,*,*,*,*" 
-                                      Padding="12,10"
-                                      BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource DarkSecondaryBackground}}">
-
-                                    <VerticalStackLayout Grid.Column="0" Spacing="2">
-                                        <Label Text="{Binding ProductName}" FontSize="14" FontAttributes="Bold"/>
-                                        <Label Text="{Binding SKU}" FontSize="11" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}"/>
-                                    </VerticalStackLayout>
-
-                                    <Label Grid.Column="1" 
-                                           Text="{Binding QuantityOnHand}" 
+                        <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                            <!-- Zone A -->
+                            <Border Grid.Column="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="A" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryColor}"/>
+                                    <Label Text="Bulk Storage" 
                                            FontSize="14"
-                                           HorizontalTextAlignment="Center"
-                                           VerticalTextAlignment="Center"/>
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ZoneAUsage, StringFormat='{0:P0}'}" 
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding ZoneAColor}"/>
+                                    <ProgressBar Progress="{Binding ZoneAUsage}"
+                                                ProgressColor="{Binding ZoneAColor}"
+                                                HeightRequest="6"/>
+                                </VerticalStackLayout>
+                            </Border>
 
-                                    <Label Grid.Column="2" 
-                                           Text="{Binding ReorderPoint}" 
+                            <!-- Zone B -->
+                            <Border Grid.Column="1" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="B" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource AccentColor}"/>
+                                    <Label Text="Picking Zone" 
                                            FontSize="14"
-                                           HorizontalTextAlignment="Center"
-                                           VerticalTextAlignment="Center"/>
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ZoneBUsage, StringFormat='{0:P0}'}" 
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding ZoneBColor}"/>
+                                    <ProgressBar Progress="{Binding ZoneBUsage}"
+                                                ProgressColor="{Binding ZoneBColor}"
+                                                HeightRequest="6"/>
+                                </VerticalStackLayout>
+                            </Border>
 
-                                    <Label Grid.Column="3"
-                                           Text="{Binding Condition}"
-                                           FontSize="11"
-                                           Padding="6,3"
-                                           HorizontalTextAlignment="Center"
-                                           VerticalTextAlignment="Center"
-                                           BackgroundColor="{Binding Condition, Converter={StaticResource ConditionColorConverter}}"/>
+                            <!-- Zone C -->
+                            <Border Grid.Column="2" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="C" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource SuccessColor}"/>
+                                    <Label Text="Cold Storage" 
+                                           FontSize="14"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ZoneCUsage, StringFormat='{0:P0}'}" 
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding ZoneCColor}"/>
+                                    <ProgressBar Progress="{Binding ZoneCUsage}"
+                                                ProgressColor="{Binding ZoneCColor}"
+                                                HeightRequest="6"/>
+                                </VerticalStackLayout>
+                            </Border>
 
-                                    <HorizontalStackLayout Grid.Column="4" 
-                                                          Spacing="8" 
-                                                          HorizontalOptions="Center">
-                                        <Label Text="✏️" FontSize="16">
-                                            <Label.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditItemCommand}"
-                                                                    CommandParameter="{Binding .}"/>
-                                            </Label.GestureRecognizers>
-                                        </Label>
-                                        <Label Text="📊" FontSize="16">
-                                            <Label.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewDetailsCommand}"
-                                                                    CommandParameter="{Binding .}"/>
-                                            </Label.GestureRecognizers>
-                                        </Label>
-                                    </HorizontalStackLayout>
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-            </Border>
+                            <!-- Zone D -->
+                            <Border Grid.Column="3" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="D" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource WarningColor}"/>
+                                    <Label Text="Hazardous" 
+                                           FontSize="14"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ZoneDUsage, StringFormat='{0:P0}'}" 
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding ZoneDColor}"/>
+                                    <ProgressBar Progress="{Binding ZoneDUsage}"
+                                                ProgressColor="{Binding ZoneDColor}"
+                                                HeightRequest="6"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                <!-- Quick Actions -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <Button Grid.Column="0" 
+                            Text="📦 Receive Goods"
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding ReceiveGoodsCommand}"/>
+
+                    <Button Grid.Column="1" 
+                            Text="📋 Inventory Check"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding InventoryCheckCommand}"/>
+
+                    <Button Grid.Column="2" 
+                            Text="🚚 Prepare Shipment"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding PrepareShipmentCommand}"/>
+                </Grid>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
 
 </ContentPage>

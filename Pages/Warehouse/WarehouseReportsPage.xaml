@@ -3,10 +3,534 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Warehouse.WarehouseReportsPage"
              Title="WarehouseReportsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Reports Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Warehouse Analytics &amp; Reports" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Stock accuracy, picking efficiency, space utilization, and damage reports" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <Border Background="{DynamicResource PrimaryColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="📊" FontSize="18"/>
+                            <Label Text="{Binding ReportCount, StringFormat='{0} Reports'}" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Report Period -->
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="15">
+                    <Border Grid.Column="0" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="Report Period" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Picker ItemsSource="{Binding ReportPeriods}"
+                                        SelectedItem="{Binding SelectedPeriod}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="Overall Efficiency" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Label Text="{Binding OverallEfficiency, StringFormat='{0:P0}'}" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{Binding EfficiencyColor}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Button Grid.Column="1" 
+                            Text="📊 Generate Report"
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding GenerateReportCommand}"/>
+
+                    <Button Grid.Column="2" 
+                            Text="📥 Export All"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding ExportAllCommand}"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Reports Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Quick Report Cards -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15" RowDefinitions="Auto,Auto" RowSpacing="15">
+
+                    <!-- Stock Accuracy -->
+                    <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource ReportCardStyle}">
+                        <VerticalStackLayout Spacing="10">
+                            <HorizontalStackLayout>
+                                <Border Background="#4ECDC4"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        StrokeShape="RoundRectangle 8">
+                                    <Label Text="📦" 
+                                           FontSize="20"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                                <VerticalStackLayout Spacing="2">
+                                    <Label Text="Stock Accuracy" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="Physical vs system count" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding StockAccuracy, StringFormat='{0:P1} accuracy'}" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#4ECDC4"/>
+                            <Button Text="View Report →"
+                                    BackgroundColor="#4ECDC420"
+                                    TextColor="#4ECDC4"
+                                    CornerRadius="8"
+                                    HeightRequest="40"
+                                    Command="{Binding ViewStockAccuracyCommand}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Picking Efficiency -->
+                    <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource ReportCardStyle}">
+                        <VerticalStackLayout Spacing="10">
+                            <HorizontalStackLayout>
+                                <Border Background="#FF6B6B"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        StrokeShape="RoundRectangle 8">
+                                    <Label Text="⚡" 
+                                           FontSize="20"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                                <VerticalStackLayout Spacing="2">
+                                    <Label Text="Picking Efficiency" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="Order fulfillment metrics" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding PickingEfficiency, StringFormat='{0} orders/hr'}" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#FF6B6B"/>
+                            <Button Text="View Report →"
+                                    BackgroundColor="#FF6B6B20"
+                                    TextColor="#FF6B6B"
+                                    CornerRadius="8"
+                                    HeightRequest="40"
+                                    Command="{Binding ViewPickingEfficiencyCommand}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Space Utilization -->
+                    <Border Grid.Column="2" Grid.Row="0" Style="{StaticResource ReportCardStyle}">
+                        <VerticalStackLayout Spacing="10">
+                            <HorizontalStackLayout>
+                                <Border Background="#06D6A0"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        StrokeShape="RoundRectangle 8">
+                                    <Label Text="📐" 
+                                           FontSize="20"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                                <VerticalStackLayout Spacing="2">
+                                    <Label Text="Space Utilization" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="Storage optimization" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding SpaceUtilization, StringFormat='{0:P0} used'}" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#06D6A0"/>
+                            <Button Text="View Report →"
+                                    BackgroundColor="#06D6A020"
+                                    TextColor="#06D6A0"
+                                    CornerRadius="8"
+                                    HeightRequest="40"
+                                    Command="{Binding ViewSpaceUtilizationCommand}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Damage Reports -->
+                    <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource ReportCardStyle}">
+                        <VerticalStackLayout Spacing="10">
+                            <HorizontalStackLayout>
+                                <Border Background="#118AB2"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        StrokeShape="RoundRectangle 8">
+                                    <Label Text="⚠️" 
+                                           FontSize="20"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                                <VerticalStackLayout Spacing="2">
+                                    <Label Text="Damage Reports" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="Product damage analysis" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding DamageRate, StringFormat='{0:P1} damage rate'}" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#118AB2"/>
+                            <Button Text="View Report →"
+                                    BackgroundColor="#118AB220"
+                                    TextColor="#118AB2"
+                                    CornerRadius="8"
+                                    HeightRequest="40"
+                                    Command="{Binding ViewDamageReportCommand}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Turnover Analysis -->
+                    <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource ReportCardStyle}">
+                        <VerticalStackLayout Spacing="10">
+                            <HorizontalStackLayout>
+                                <Border Background="#FFD166"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        StrokeShape="RoundRectangle 8">
+                                    <Label Text="🔄" 
+                                           FontSize="20"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                                <VerticalStackLayout Spacing="2">
+                                    <Label Text="Turnover Analysis" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="Inventory movement rates" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding TurnoverRate, StringFormat='{0:F1}x turnover'}" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#FFD166"/>
+                            <Button Text="View Report →"
+                                    BackgroundColor="#FFD16620"
+                                    TextColor="#FFD166"
+                                    CornerRadius="8"
+                                    HeightRequest="40"
+                                    Command="{Binding ViewTurnoverAnalysisCommand}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Labor Productivity -->
+                    <Border Grid.Column="2" Grid.Row="1" Style="{StaticResource ReportCardStyle}">
+                        <VerticalStackLayout Spacing="10">
+                            <HorizontalStackLayout>
+                                <Border Background="#9D4EDD"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        StrokeShape="RoundRectangle 8">
+                                    <Label Text="👷" 
+                                           FontSize="20"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                                <VerticalStackLayout Spacing="2">
+                                    <Label Text="Labor Productivity" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="Staff performance metrics" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource SecondaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding LaborProductivity, StringFormat='{0} units/hr'}" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#9D4EDD"/>
+                            <Button Text="View Report →"
+                                    BackgroundColor="#9D4EDD20"
+                                    TextColor="#9D4EDD"
+                                    CornerRadius="8"
+                                    HeightRequest="40"
+                                    Command="{Binding ViewLaborProductivityCommand}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Custom Report Generator -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Custom Report Generator" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                            <!-- Report Configuration -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="15">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="Report Type" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Picker ItemsSource="{Binding ReportTypes}"
+                                            SelectedItem="{Binding SelectedReportType}"
+                                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                            TextColor="{DynamicResource PrimaryTextColor}"/>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="Time Period" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Picker ItemsSource="{Binding TimePeriods}"
+                                            SelectedItem="{Binding SelectedTimePeriod}"
+                                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                            TextColor="{DynamicResource PrimaryTextColor}"/>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="Include Departments" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <CollectionView ItemsSource="{Binding Departments}" HeightRequest="100">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <HorizontalStackLayout Spacing="10">
+                                                    <CheckBox IsChecked="{Binding IsSelected}"
+                                                              Color="{DynamicResource PrimaryColor}"/>
+                                                    <Label Text="{Binding Name}" 
+                                                           FontSize="13"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                                           VerticalOptions="Center"/>
+                                                </HorizontalStackLayout>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+
+                            <!-- Format Selection -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="15">
+                                <Label Text="Output Format" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                                <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="Start">
+                                    <Border Background="{Binding IsPdfSelected, Converter={StaticResource FormatSelectedConverter}}"
+                                            Padding="15,10"
+                                            StrokeShape="RoundRectangle 8"
+                                            Margin="0,0,10,5">
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Label Text="📄" FontSize="16"/>
+                                            <Label Text="PDF" 
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding IsPdfSelected, Converter={StaticResource FormatTextColorConverter}}"/>
+                                        </HorizontalStackLayout>
+                                    </Border>
+
+                                    <Border Background="{Binding IsExcelSelected, Converter={StaticResource FormatSelectedConverter}}"
+                                            Padding="15,10"
+                                            StrokeShape="RoundRectangle 8"
+                                            Margin="0,0,10,5">
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Label Text="📊" FontSize="16"/>
+                                            <Label Text="Excel" 
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding IsExcelSelected, Converter={StaticResource FormatTextColorConverter}}"/>
+                                        </HorizontalStackLayout>
+                                    </Border>
+
+                                    <Border Background="{Binding IsPowerpointSelected, Converter={StaticResource FormatSelectedConverter}}"
+                                            Padding="15,10"
+                                            StrokeShape="RoundRectangle 8">
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Label Text="📽️" FontSize="16"/>
+                                            <Label Text="PowerPoint" 
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding IsPowerpointSelected, Converter={StaticResource FormatTextColorConverter}}"/>
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </FlexLayout>
+
+                                <!-- Preview -->
+                                <Border Background="{DynamicResource HeaderBackgroundColor}"
+                                        Padding="20"
+                                        StrokeShape="RoundRectangle 10"
+                                        HeightRequest="120">
+                                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                        <Label Text="📊" 
+                                               FontSize="32"
+                                               HorizontalOptions="Center"/>
+                                        <Label Text="{Binding SelectedReportType}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                               HorizontalOptions="Center"/>
+                                        <Label Text="{Binding SelectedTimePeriod}" 
+                                               FontSize="14"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               HorizontalOptions="Center"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+                        <!-- Generate Custom Report Button -->
+                        <Button Text="🚀 Generate Custom Report"
+                                BackgroundColor="{DynamicResource PrimaryColor}"
+                                TextColor="White"
+                                CornerRadius="10"
+                                HeightRequest="50"
+                                FontSize="16"
+                                Command="{Binding GenerateCustomReportCommand}"/>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Recent Reports -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+
+                        <HorizontalStackLayout>
+                            <Label Text="📁 Recent Reports"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Button Text="View All"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{DynamicResource PrimaryColor}"
+                                    HorizontalOptions="EndAndExpand"
+                                    Command="{Binding ViewAllReportsCommand}"/>
+                        </HorizontalStackLayout>
+
+                        <CollectionView ItemsSource="{Binding RecentReports}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+
+                                    <Border Padding="15" Margin="0,0,0,10"
+                                            StrokeShape="RoundRectangle 10">
+                                        <Grid ColumnDefinitions="40,*,Auto" ColumnSpacing="15">
+
+                                            <Border Background="{Binding ReportColor}"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"
+                                                    StrokeShape="RoundRectangle 8">
+                                                <Label Text="{Binding Icon}"
+                                                       FontSize="20"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                                <Label Text="{Binding Name}"
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding GeneratedDate, StringFormat='Generated {0:MMM dd, yyyy HH:mm}'}"
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <Button Grid.Column="2"
+                                                    Text="Open"
+                                                    BackgroundColor="{DynamicResource PrimaryColor}"
+                                                    TextColor="White"
+                                                    CornerRadius="8"
+                                                    HeightRequest="36"
+                                                    Command="{Binding OpenReportCommand}"
+                                                    CommandParameter="{Binding Id}"/>
+                                        </Grid>
+                                    </Border>
+
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Footer -->
+        <Border Grid.Row="2"
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="15">
+            <Grid ColumnDefinitions="*,Auto">
+
+                <Label Text="Last Generated: "
+                       FontSize="12"
+                       TextColor="{DynamicResource SecondaryTextColor}"/>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="⚙️ Report Settings"
+                            Command="{Binding ReportSettingsCommand}"/>
+                    <Button Text="📊 Dashboard View"
+                            Command="{Binding DashboardViewCommand}"/>
+                </HorizontalStackLayout>
+
+            </Grid>
+        </Border>
+
+    </Grid>
 </ContentPage>

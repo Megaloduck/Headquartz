@@ -3,10 +3,375 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Sales.LeadsPage"
              Title="LeadsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Leads Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Leads Management" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Lead tracking, scoring, and follow-up management" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <Border Background="{DynamicResource PrimaryColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="👥" FontSize="18"/>
+                            <Label Text="{Binding TotalLeads}" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Lead Tabs -->
+                <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Center">
+                    <Button Text="📋 All Leads ({Binding AllLeadsCount})" 
+                            BackgroundColor="{Binding IsAllTabActive, Converter={StaticResource TabActiveConverter}}"
+                            TextColor="{Binding IsAllTabActive, Converter={StaticResource TabTextColorConverter}}"
+                            CornerRadius="20"
+                            Padding="20,10"
+                            Margin="0,0,10,0"
+                            Command="{Binding SwitchToAllCommand}"/>
+
+                    <Button Text="🔥 Hot Leads ({Binding HotLeadsCount})" 
+                            BackgroundColor="{Binding IsHotTabActive, Converter={StaticResource TabActiveConverter}}"
+                            TextColor="{Binding IsHotTabActive, Converter={StaticResource TabTextColorConverter}}"
+                            CornerRadius="20"
+                            Padding="20,10"
+                            Margin="0,0,10,0"
+                            Command="{Binding SwitchToHotCommand}"/>
+
+                    <Button Text="⏰ Follow-up ({Binding FollowUpCount})" 
+                            BackgroundColor="{Binding IsFollowUpTabActive, Converter={StaticResource TabActiveConverter}}"
+                            TextColor="{Binding IsFollowUpTabActive, Converter={StaticResource TabTextColorConverter}}"
+                            CornerRadius="20"
+                            Padding="20,10"
+                            Margin="0,0,10,0"
+                            Command="{Binding SwitchToFollowUpCommand}"/>
+
+                    <Button Text="➕ Add Lead"
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="20,10"
+                            CornerRadius="20"
+                            Command="{Binding AddLeadCommand}"/>
+                </FlexLayout>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Leads Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Lead Stats -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                    <!-- New Leads -->
+                    <Border Grid.Column="0" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding NewLeads}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryColor}"/>
+                            <Label Text="New This Week" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Conversion Rate -->
+                    <Border Grid.Column="1" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding LeadConversionRate, StringFormat='{0:P1}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource SuccessColor}"/>
+                            <Label Text="Conversion Rate" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Avg Response Time -->
+                    <Border Grid.Column="2" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding AvgResponseTime, StringFormat='{0}h'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource WarningColor}"/>
+                            <Label Text="Avg Response Time" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Pipeline Value -->
+                    <Border Grid.Column="3" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding LeadsPipelineValue, StringFormat='${0:N0}K'}" 
+                                   FontSize="24" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource AccentColor}"/>
+                            <Label Text="Pipeline Value" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Add Lead Button -->
+                <Border Background="{DynamicResource PrimaryColor}"
+                        Padding="20,15"
+                        StrokeShape="RoundRectangle 10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="➕ Capture New Lead" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryColor}"/>
+                            <Label Text="Quickly add leads from website, referrals, or events" 
+                                   FontSize="13"
+                                   TextColor="{DynamicResource SecondaryTextColor}"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="1" 
+                                Text="Add Lead"
+                                BackgroundColor="{DynamicResource PrimaryColor}"
+                                TextColor="White"
+                                Padding="20,10"
+                                CornerRadius="8"
+                                Command="{Binding AddLeadCommand}"/>
+                    </Grid>
+                </Border>
+
+                <!-- Lead Sources -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Lead Sources" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="2*,*" ColumnSpacing="20">
+                            <!-- Sources Chart -->
+                            <Border Grid.Column="0" 
+                                    Background="#1AFFFFFF"
+                                    HeightRequest="200"
+                                    StrokeShape="RoundRectangle 8">
+                                <Label Text="📊 Lead Sources Distribution" 
+                                       FontSize="16"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+
+                            <!-- Sources List -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding LeadSources}" Spacing="8">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                                                    <BoxView WidthRequest="12"
+                                                             HeightRequest="12"
+                                                             Color="{Binding Color}"
+                                                             CornerRadius="2"
+                                                             VerticalOptions="Center"/>
+                                                    <Label Text="{Binding Source}" 
+                                                           FontSize="13"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                </HorizontalStackLayout>
+                                                <Label Grid.Column="1" 
+                                                       Text="{Binding Count}"
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryColor}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Leads List -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <HorizontalStackLayout>
+                            <Label Text="Lead List" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding ShowingCount, StringFormat='Showing {0}'}" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"
+                                   Margin="10,0,0,0"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Leads Table -->
+                        <CollectionView ItemsSource="{Binding Leads}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="15" 
+                                            Margin="0,0,0,10"
+                                            Background="{DynamicResource HeaderBackgroundColor}"
+                                            StrokeShape="RoundRectangle 8">
+                                        <Grid ColumnDefinitions="Auto,*,100,100,100,80" ColumnSpacing="15">
+                                            <!-- Lead Score -->
+                                            <Border Grid.Column="0" 
+                                                    Background="{Binding ScoreColor}"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"
+                                                    StrokeShape="RoundRectangle 8">
+                                                <Label Text="{Binding Score}" 
+                                                       FontSize="16"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+
+                                            <!-- Lead Info -->
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding CompanyName}" 
+                                                       FontSize="16"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding ContactPerson}" 
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                                <Label Text="{Binding Email}" 
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Source -->
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Text="Source" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Border Background="{Binding SourceColor}"
+                                                        Padding="8,4"
+                                                        StrokeShape="RoundRectangle 5">
+                                                    <Label Text="{Binding Source}" 
+                                                           FontSize="11"
+                                                           FontAttributes="Bold"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center"/>
+                                                </Border>
+                                            </VerticalStackLayout>
+
+                                            <!-- Status -->
+                                            <VerticalStackLayout Grid.Column="3" Spacing="2">
+                                                <Label Text="Status" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Border Background="{Binding StatusColor}"
+                                                        Padding="8,4"
+                                                        StrokeShape="RoundRectangle 5">
+                                                    <Label Text="{Binding Status}" 
+                                                           FontSize="11"
+                                                           FontAttributes="Bold"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center"/>
+                                                </Border>
+                                            </VerticalStackLayout>
+
+                                            <!-- Last Contact -->
+                                            <VerticalStackLayout Grid.Column="4" Spacing="2">
+                                                <Label Text="Last Contact" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding LastContactDate, StringFormat='{0:MMM dd}'}" 
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Actions -->
+                                            <VerticalStackLayout Grid.Column="5" Spacing="5">
+                                                <Button Text="👁️"
+                                                        BackgroundColor="Transparent"
+                                                        TextColor="{DynamicResource PrimaryColor}"
+                                                        Padding="0"
+                                                        HeightRequest="30"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewLeadCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+
+                                                <Button Text="📞"
+                                                        BackgroundColor="Transparent"
+                                                        TextColor="{DynamicResource SuccessColor}"
+                                                        Padding="0"
+                                                        HeightRequest="30"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ContactLeadCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Lead Actions -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="15">
+            <Grid ColumnDefinitions="*,Auto">
+                <HorizontalStackLayout Grid.Column="0" Spacing="15">
+                    <Button Text="📊 Lead Analytics" 
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding LeadAnalyticsCommand}"/>
+
+                    <Button Text="🔄 Import Leads" 
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ImportLeadsCommand}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="📥 Export Leads" 
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ExportLeadsCommand}"/>
+
+                    <Button Text="⚙️ Lead Scoring" 
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding LeadScoringCommand}"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+    </Grid>
+
 </ContentPage>
