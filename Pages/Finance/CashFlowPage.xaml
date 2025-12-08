@@ -3,10 +3,359 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Finance.CashFlowPage"
              Title="CashFlowPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Cash Flow Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Cash Flow Management" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Cash flow statements, liquidity analysis, and working capital" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <Border Background="{Binding CashFlowColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="💵" FontSize="18"/>
+                            <Label Text="{Binding NetCashFlow, StringFormat='${0:N0}K'}" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Cash Flow Period -->
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="15">
+                    <Border Grid.Column="0" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="Period" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Picker ItemsSource="{Binding Periods}"
+                                        SelectedItem="{Binding SelectedPeriod}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="Cash Balance" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Label Text="{Binding CashBalance, StringFormat='${0:N0}K'}" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource SuccessColor}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Button Grid.Column="1" 
+                            Text="📊 Statement"
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding GenerateStatementCommand}"/>
+
+                    <Button Grid.Column="2" 
+                            Text="🔍 Analyze"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding AnalyzeCommand}"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Cash Flow Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Cash Flow Components -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
+                    <!-- Operating -->
+                    <Border Grid.Column="0" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="Operating" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding OperatingCashFlow, StringFormat='${0:N0}K'}" 
+                                   FontSize="24" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource SuccessColor}"/>
+                            <ProgressBar Progress="{Binding OperatingProgress}"
+                                        ProgressColor="{DynamicResource SuccessColor}"
+                                        HeightRequest="6"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Investing -->
+                    <Border Grid.Column="1" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="Investing" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding InvestingCashFlow, StringFormat='${0:N0}K'}" 
+                                   FontSize="24" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource WarningColor}"/>
+                            <ProgressBar Progress="{Binding InvestingProgress}"
+                                        ProgressColor="{DynamicResource WarningColor}"
+                                        HeightRequest="6"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Financing -->
+                    <Border Grid.Column="2" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="Financing" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding FinancingCashFlow, StringFormat='${0:N0}K'}" 
+                                   FontSize="24" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryColor}"/>
+                            <ProgressBar Progress="{Binding FinancingProgress}"
+                                        ProgressColor="{DynamicResource PrimaryColor}"
+                                        HeightRequest="6"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Cash Flow Statement -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Cash Flow Statement" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <CollectionView ItemsSource="{Binding CashFlowItems}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="15,10" 
+                                            Margin="0,0,0,1"
+                                            Background="{DynamicResource HeaderBackgroundColor}">
+                                        <Grid ColumnDefinitions="*,100,100" ColumnSpacing="10">
+                                            <!-- Description -->
+                                            <Label Grid.Column="0" 
+                                                   Text="{Binding Description}"
+                                                   FontSize="14"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   VerticalOptions="Center"/>
+
+                                            <!-- Amount -->
+                                            <Label Grid.Column="1" 
+                                                   Text="{Binding Amount, StringFormat='${0:N0}'}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding AmountColor}"
+                                                   HorizontalOptions="End"
+                                                   VerticalOptions="Center"/>
+
+                                            <!-- Type -->
+                                            <Border Grid.Column="2" 
+                                                    Background="{Binding TypeColor}"
+                                                    Padding="8,4"
+                                                    StrokeShape="RoundRectangle 5">
+                                                <Label Text="{Binding Type}" 
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"
+                                                       HorizontalOptions="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Liquidity Metrics -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Liquidity Metrics" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
+                            <!-- Current Ratio -->
+                            <Border Grid.Column="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="Current Ratio" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding CurrentRatio, StringFormat='{0:F2}'}" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding CurrentRatioColor}"/>
+                                    <Label Text="{Binding CurrentRatioStatus}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Quick Ratio -->
+                            <Border Grid.Column="1" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="Quick Ratio" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding QuickRatio, StringFormat='{0:F2}'}" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding QuickRatioColor}"/>
+                                    <Label Text="{Binding QuickRatioStatus}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Cash Conversion -->
+                            <Border Grid.Column="2" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="Cash Conversion" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding CashConversionCycle, StringFormat='{0} days'}" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding CashConversionColor}"/>
+                                    <Label Text="{Binding CashConversionStatus}" 
+                                           FontSize="12"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Cash Flow Forecast -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Cash Flow Forecast (Next 3 Months)" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="2*,*" ColumnSpacing="20">
+                            <!-- Forecast Chart -->
+                            <Border Grid.Column="0" 
+                                    Background="#1AFFFFFF"
+                                    HeightRequest="200"
+                                    StrokeShape="RoundRectangle 8">
+                                <Label Text="📈 Cash Flow Forecast" 
+                                       FontSize="16"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+
+                            <!-- Monthly Forecast -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding MonthlyForecasts}" Spacing="8">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <Label Grid.Column="0" 
+                                                       Text="{Binding Month}"
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Grid.Column="1" 
+                                                       Text="{Binding Forecast, StringFormat='${0:N0}K'}"
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{Binding ForecastColor}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Cash Flow Actions -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="15">
+            <Grid ColumnDefinitions="*,Auto">
+                <HorizontalStackLayout Grid.Column="0" Spacing="15">
+                    <Button Text="📊 Detailed Analysis" 
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding DetailedAnalysisCommand}"/>
+
+                    <Button Text="🔄 Optimize Cash Flow" 
+                            BackgroundColor="{DynamicResource WarningColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding OptimizeCommand}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="📥 Export Statement" 
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ExportStatementCommand}"/>
+
+                    <Button Text="📋 Share with CEO" 
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ShareWithCEOCommand}"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+    </Grid>
+
 </ContentPage>

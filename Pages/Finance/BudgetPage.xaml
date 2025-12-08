@@ -3,10 +3,411 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Finance.BudgetPage"
              Title="BudgetPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Budget Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Budget Planning and Allocation" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Create budgets, allocate funds, and track spending" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <Border Background="{DynamicResource PrimaryColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="📊" FontSize="18"/>
+                            <Label Text="{Binding TotalBudget, StringFormat='${0:N0}K'}" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Budget Period -->
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="15">
+                    <Border Grid.Column="0" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="Fiscal Year" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Picker ItemsSource="{Binding FiscalYears}"
+                                        SelectedItem="{Binding SelectedFiscalYear}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="Quarter" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Picker ItemsSource="{Binding Quarters}"
+                                        SelectedItem="{Binding SelectedQuarter}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Button Grid.Column="1" 
+                            Text="➕ Create Budget"
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding CreateBudgetCommand}"/>
+
+                    <Button Grid.Column="2" 
+                            Text="📥 Import"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding ImportBudgetCommand}"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Budget Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Department Budgets -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Department Budget Allocation" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <CollectionView ItemsSource="{Binding DepartmentBudgets}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="15" 
+                                            Margin="0,0,0,10"
+                                            Background="{DynamicResource HeaderBackgroundColor}"
+                                            StrokeShape="RoundRectangle 8">
+                                        <Grid ColumnDefinitions="*,100,100,100,100,80" ColumnSpacing="10">
+                                            <!-- Department -->
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label Text="{Binding Department}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding Manager}" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Allocated -->
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="Allocated" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding Allocated, StringFormat='${0:N0}'}" 
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Spent -->
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Text="Spent" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding Spent, StringFormat='${0:N0}'}" 
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource DangerColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Remaining -->
+                                            <VerticalStackLayout Grid.Column="3" Spacing="2">
+                                                <Label Text="Remaining" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding Remaining, StringFormat='${0:N0}'}" 
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource SuccessColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Utilization -->
+                                            <VerticalStackLayout Grid.Column="4" Spacing="2">
+                                                <Label Text="Utilization" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <ProgressBar Progress="{Binding Utilization}"
+                                                            ProgressColor="{Binding UtilizationColor}"
+                                                            HeightRequest="6"/>
+                                                <Label Text="{Binding Utilization, StringFormat='{0:P0}'}" 
+                                                       FontSize="11"
+                                                       TextColor="{Binding UtilizationColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Actions -->
+                                            <Button Grid.Column="5" 
+                                                    Text="Edit"
+                                                    BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                                    TextColor="{DynamicResource PrimaryTextColor}"
+                                                    Padding="10,5"
+                                                    CornerRadius="6"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditDepartmentBudgetCommand}"
+                                                    CommandParameter="{Binding Id}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Budget Categories -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Budget Categories" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto,Auto" 
+                              ColumnSpacing="15" RowSpacing="15">
+
+                            <!-- Salaries -->
+                            <Border Grid.Column="0" Grid.Row="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="💰" FontSize="24"/>
+                                    <Label Text="Salaries" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding SalariesBudget, StringFormat='${0:N0}K'}" 
+                                           FontSize="16"
+                                           TextColor="{DynamicResource SuccessColor}"/>
+                                    <Label Text="{Binding SalariesUtilization, StringFormat='{0:P0} used'}" 
+                                           FontSize="11"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Marketing -->
+                            <Border Grid.Column="1" Grid.Row="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="📈" FontSize="24"/>
+                                    <Label Text="Marketing" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding MarketingBudget, StringFormat='${0:N0}K'}" 
+                                           FontSize="16"
+                                           TextColor="{DynamicResource AccentColor}"/>
+                                    <Label Text="{Binding MarketingUtilization, StringFormat='{0:P0} used'}" 
+                                           FontSize="11"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Operations -->
+                            <Border Grid.Column="2" Grid.Row="0" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="⚙️" FontSize="24"/>
+                                    <Label Text="Operations" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding OperationsBudget, StringFormat='${0:N0}K'}" 
+                                           FontSize="16"
+                                           TextColor="{DynamicResource PrimaryColor}"/>
+                                    <Label Text="{Binding OperationsUtilization, StringFormat='{0:P0} used'}" 
+                                           FontSize="11"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- R&D -->
+                            <Border Grid.Column="0" Grid.Row="1" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="🔬" FontSize="24"/>
+                                    <Label Text="Research and Development" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding RnDBudget, StringFormat='${0:N0}K'}" 
+                                           FontSize="16"
+                                           TextColor="{DynamicResource InfoColor}"/>
+                                    <Label Text="{Binding RnDUtilization, StringFormat='{0:P0} used'}" 
+                                           FontSize="11"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- IT -->
+                            <Border Grid.Column="1" Grid.Row="1" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="💻" FontSize="24"/>
+                                    <Label Text="IT Infrastructure" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ITBudget, StringFormat='${0:N0}K'}" 
+                                           FontSize="16"
+                                           TextColor="{DynamicResource WarningColor}"/>
+                                    <Label Text="{Binding ITUtilization, StringFormat='{0:P0} used'}" 
+                                           FontSize="11"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Contingency -->
+                            <Border Grid.Column="2" Grid.Row="1" 
+                                    Background="{DynamicResource HeaderBackgroundColor}"
+                                    Padding="15"
+                                    StrokeShape="RoundRectangle 8">
+                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label Text="🛡️" FontSize="24"/>
+                                    <Label Text="Contingency" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Label Text="{Binding ContingencyBudget, StringFormat='${0:N0}K'}" 
+                                           FontSize="16"
+                                           TextColor="{DynamicResource DangerColor}"/>
+                                    <Label Text="{Binding ContingencyUtilization, StringFormat='{0:P0} used'}" 
+                                           FontSize="11"
+                                           TextColor="{DynamicResource TertiaryTextColor}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Budget Timeline -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Budget Timeline" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="2*,*" ColumnSpacing="20">
+                            <!-- Timeline Chart -->
+                            <Border Grid.Column="0" 
+                                    Background="#1AFFFFFF"
+                                    HeightRequest="200"
+                                    StrokeShape="RoundRectangle 8">
+                                <Label Text="📅 Budget vs Actual Timeline" 
+                                       FontSize="16"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+
+                            <!-- Quarterly Summary -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                <Label Text="Quarterly Summary" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+
+                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding QuarterlySummaries}" Spacing="8">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <Label Grid.Column="0" 
+                                                       Text="{Binding Quarter}"
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Grid.Column="1" 
+                                                       Text="{Binding Variance, StringFormat='${0:N0}K'}"
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{Binding VarianceColor}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Budget Actions -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="15">
+            <Grid ColumnDefinitions="*,Auto">
+                <HorizontalStackLayout Grid.Column="0" Spacing="15">
+                    <Button Text="📊 Variance Report" 
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding VarianceReportCommand}"/>
+
+                    <Button Text="🔄 Reallocate Funds" 
+                            BackgroundColor="{DynamicResource WarningColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ReallocateCommand}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="📥 Export Budget" 
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ExportBudgetCommand}"/>
+
+                    <Button Text="✅ Submit for Approval" 
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding SubmitForApprovalCommand}"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+    </Grid>
+
 </ContentPage>

@@ -3,10 +3,359 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Finance.RevenuePage"
              Title="RevenuePage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Revenue Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Revenue and Income Management" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Income tracking, invoice management, and revenue recognition" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+
+                    <Border Background="{DynamicResource SuccessColor}"
+                            Padding="15,10"
+                            StrokeShape="RoundRectangle 10"
+                            Margin="20,0,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="💰" FontSize="18"/>
+                            <Label Text="{Binding TotalRevenue, StringFormat='${0:N0}K'}" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Revenue Period -->
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="15">
+                    <Border Grid.Column="0" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="Revenue Period" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Picker ItemsSource="{Binding RevenuePeriods}"
+                                        SelectedItem="{Binding SelectedPeriod}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="Growth vs Last Period" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Label Text="{Binding RevenueGrowth, StringFormat='{0:P1}'}" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{Binding GrowthColor}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Button Grid.Column="1" 
+                            Text="➕ Create Invoice"
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding CreateInvoiceCommand}"/>
+
+                    <Button Grid.Column="2" 
+                            Text="📥 Import Revenue"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding ImportRevenueCommand}"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Revenue Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Revenue Overview -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="15">
+                    <!-- Monthly Revenue -->
+                    <Border Grid.Column="0" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding MonthlyRevenue, StringFormat='${0:N0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource SuccessColor}"/>
+                            <Label Text="This Month" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- YTD Revenue -->
+                    <Border Grid.Column="1" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding YearToDateRevenue, StringFormat='${0:N0}K'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryColor}"/>
+                            <Label Text="Year to Date" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Avg Invoice -->
+                    <Border Grid.Column="2" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding AverageInvoice, StringFormat='${0:N0}'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource AccentColor}"/>
+                            <Label Text="Avg Invoice Value" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Outstanding -->
+                    <Border Grid.Column="3" Style="{StaticResource DashboardCardStyle}">
+                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding OutstandingRevenue, StringFormat='${0:N0}K'}" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource WarningColor}"/>
+                            <Label Text="Outstanding" 
+                                   FontSize="12"
+                                   TextColor="{DynamicResource TertiaryTextColor}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Revenue Sources -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Revenue Sources" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="2*,*" ColumnSpacing="20">
+                            <!-- Source Chart -->
+                            <Border Grid.Column="0" 
+                                    Background="#1AFFFFFF"
+                                    HeightRequest="200"
+                                    StrokeShape="RoundRectangle 8">
+                                <Label Text="📊 Revenue Sources Chart" 
+                                       FontSize="16"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+
+                            <!-- Source List -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding RevenueSources}" Spacing="8">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                                                    <BoxView WidthRequest="12"
+                                                             HeightRequest="12"
+                                                             Color="{Binding Color}"
+                                                             CornerRadius="2"
+                                                             VerticalOptions="Center"/>
+                                                    <Label Text="{Binding Source}" 
+                                                           FontSize="13"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                </HorizontalStackLayout>
+                                                <Label Grid.Column="1" 
+                                                       Text="{Binding Amount, StringFormat='${0:N0}K'}"
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource SuccessColor}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Recent Invoices -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <HorizontalStackLayout>
+                            <Label Text="Recent Invoices" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="{Binding RecentInvoices.Count}" 
+                                   BackgroundColor="{DynamicResource PrimaryColor}"
+                                   TextColor="White"
+                                   Padding="8,4"
+                                   Margin="10,0,0,0"/>
+
+                        </HorizontalStackLayout>
+
+                        <CollectionView ItemsSource="{Binding RecentInvoices}" HeightRequest="250">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="15" 
+                                            Margin="0,0,0,10"
+                                            Background="{DynamicResource HeaderBackgroundColor}"
+                                            StrokeShape="RoundRectangle 8">
+                                        <Grid ColumnDefinitions="80,*,100,100,100,80" ColumnSpacing="10">
+                                            <!-- Invoice Number -->
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label Text="Invoice #" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding InvoiceNumber}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Customer -->
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding CustomerName}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding Description}" 
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Amount -->
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Text="Amount" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding Amount, StringFormat='${0:N0}'}" 
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource SuccessColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Date -->
+                                            <VerticalStackLayout Grid.Column="3" Spacing="2">
+                                                <Label Text="Issue Date" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding IssueDate, StringFormat='{0:MMM dd}'}" 
+                                                       FontSize="13"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Due Date -->
+                                            <VerticalStackLayout Grid.Column="4" Spacing="2">
+                                                <Label Text="Due Date" 
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                                <Label Text="{Binding DueDate, StringFormat='{0:MMM dd}'}" 
+                                                       FontSize="13"
+                                                       TextColor="{Binding DueDateColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Status -->
+                                            <Border Grid.Column="5" 
+                                                    Background="{Binding StatusColor}"
+                                                    Padding="8,4"
+                                                    StrokeShape="RoundRectangle 5"
+                                                    VerticalOptions="Center">
+                                                <Label Text="{Binding Status}" 
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"
+                                                       HorizontalOptions="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Quick Actions -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <Button Grid.Column="0" 
+                            Text="📄 Create Invoice"
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding CreateInvoiceCommand}"/>
+
+                    <Button Grid.Column="1" 
+                            Text="📊 Revenue Report"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding RevenueReportCommand}"/>
+
+                    <Button Grid.Column="2" 
+                            Text="⏰ Follow-up"
+                            BackgroundColor="{DynamicResource WarningColor}"
+                            TextColor="White"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            Command="{Binding FollowUpCommand}"/>
+                </Grid>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Revenue Actions -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="15">
+            <Grid ColumnDefinitions="*,Auto">
+                <HorizontalStackLayout Grid.Column="0" Spacing="15">
+                    <Button Text="📈 Forecast Revenue" 
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ForecastCommand}"/>
+
+                    <Button Text="💰 Recognize Revenue" 
+                            BackgroundColor="{DynamicResource SuccessColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding RecognizeRevenueCommand}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                    <Button Text="📥 Export Data" 
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="15,10"
+                            CornerRadius="8"
+                            Command="{Binding ExportDataCommand}"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+    </Grid>
+
 </ContentPage>
