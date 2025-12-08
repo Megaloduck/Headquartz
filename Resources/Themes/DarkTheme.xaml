@@ -53,8 +53,7 @@
 
     <!-- Hover States -->
     <Color x:Key="HoverOverlayColor">#1AFFFFFF</Color>    
-    <Color x:Key="PressedOverlayColor">#33FFFFFF</Color>   
-    
+    <Color x:Key="PressedOverlayColor">#33FFFFFF</Color>       
 
     <!-- ==================== -->
     <!-- SPECIAL COMPONENTS   -->

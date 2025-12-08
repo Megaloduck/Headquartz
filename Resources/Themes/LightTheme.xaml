@@ -13,7 +13,7 @@
     <Color x:Key="SurfaceColor">#FFFFFF</Color>
 
     <!-- ==================== -->
-    <!-- TEXT COLORS          -->
+    <!-- TEXT COLORS      -->
     <!-- ==================== -->
     <Color x:Key="PrimaryTextColor">#1A1A1A</Color>
     <Color x:Key="SecondaryTextColor">#666666</Color>
@@ -46,31 +46,20 @@
     <!-- ==================== -->
     <!-- INTERACTIVE ELEMENTS -->
     <!-- ==================== -->
-    <!-- Button Colors - Clean with good contrast -->
     <Color x:Key="PrimaryButtonBackground">#007AFF</Color>
     <Color x:Key="PrimaryButtonTextColor">#FFFFFF</Color>
-    <!-- White text on colored buttons -->
-
     <Color x:Key="SecondaryButtonBackground">#F1F3F5</Color>
-    <!-- Light gray background -->
     <Color x:Key="SecondaryButtonTextColor">#1A1A1A</Color>
-    <!-- Dark text -->
-
-    <Color x:Key="TextButtonColor">#007AFF</Color>
-    <!-- Colored text only -->
+    <Color x:Key="TextButtonColor">#007AFF</Color>    
 
     <!-- Hover States -->
     <Color x:Key="HoverOverlayColor">#0A000000</Color>
-    <!-- 4% black overlay -->
     <Color x:Key="PressedOverlayColor">#14000000</Color>
-    <!-- 8% black overlay -->
 
     <!-- ==================== -->
     <!-- SPECIAL COMPONENTS   -->
     <!-- ==================== -->
-    <!-- Category Badge - Subtle tint -->
     <Color x:Key="BadgeBackgroundColor">#E8F4FF</Color>
-    <!-- Very light blue tint -->
     <Color x:Key="BadgeTextColor">#007AFF</Color>
 
     <!-- Input Fields -->
@@ -80,7 +69,6 @@
 
     <!-- Selection & Focus -->
     <Color x:Key="SelectionColor">#1A007AFF</Color>
-    <!-- 10% primary color overlay -->
     <Color x:Key="FocusBorderColor">#007AFF</Color>
 
     <!-- ==================== -->
