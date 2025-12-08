@@ -65,7 +65,7 @@
                                            HorizontalOptions="Center"
                                            VerticalOptions="Center"/>
                                 </Border>
-                                <Label Text="HR Manager" 
+                                <Label Text="Finance Manager" 
                                        FontSize="14"
                                        FontAttributes="Bold"
                                        VerticalTextAlignment="Center"
