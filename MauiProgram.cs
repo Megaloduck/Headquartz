@@ -39,15 +39,13 @@ namespace Headquartz
             // CORE GAME SERVICES
             // ────────────────────────────────────────────────
             builder.Services.AddSingleton<GameState>();
-            builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>();
+            //builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>();
             builder.Services.AddSingleton<ISaveService, JsonSaveService>();
 
             // Role Service (global access everywhere)
             builder.Services.AddSingleton<RoleService>();
 
             // Sidebar - must stay alive during the entire app lifetime
-            builder.Services.AddSingleton<SidebarPageModel>();
-           // builder.Services.AddSingleton<SidebarPage>();
             builder.Services.AddSingleton<SidebarCEOPage>();
             builder.Services.AddSingleton<SidebarHRPage>();
             builder.Services.AddSingleton<SidebarWarehousePage>();
@@ -160,7 +158,7 @@ namespace Headquartz
 
             // Seed initial game data
             var gameState = app.Services.GetRequiredService<GameState>();
-            SeedService.Seed(gameState);
+            //SeedService.Seed(gameState);
 
             return app;
         }
