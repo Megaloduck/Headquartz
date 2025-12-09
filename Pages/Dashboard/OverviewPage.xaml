@@ -8,132 +8,652 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Headquartz.Pages.Dashboard.OverviewPage"
              x:DataType="pageModels:OverviewPageModel"
-              Title="Headquartz">
+             Title="ERP Overview">
 
     <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource LayoutPadding}" Spacing="0">
+        <VerticalStackLayout Padding="20" Spacing="20">
 
             <!-- Page Header -->
-            <Label Text="System Overview" Style="{StaticResource PageTitle}" />
-            <Label Text="Real-time simulation monitoring and controls" Style="{StaticResource PageSubtitle}" />
+            <Grid ColumnDefinitions="*,Auto" VerticalOptions="Start">
+                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                    <Label Text="ERP Simulation Dashboard" 
+                           FontSize="24" 
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontAttributes="Bold" />
+                    <Label Text="Real-time monitoring of all business operations" 
+                           TextColor="{DynamicResource SecondaryTextColor}"
+                           FontSize="14" />
+                </VerticalStackLayout>
 
-            <!-- Status Cards -->
-            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16" Margin="0,0,0,24">
+                <!-- Company Status Badge -->
+                <Frame Grid.Column="1"
+                       BackgroundColor="{DynamicResource SurfaceColor}"
+                       Padding="12,8"
+                       CornerRadius="12"
+                       BorderColor="{DynamicResource BorderColor}"
+                       HasShadow="True">
+                    <HorizontalStackLayout Spacing="8">
+                        <BoxView Color="{Binding CompanyStatusColor}"
+                                 WidthRequest="10"
+                                 HeightRequest="10"
+                                 VerticalOptions="Center"
+                                 CornerRadius="5" />
+                        <Label Text="{Binding CompanyStatus}"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="12"
+                               FontAttributes="Bold" />
+                    </HorizontalStackLayout>
+                </Frame>
+            </Grid>
 
-                <!-- Simulation Time -->
-                <Border Grid.Column="0" Style="{StaticResource StatCard}">
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Simulation Time" Style="{StaticResource CardTitle}" />
-                        <Label Text="{Binding SimTime}" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                        <Label Text="{Binding SimulationStatus}" Style="{StaticResource StatChange}" TextColor="{StaticResource Success}" />
+            <!-- Simulation Time & Controls Section -->
+            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                   Padding="20"
+                   CornerRadius="12"
+                   BorderColor="{DynamicResource BorderColor}"
+                   HasShadow="True">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="20">
+                    <!-- Simulation Time -->
+                    <VerticalStackLayout Grid.Column="0" Spacing="8">
+                        <Label Text="Simulation Timeline" 
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="14" />
+                        <Grid ColumnDefinitions="Auto,*,Auto" VerticalOptions="Center">
+                            <Label Grid.Column="0"
+                                   Text="⏱️"
+                                   FontSize="20"
+                                   VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" Margin="12,0">
+                                <Label Text="{Binding SimTime}"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontSize="28"
+                                       FontAttributes="Bold" />
+                                <Label Text="{Binding SimulationPhase}"
+                                       TextColor="{DynamicResource TertiaryTextColor}"
+                                       FontSize="12" />
+                            </VerticalStackLayout>
+                            <Frame Grid.Column="2"
+                                   BackgroundColor="{Binding SimulationStatusColor}"
+                                   Padding="8,4"
+                                   CornerRadius="8">
+                                <Label Text="{Binding SimulationStatus}"
+                                       TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                       FontSize="12"
+                                       FontAttributes="Bold" />
+                            </Frame>
+                        </Grid>
+
+                        <!-- Time Progress -->
+                        <Grid Margin="0,12,0,0">
+                            <ProgressBar Progress="{Binding TimeProgress}"
+                                         ProgressColor="{DynamicResource PrimaryColor}"
+                                         HeightRequest="6" />
+                            <Label Text="{Binding TimeProgress, StringFormat='{0:P0} of quarter complete'}"
+                                   HorizontalOptions="Center"
+                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                   Padding="10,2"
+                                   FontSize="11" />
+                        </Grid>
                     </VerticalStackLayout>
-                </Border>
 
-                <!-- Cash -->
-                <Border Grid.Column="1" Style="{StaticResource StatCard}">
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Available Cash" Style="{StaticResource CardTitle}" />
-                        <Label Text="{Binding Cash, StringFormat='${0:N2}'}" Style="{StaticResource StatValue}" />
-                        <Label Text="Company funds" Style="{StaticResource StatChange}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
+                    <!-- Control Buttons -->
+                    <VerticalStackLayout Grid.Column="1" Spacing="10" HorizontalOptions="End">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Grid.Column="0"
+                                    Text="▶ Start"
+                                    Command="{Binding StartSimulationCommand}"
+                                    BackgroundColor="{DynamicResource PrimaryButtonBackground}"
+                                    TextColor="{DynamicResource PrimaryButtonTextColor}"
+                                    CornerRadius="8"
+                                    Padding="20,12"
+                                    FontSize="14"
+                                    FontAttributes="Bold" />
+                            <Button Grid.Column="1"
+                                    Text="⏸ Pause"
+                                    Command="{Binding StopSimulationCommand}"
+                                    BackgroundColor="{DynamicResource WarningColor}"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    Padding="20,12"
+                                    FontSize="14"
+                                    FontAttributes="Bold" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Grid.Column="0"
+                                    Text="💾 Save"
+                                    Command="{Binding SaveGameCommand}"
+                                    BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                    TextColor="{DynamicResource SecondaryButtonTextColor}"
+                                    CornerRadius="8"
+                                    Padding="20,12"
+                                    FontSize="14" />
+                            <Button Grid.Column="1"
+                                    Text="📂 Load"
+                                    Command="{Binding LoadGameCommand}"
+                                    BackgroundColor="{DynamicResource InfoColor}"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    Padding="20,12"
+                                    FontSize="14" />
+                        </Grid>
                     </VerticalStackLayout>
-                </Border>
+                </Grid>
+            </Frame>
+
+            <!-- Key Performance Indicators -->
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16">
+                <!-- Cash Flow -->
+                <Frame Grid.Column="0"
+                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                       Padding="16"
+                       CornerRadius="10"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="12">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame BackgroundColor="#E8F4FF"
+                                   Padding="8"
+                                   CornerRadius="8">
+                                <Label Text="💰"
+                                       FontSize="16" />
+                            </Frame>
+                            <Label Text="Cash Flow"
+                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Label Text="{Binding Cash, StringFormat='${0:N0}'}"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="24"
+                               FontAttributes="Bold" />
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="Available funds"
+                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                   FontSize="12" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding CashChange, StringFormat='{0:+$0;-$0;0}'}"
+                                   TextColor="{Binding CashChangeColor}"
+                                   FontSize="12"
+                                   FontAttributes="Bold" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
 
                 <!-- Market Demand -->
-                <Border Grid.Column="2" Style="{StaticResource StatCard}">
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Market Demand" Style="{StaticResource CardTitle}" />
-                        <Label Text="{Binding CurrentDemand, StringFormat='{0:F0}'}" Style="{StaticResource StatValue}" />
-                        <Label Text="Current market level" Style="{StaticResource StatChange}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
-                    </VerticalStackLayout>
-                </Border>
+                <Frame Grid.Column="1"
+                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                       Padding="16"
+                       CornerRadius="10"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="12">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame BackgroundColor="#E8F7FF"
+                                   Padding="8"
+                                   CornerRadius="8">
+                                <Label Text="📈"
+                                       FontSize="16" />
+                            </Frame>
+                            <Label Text="Market Demand"
+                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
 
-                <!-- Total Stock -->
-                <Border Grid.Column="3" Style="{StaticResource StatCard}">
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Total Stock" Style="{StaticResource CardTitle}" />
-                        <Label Text="{Binding TotalStock}" Style="{StaticResource StatValue}" />
-                        <Label Text="Units in inventory" Style="{StaticResource StatChange}" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
-                    </VerticalStackLayout>
-                </Border>
+                        <Label Text="{Binding CurrentDemand, StringFormat='{0:F0}'}"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="24"
+                               FontAttributes="Bold" />
 
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="Units demanded"
+                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                   FontSize="12" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding DemandChange, StringFormat='{0:+0;-0;0}'}"
+                                   TextColor="{Binding DemandChangeColor}"
+                                   FontSize="12"
+                                   FontAttributes="Bold" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Inventory -->
+                <Frame Grid.Column="2"
+                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                       Padding="16"
+                       CornerRadius="10"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="12">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame BackgroundColor="#F0F7FF"
+                                   Padding="8"
+                                   CornerRadius="8">
+                                <Label Text="📦"
+                                       FontSize="16" />
+                            </Frame>
+                            <Label Text="Inventory"
+                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Label Text="{Binding TotalStock}"
+                               TextColor="{DynamicResource PrimaryTextColor}"
+                               FontSize="24"
+                               FontAttributes="Bold" />
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="Units in stock"
+                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                   FontSize="12" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding StockChange, StringFormat='{0:+0;-0;0}'}"
+                                   TextColor="{Binding StockChangeColor}"
+                                   FontSize="12"
+                                   FontAttributes="Bold" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Efficiency -->
+                <Frame Grid.Column="3"
+                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                       Padding="16"
+                       CornerRadius="10"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="12">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame BackgroundColor="#F5F7FA"
+                                   Padding="8"
+                                   CornerRadius="8">
+                                <Label Text="⚡"
+                                       FontSize="16" />
+                            </Frame>
+                            <Label Text="Efficiency"
+                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Label Text="{Binding Efficiency, StringFormat='{0:P0}'}"
+                               TextColor="{Binding EfficiencyColor}"
+                               FontSize="24"
+                               FontAttributes="Bold" />
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="Overall efficiency"
+                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                   FontSize="12" />
+                            <ProgressBar Grid.Column="1"
+                                         Progress="{Binding Efficiency}"
+                                         ProgressColor="{Binding EfficiencyColor}"
+                                         WidthRequest="60"
+                                         VerticalOptions="Center" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
             </Grid>
 
-            <!-- Simulation Controls Card -->
-            <Border Style="{StaticResource CardBorder}">
-                <VerticalStackLayout Spacing="20">
+            <!-- Detailed Metrics Section -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+                <!-- Financial Overview -->
+                <Frame Grid.Column="0"
+                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                       Padding="20"
+                       CornerRadius="12"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="16">
+                        <!-- Header -->
+                        <Grid>
+                            <HorizontalStackLayout Spacing="12">
+                                <Frame BackgroundColor="{DynamicResource BadgeBackgroundColor}"
+                                       Padding="10"
+                                       CornerRadius="10">
+                                    <Label Text="💵"
+                                           FontSize="20"
+                                           TextColor="{DynamicResource BadgeTextColor}" />
+                                </Frame>
+                                <VerticalStackLayout Spacing="2">
+                                    <Label Text="Financial Overview"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="18"
+                                           FontAttributes="Bold" />
+                                    <Label Text="Q1 Performance"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12" />
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
 
-                    <Label Text="Simulation Controls" Style="{StaticResource Title3}" />
+                            <Button Text="Details →"
+                                    Command="{Binding ViewFinancialDetailsCommand}"
+                                    HorizontalOptions="End"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{DynamicResource TextButtonColor}"
+                                    FontSize="12" />
+                        </Grid>
 
-                    <HorizontalStackLayout Spacing="16" HorizontalOptions="Center">
-                        <Button Text="▶ Start" Command="{Binding StartSimulationCommand}" Style="{StaticResource PrimaryButton}" WidthRequest="150" />
-                        <Button Text="⏸ Pause" Command="{Binding StopSimulationCommand}" BackgroundColor="{StaticResource Warning}" TextColor="White" CornerRadius="8" Padding="20,12" FontAttributes="Bold" WidthRequest="150" />
-                        <Button Text="💾 Save" Command="{Binding SaveGameCommand}" Style="{StaticResource SecondaryButton}" WidthRequest="150" />
-                        <Button Text="📂 Load" Command="{Binding LoadGameCommand}" BackgroundColor="{StaticResource Info}" TextColor="White" CornerRadius="8" Padding="20,12" FontAttributes="Bold" WidthRequest="150" />
-                    </HorizontalStackLayout>
+                        <!-- Financial Metrics -->
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12">
+                            <!-- Revenue -->
+                            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                                    <BoxView Color="{DynamicResource SuccessColor}"
+                                             WidthRequest="4"
+                                             HeightRequest="20"
+                                             VerticalOptions="Center"
+                                             CornerRadius="2" />
+                                    <Label Text="Revenue"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="14" />
+                                </HorizontalStackLayout>
+                                <Label Grid.Column="1"
+                                       Text="{Binding Revenue, StringFormat='${0:N0}'}"
+                                       TextColor="{DynamicResource SuccessColor}"
+                                       FontSize="16"
+                                       FontAttributes="Bold" />
+                            </Grid>
 
-                    <!-- Progress Indicator -->
-                    <Border Background="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource DarkBackground}}" Padding="16" StrokeShape="RoundRectangle 8" StrokeThickness="0">
-                        <VerticalStackLayout Spacing="8">
-                            <Label Text="Simulation Status" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
-                            <ProgressBar Progress="0.65" ProgressColor="{StaticResource Primary}" HeightRequest="8" />
-                            <Label Text="Running smoothly - 65% of tick cycle" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
-                        </VerticalStackLayout>
-                    </Border>
+                            <!-- Expenses -->
+                            <Grid Grid.Row="1" ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                                    <BoxView Color="{DynamicResource DangerColor}"
+                                             WidthRequest="4"
+                                             HeightRequest="20"
+                                             VerticalOptions="Center"
+                                             CornerRadius="2" />
+                                    <Label Text="Expenses"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="14" />
+                                </HorizontalStackLayout>
+                                <Label Grid.Column="1"
+                                       Text="{Binding Expenses, StringFormat='${0:N0}'}"
+                                       TextColor="{DynamicResource DangerColor}"
+                                       FontSize="16"
+                                       FontAttributes="Bold" />
+                            </Grid>
 
+                            <!-- Divider -->
+                            <BoxView Grid.Row="2" HeightRequest="1" Color="{DynamicResource DividerColor}" />
+
+                            <!-- Net Profit -->
+                            <Grid Grid.Row="3" ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <Label Grid.Column="0"
+                                       Text="Net Profit"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       FontSize="16"
+                                       FontAttributes="Bold" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding NetProfit, StringFormat='${0:N0}'}"
+                                       TextColor="{Binding NetProfitColor}"
+                                       FontSize="20"
+                                       FontAttributes="Bold" />
+                            </Grid>
+
+                            <!-- Profit Margin -->
+                            <Grid Grid.Row="4" ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <Label Grid.Column="0"
+                                       Text="Profit Margin"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       FontSize="13" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding ProfitMargin, StringFormat='{0:P1}'}"
+                                       TextColor="{Binding ProfitMarginColor}"
+                                       FontSize="14"
+                                       FontAttributes="Bold" />
+                            </Grid>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Market & Operations -->
+                <Frame Grid.Column="1"
+                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                       Padding="20"
+                       CornerRadius="12"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="16">
+                        <!-- Header -->
+                        <Grid>
+                            <HorizontalStackLayout Spacing="12">
+                                <Frame BackgroundColor="{DynamicResource BadgeBackgroundColor}"
+                                       Padding="10"
+                                       CornerRadius="10">
+                                    <Label Text="🌍"
+                                           FontSize="20"
+                                           TextColor="{DynamicResource BadgeTextColor}" />
+                                </Frame>
+                                <VerticalStackLayout Spacing="2">
+                                    <Label Text="Market &amp; Operations"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="18"
+                                           FontAttributes="Bold" />
+                                    <Label Text="Current quarter analysis"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12" />
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+
+                            <Button Text="Details →"
+                                    Command="{Binding ViewMarketDetailsCommand}"
+                                    HorizontalOptions="End"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{DynamicResource TextButtonColor}"
+                                    FontSize="12" />
+                        </Grid>
+
+                        <!-- Market Metrics -->
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12">
+                            <!-- Market Share -->
+                            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                                    <BoxView Color="{DynamicResource PrimaryColor}"
+                                             WidthRequest="4"
+                                             HeightRequest="20"
+                                             VerticalOptions="Center"
+                                             CornerRadius="2" />
+                                    <Label Text="Market Share"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="14" />
+                                </HorizontalStackLayout>
+                                <Label Grid.Column="1"
+                                       Text="{Binding MarketShare, StringFormat='{0:P1}'}"
+                                       TextColor="{DynamicResource PrimaryColor}"
+                                       FontSize="16"
+                                       FontAttributes="Bold" />
+                            </Grid>
+
+                            <!-- Competitors -->
+                            <Grid Grid.Row="1" ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                                    <BoxView Color="{DynamicResource WarningColor}"
+                                             WidthRequest="4"
+                                             HeightRequest="20"
+                                             VerticalOptions="Center"
+                                             CornerRadius="2" />
+                                    <Label Text="Active Competitors"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="14" />
+                                </HorizontalStackLayout>
+                                <Label Grid.Column="1"
+                                       Text="{Binding CompetitorCount}"
+                                       TextColor="{DynamicResource WarningColor}"
+                                       FontSize="16"
+                                       FontAttributes="Bold" />
+                            </Grid>
+
+                            <!-- Average Price -->
+                            <Grid Grid.Row="2" ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                                    <BoxView Color="{DynamicResource InfoColor}"
+                                             WidthRequest="4"
+                                             HeightRequest="20"
+                                             VerticalOptions="Center"
+                                             CornerRadius="2" />
+                                    <Label Text="Average Price"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           FontSize="14" />
+                                </HorizontalStackLayout>
+                                <Label Grid.Column="1"
+                                       Text="{Binding AveragePrice, StringFormat='${0:F2}'}"
+                                       TextColor="{DynamicResource InfoColor}"
+                                       FontSize="16"
+                                       FontAttributes="Bold" />
+                            </Grid>
+
+                            <!-- Divider -->
+                            <BoxView Grid.Row="3" HeightRequest="1" Color="{DynamicResource DividerColor}" />
+
+                            <!-- Department Status -->
+                            <Grid Grid.Row="4" ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <Label Grid.Column="0"
+                                       Text="Department Status"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       FontSize="13" />
+                                <HorizontalStackLayout Grid.Column="1" Spacing="4">
+                                    <BoxView Color="{Binding SalesStatusColor}"
+                                             WidthRequest="8"
+                                             HeightRequest="8"
+                                             VerticalOptions="Center"
+                                             CornerRadius="4" />
+                                    <BoxView Color="{Binding ProductionStatusColor}"
+                                             WidthRequest="8"
+                                             HeightRequest="8"
+                                             VerticalOptions="Center"
+                                             CornerRadius="4" />
+                                    <BoxView Color="{Binding LogisticsStatusColor}"
+                                             WidthRequest="8"
+                                             HeightRequest="8"
+                                             VerticalOptions="Center"
+                                             CornerRadius="4" />
+                                    <BoxView Color="{Binding FinanceStatusColor}"
+                                             WidthRequest="8"
+                                             HeightRequest="8"
+                                             VerticalOptions="Center"
+                                             CornerRadius="4" />
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Quick Actions -->
+            <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+       Padding="20"
+       CornerRadius="12"
+       HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Quick Actions"
+               TextColor="{DynamicResource PrimaryTextColor}"
+               FontSize="18"
+               FontAttributes="Bold" />
+
+                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="12">
+                        <!-- Adjust Prices -->
+                        <Frame Grid.Column="0"
+                   BackgroundColor="{DynamicResource SurfaceColor}"
+                   Padding="16"
+                   CornerRadius="12"
+                   HasShadow="True">
+                            <VerticalStackLayout Spacing="8">
+                                <Button Text="💰"
+                            Command="{Binding AdjustPricesCommand}"
+                            FontSize="24"
+                            BackgroundColor="Transparent"
+                            Padding="0"
+                            HorizontalOptions="Center" />
+                                <Label Text="Adjust Prices"
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontSize="13"
+                           HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding AdjustPricesCommand}" />
+                            </Frame.GestureRecognizers>
+                        </Frame>
+
+                        <!-- Order Materials -->
+                        <Frame Grid.Column="1"
+                   BackgroundColor="{DynamicResource SurfaceColor}"
+                   Padding="16"
+                   CornerRadius="12"
+                   HasShadow="True">
+                            <VerticalStackLayout Spacing="8">
+                                <Button Text="📦"
+                            Command="{Binding OrderMaterialsCommand}"
+                            FontSize="24"
+                            BackgroundColor="Transparent"
+                            Padding="0"
+                            HorizontalOptions="Center" />
+                                <Label Text="Order Materials"
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontSize="13"
+                           HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OrderMaterialsCommand}" />
+                            </Frame.GestureRecognizers>
+                        </Frame>
+
+                        <!-- Schedule Production -->
+                        <Frame Grid.Column="2"
+                   BackgroundColor="{DynamicResource SurfaceColor}"
+                   Padding="16"
+                   CornerRadius="12"
+                   HasShadow="True">
+                            <VerticalStackLayout Spacing="8">
+                                <Button Text="⚙️"
+                            Command="{Binding ScheduleProductionCommand}"
+                            FontSize="24"
+                            BackgroundColor="Transparent"
+                            Padding="0"
+                            HorizontalOptions="Center" />
+                                <Label Text="Schedule Production"
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontSize="13"
+                           HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ScheduleProductionCommand}" />
+                            </Frame.GestureRecognizers>
+                        </Frame>
+
+                        <!-- View Reports -->
+                        <Frame Grid.Column="3"
+                   BackgroundColor="{DynamicResource SurfaceColor}"
+                   Padding="16"
+                   CornerRadius="12"
+                   HasShadow="True">
+                            <VerticalStackLayout Spacing="8">
+                                <Button Text="📊"
+                            Command="{Binding ViewReportsCommand}"
+                            FontSize="24"
+                            BackgroundColor="Transparent"
+                            Padding="0"
+                            HorizontalOptions="Center" />
+                                <Label Text="View Reports"
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           FontSize="13"
+                           HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ViewReportsCommand}" />
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                    </Grid>
                 </VerticalStackLayout>
-            </Border>
-
-            <!-- Quick Stats Grid -->
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="16" RowSpacing="16" Margin="0,16,0,0">
-
-                <!-- Finance Summary -->
-                <Border Grid.Column="0" Style="{StaticResource CardBorder}">
-                    <VerticalStackLayout Spacing="16">
-                        <HorizontalStackLayout Spacing="8">
-                            <Label Text="💰" FontSize="24" />
-                            <Label Text="Finance Summary" Style="{StaticResource Title3}" VerticalOptions="Center" />
-                        </HorizontalStackLayout>
-
-                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12">
-                            <Label Grid.Row="0" Grid.Column="0" Text="Revenue" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
-                            <Label Grid.Row="0" Grid.Column="1" Text="$12,450" FontAttributes="Bold" TextColor="{StaticResource Success}" />
-
-                            <Label Grid.Row="1" Grid.Column="0" Text="Expenses" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
-                            <Label Grid.Row="1" Grid.Column="1" Text="$3,206" FontAttributes="Bold" TextColor="{StaticResource Danger}" />
-
-                            <BoxView Grid.Row="2" Grid.ColumnSpan="2" HeightRequest="1" Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource BorderColor}}" />
-
-                            <Label Grid.Row="3" Grid.Column="0" Text="Net Profit" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}" />
-                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Cash, StringFormat='${0:N0}'}" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Success}" />
-                        </Grid>
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Market Overview -->
-                <Border Grid.Column="1" Style="{StaticResource CardBorder}">
-                    <VerticalStackLayout Spacing="16">
-                        <HorizontalStackLayout Spacing="8">
-                            <Label Text="📊" FontSize="24" />
-                            <Label Text="Market Overview" Style="{StaticResource Title3}" VerticalOptions="Center" />
-                        </HorizontalStackLayout>
-
-                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12">
-                            <Label Grid.Row="0" Grid.Column="0" Text="Current Demand" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
-                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding CurrentDemand, StringFormat='{0:F0}'}" FontAttributes="Bold" />
-
-                            <Label Grid.Row="1" Grid.Column="0" Text="Average Price" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
-                            <Label Grid.Row="1" Grid.Column="1" Text="$45.50" FontAttributes="Bold" />
-
-                            <Label Grid.Row="2" Grid.Column="0" Text="Market Trend" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
-                            <Label Grid.Row="2" Grid.Column="1" Text="📈 Rising" FontAttributes="Bold" TextColor="{StaticResource Success}" />
-
-                            <Label Grid.Row="3" Grid.Column="0" Text="Competitors" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource SecondaryDarkText}}" />
-                            <Label Grid.Row="3" Grid.Column="1" Text="3 Active" FontAttributes="Bold" />
-                        </Grid>
-                    </VerticalStackLayout>
-                </Border>
-
-            </Grid>
+            </Frame>
 
         </VerticalStackLayout>
     </ScrollView>

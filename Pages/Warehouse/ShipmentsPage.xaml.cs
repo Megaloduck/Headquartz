@@ -1,9 +1,12 @@
+using Headquartz.PageModels.Warehouse;
+
 namespace Headquartz.Pages.Warehouse;
 
 public partial class ShipmentsPage : ContentPage
 {
-	public ShipmentsPage()
+	public ShipmentsPage(ShipmentsPageModel pageModel)
 	{
 		InitializeComponent();
-	}
+        BindingContext = pageModel;
+    }
 }

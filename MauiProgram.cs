@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Headquartz.Models;
 using Headquartz.PageModels;
+using Headquartz.PageModels.Warehouse;
 using Headquartz.Pages;
 using Headquartz.Pages.CEO;
 using Headquartz.Pages.Dashboard;
@@ -71,12 +72,14 @@ namespace Headquartz
             // WAREHOUSE MODULE
             // ────────────────────────────────────────────────
             builder.Services.AddTransient<WarehouseDashboardPage>();
+            builder.Services.AddTransient<WarehouseDashboardPageModel>();
             builder.Services.AddTransient<InventoryPage>();
+            builder.Services.AddTransient<InventoryPageModel>();
             builder.Services.AddTransient<StockInPage>();
             builder.Services.AddTransient<StockOutPage>();
             builder.Services.AddTransient<ShipmentsPage>();
             builder.Services.AddTransient<StorageAllocationPage>();
-            builder.Services.AddTransient<WarehouseReportsPage>();
+            builder.Services.AddTransient<WarehouseReportsPage>();               
 
             // ────────────────────────────────────────────────
             // PRODUCTION MODULE
