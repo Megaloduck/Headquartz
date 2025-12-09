@@ -40,7 +40,7 @@ namespace Headquartz
             // ────────────────────────────────────────────────
             builder.Services.AddSingleton<GameState>();
             //builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>();
-            builder.Services.AddSingleton<ISaveService, JsonSaveService>();
+            //builder.Services.AddSingleton<ISaveService, JsonSaveService>();
 
             // Role Service (global access everywhere)
             builder.Services.AddSingleton<RoleService>();
