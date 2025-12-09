@@ -158,7 +158,7 @@ namespace Headquartz.PageModels.Warehouse
         [RelayCommand]
         private void NewReceipt()
         {
-            PONumber = "";
+            //PONumber = "";
             Quantity = "";
             BatchNumber = "";
             ReceiptNotes = "";
@@ -185,7 +185,7 @@ namespace Headquartz.PageModels.Warehouse
                 _gameState.Inventory[productId].LastRestocked = _gameState.CurrentGameDate;
 
                 // Clear form
-                PONumber = "";
+                //PONumber = "";
                 Quantity = "";
                 BatchNumber = "";
                 ReceiptNotes = "";
