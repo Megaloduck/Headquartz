@@ -42,6 +42,9 @@ namespace Headquartz
             builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>();
             builder.Services.AddSingleton<ISaveService, JsonSaveService>();
 
+            // Networking
+            builder.Services.AddSingleton<INetworkService, NetworkService>();
+
             // Role Service (global access everywhere)
             builder.Services.AddSingleton<RoleService>();
 

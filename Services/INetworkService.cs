@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Headquartz.Models;
-using Headquartz.Modules;
+﻿using Headquartz.Models;
 
 namespace Headquartz.Services
 {
     public interface INetworkService
     {
-        Task HostGameAsync(int port = 9050);
-        Task JoinGameAsync(string hostIp, int port = 9050);
-        Task<List<GameSession>> DiscoverSessionsAsync();
-        void SendAction(NetworkMessage message);
-        event Action<NetworkMessage> OnMessageReceived;
+        bool IsHost { get; }
+        bool IsConnected { get; }
+
+        event Action<GameState> OnGameStateReceived;
+        event Action<string> OnLog;
+
+        void StartHost(int port);
+        void Connect(string ip, int port);
+        void Stop();
+        void PollEvents();
+        void BroadcastGameState(GameState state);
     }
 }

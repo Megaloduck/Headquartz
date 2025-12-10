@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Headquartz.Pages.LoginPage"
              Title="LoginPage">
 
@@ -10,7 +11,33 @@
             StrokeThickness="0"
             Margin="0,5">
 
-        <VerticalStackLayout>
+        <VerticalStackLayout Spacing="15">
+            
+            <!-- Network Section -->
+            <Border StrokeThickness="0" Background="#22FFFFFF" Padding="10" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Multiplayer Setup" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    
+                    <Label Text="{Binding ConnectionStatus}" 
+                           TextColor="Orange" 
+                           HorizontalOptions="Center"
+                           FontSize="12"/>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                        <Button Text="Host Game" 
+                                Command="{Binding HostCommand}">
+                                <Button.IsEnabled>
+                                    <Binding Path="IsConnected" Converter="{toolkit:InvertedBoolConverter}"/>
+                                </Button.IsEnabled>
+                        </Button>
+                        
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Entry Text="{Binding IpAddress}" Placeholder="IP Address"/>
+                            <Button Text="Join Game" Command="{Binding JoinCommand}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
 
             <Picker x:Name="RolePicker"
                     Title="Select Role"

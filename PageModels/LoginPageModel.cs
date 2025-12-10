@@ -20,23 +20,73 @@ namespace Headquartz.PageModels
     public partial class LoginPageModel : ObservableObject
     {
         private readonly RoleService _roleService;
+        private readonly INetworkService _networkService;
+        private readonly ISimulationEngine _simulationEngine;
 
         public List<RolePermissions> Roles { get; }
 
         [ObservableProperty]
         private RolePermissions selectedRole;
 
-        public IRelayCommand LoginCommand { get; }
+        [ObservableProperty]
+        private string ipAddress = "127.0.0.1";
 
-        public LoginPageModel(RoleService roleService)
+        [ObservableProperty]
+        private bool isConnected;
+
+        [ObservableProperty]
+        private string connectionStatus = "Not Connected";
+
+        public IRelayCommand LoginCommand { get; }
+        public IRelayCommand HostCommand { get; }
+        public IRelayCommand JoinCommand { get; }
+
+        public LoginPageModel(RoleService roleService, INetworkService networkService, ISimulationEngine simulationEngine)
         {
             _roleService = roleService;
+            _networkService = networkService;
+            _simulationEngine = simulationEngine;
 
             Roles = roleService.AvailableRoles;
-
             SelectedRole = Roles[0]; // default
 
             LoginCommand = new RelayCommand(OnLogin);
+            HostCommand = new RelayCommand(OnHost);
+            JoinCommand = new RelayCommand(OnJoin);
+        }
+
+        private void OnHost()
+        {
+            try 
+            {
+                _networkService.StartHost(9050);
+                // Start the simulation engine as well since we are host
+                if (_simulationEngine is SimulationEngine engine)
+                {
+                    engine.Start();
+                }
+                
+                IsConnected = true;
+                ConnectionStatus = "Hosting on Port 9050";
+            }
+            catch (Exception ex)
+            {
+                ConnectionStatus = $"Error: {ex.Message}";
+            }
+        }
+
+        private void OnJoin()
+        {
+             try 
+            {
+                _networkService.Connect(IpAddress, 9050);
+                IsConnected = true;
+                ConnectionStatus = $"Connecting to {IpAddress}...";
+            }
+             catch (Exception ex)
+            {
+                ConnectionStatus = $"Error: {ex.Message}";
+            }
         }
 
         private async void OnLogin()
