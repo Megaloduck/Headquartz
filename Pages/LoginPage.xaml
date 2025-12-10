@@ -3,59 +3,208 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Headquartz.Pages.LoginPage"
-             Title="LoginPage">
+             Title="Login"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-    <Border Background="{DynamicResource CardBackgroundColor}"
-            Padding="10,5"
-            StrokeShape="RoundRectangle 7.5"
-            StrokeThickness="0"
-            Margin="0,5">
+    <ScrollView>
+        <Grid RowDefinitions="Auto,*,Auto" Padding="20" 
+              HorizontalOptions="Center" 
+              VerticalOptions="Center"
+              WidthRequest="400"
+              MaximumWidthRequest="400">
 
-        <VerticalStackLayout Spacing="15">
+            <!-- Header -->
+            <VerticalStackLayout Grid.Row="0" Spacing="8" HorizontalOptions="Center" Margin="0,0,0,30">
+                <Label Text="🚀" FontSize="48" HorizontalOptions="Center" />
+                <Label Text="Headquartz" 
+                       FontSize="28" 
+                       TextColor="{DynamicResource PrimaryTextColor}"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+                <Label Text="Enterprise Resource Planning Simulation" 
+                       TextColor="{DynamicResource SecondaryTextColor}"
+                       FontSize="14"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
 
-            <!-- Network Section -->
-            <Border StrokeThickness="0" Background="#22FFFFFF" Padding="10" StrokeShape="RoundRectangle 10">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Multiplayer Setup" FontAttributes="Bold" HorizontalOptions="Center"/>
+            <!-- Main Login Card -->
+            <Frame Grid.Row="1"
+                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                   Padding="25"
+                   CornerRadius="16"
+                   BorderColor="{DynamicResource BorderColor}"
+                   HasShadow="True"
+                   VerticalOptions="Center">
+                <VerticalStackLayout Spacing="20">
 
-                    <Label Text="{Binding ConnectionStatus}" 
-                           TextColor="Orange" 
-                           HorizontalOptions="Center"
-                           FontSize="12"/>
+                    <!-- Network Section -->
+                    <Border StrokeThickness="0" 
+                            Background="{DynamicResource SurfaceColor}" 
+                            Padding="16" 
+                            StrokeShape="RoundRectangle 12">
+                        <VerticalStackLayout Spacing="12">
+                            <Grid RowDefinitions="*,Auto">
+                                <HorizontalStackLayout Grid.Row="0" Spacing="8">
+                                    <Label Text="🌐" FontSize="16" VerticalOptions="Center" />
+                                    <Label Text="Multiplayer Setup" 
+                                           FontAttributes="Bold" 
+                                           FontSize="16"
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
 
-                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
-                        <Button Text="Host Game" 
-                                Command="{Binding HostCommand}">
-                            <Button.IsEnabled>
-                                <Binding Path="IsConnected" Converter="{toolkit:InvertedBoolConverter}"/>
-                            </Button.IsEnabled>
-                        </Button>
+                                <!-- Connection Status -->
+                                <Frame Grid.Row="1"
+                                       BackgroundColor="{Binding ConnectionStatusColor}"
+                                       Padding="6,4"
+                                       CornerRadius="6">
+                                    <HorizontalStackLayout Spacing="4">
+                                        <BoxView Color="White"
+                                                 WidthRequest="6"
+                                                 HeightRequest="6"
+                                                 VerticalOptions="Center"
+                                                 CornerRadius="3" />
+                                        <Label Text="{Binding ConnectionStatus}" 
+                                               TextColor="White" 
+                                               FontSize="10"
+                                               FontAttributes="Bold" />
+                                    </HorizontalStackLayout>
+                                </Frame>
+                            </Grid>
 
-                        <VerticalStackLayout Grid.Column="1" Spacing="5">
-                            <Entry Text="{Binding IpAddress}" Placeholder="IP Address"/>
-                            <Button Text="Join Game" Command="{Binding JoinCommand}"/>
+                            <!-- Network Controls -->
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                                <!-- Host Game -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                    <Label Text="Start New Session"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12" />
+                                    <Button Text="Host Game" 
+                                            Command="{Binding HostCommand}"
+                                            BackgroundColor="{DynamicResource PrimaryColor}"
+                                            TextColor="White"
+                                            CornerRadius="8"
+                                            Padding="0,12"
+                                            FontSize="14">
+                                        <Button.IsEnabled>
+                                            <Binding Path="IsConnected" Converter="{toolkit:InvertedBoolConverter}"/>
+                                        </Button.IsEnabled>
+                                    </Button>
+                                </VerticalStackLayout>
+
+                                <!-- Join Game -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                    <Label Text="Join Existing Session"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           FontSize="12" />
+                                    <VerticalStackLayout Spacing="8">
+                                        <Border Stroke="{DynamicResource BorderColor}"
+                                                StrokeThickness="1"
+                                                StrokeShape="RoundRectangle 8"
+                                                Padding="12,0">
+                                            <Entry Text="{Binding IpAddress}" 
+                                                   Placeholder="Enter IP Address"
+                                                   ClearButtonVisibility="WhileEditing"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   FontSize="14"
+                                                   BackgroundColor="Transparent"
+                                                   PlaceholderColor="{DynamicResource TertiaryTextColor}" />
+                                        </Border>
+                                        <Button Text="Join Game" 
+                                                Command="{Binding JoinCommand}"
+                                                BackgroundColor="{DynamicResource SecondaryButtonBackground}"
+                                                TextColor="{DynamicResource SecondaryButtonTextColor}"
+                                                CornerRadius="8"
+                                                Padding="0,12"
+                                                FontSize="14" />
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </Grid>
                         </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Divider -->
+                    <Grid>
+                        <BoxView Color="{DynamicResource DividerColor}" HeightRequest="1" />
+                        <Label Text="OR"
+                               TextColor="{DynamicResource TertiaryTextColor}"
+                               FontSize="12"
+                               BackgroundColor="{DynamicResource CardBackgroundColor}"
+                               Padding="8,0"
+                               HorizontalOptions="Center" />
                     </Grid>
+
+                    <!-- Single Player / Role Selection -->
+                    <VerticalStackLayout Spacing="12">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="👤" FontSize="16" VerticalOptions="Center" />
+                            <Label Text="Select Your Role" 
+                                   FontSize="16"
+                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Border Stroke="{DynamicResource BorderColor}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 10"
+                                Padding="0">
+                            <Picker Title="Choose your simulation role..."
+                                    ItemsSource="{Binding Roles}"
+                                    ItemDisplayBinding="{Binding DisplayName}"
+                                    SelectedItem="{Binding SelectedRole}"
+                                    FontSize="14"
+                                    TextColor="{DynamicResource PrimaryTextColor}"
+                                    TitleColor="{DynamicResource SecondaryTextColor}"
+                                    BackgroundColor="Transparent">
+         
+                            </Picker>
+                        </Border>
+
+                        <Label Text="Select a role to start a single-player simulation"
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               FontSize="12"
+                               HorizontalOptions="Center"
+                               Margin="0,4,0,0" />
+                    </VerticalStackLayout>
+
+                    <!-- Login Button -->
+                    <Button Text="Start Simulation"
+                            Command="{Binding LoginCommand}"
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="48"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            Margin="0,10,0,0">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button"
+                                         Binding="{Binding IsBusy}"
+                                         Value="True">
+                                <Setter Property="Text" Value="Loading..." />
+                                <Setter Property="BackgroundColor" Value="{DynamicResource DisabledButtonColor}" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+
                 </VerticalStackLayout>
-            </Border>
+            </Frame>
 
-            <Picker x:Name="RolePicker"
-                    Title="Select Role"
-                    ItemsSource="{Binding Roles}"
-                    ItemDisplayBinding="{Binding DisplayName}"
-                    SelectedItem="{Binding SelectedRole}"
-                    FontSize="13"
-                    TextColor="{DynamicResource PrimaryColor}" />
+            <!-- Footer -->
+            <VerticalStackLayout Grid.Row="2" Spacing="8" HorizontalOptions="Center" Margin="0,30,0,0">
+                <Label Text="© 2024 Headquartz ERP Simulation" 
+                       TextColor="{DynamicResource TertiaryTextColor}"
+                       FontSize="12"
+                       HorizontalOptions="Center" />
+                <Label Text="Version 1.0.0" 
+                       TextColor="{DynamicResource TertiaryTextColor}"
+                       FontSize="11"
+                       HorizontalOptions="Center"
+                       Opacity="0.7" />
+            </VerticalStackLayout>
 
-            <Button Text="Login"
-                    Margin="0,10,0,0"
-                    Command="{Binding LoginCommand}"
-                    BackgroundColor="{DynamicResource PrimaryColor}"
-                    TextColor="White"
-                    CornerRadius="5"
-                    HeightRequest="40"/>
-
-        </VerticalStackLayout>
-    </Border>
+        </Grid>
+    </ScrollView>
 
 </ContentPage>
