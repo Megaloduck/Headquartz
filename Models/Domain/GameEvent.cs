@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Headquartz.Models
+namespace Headquartz.Models.Domain
 {
     public class GameEvent
     {

@@ -6,8 +6,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Headquartz.Models;
 using Headquartz.Models.Warehouse;
+using Headquartz.Models.Domain;
 
 namespace Headquartz.PageModels.Warehouse
 {

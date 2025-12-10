@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Maui;
-using Headquartz.Models;
+using Headquartz.Models.Domain;
 using Headquartz.PageModels;
 using Headquartz.PageModels.Warehouse;
 using Headquartz.Pages;

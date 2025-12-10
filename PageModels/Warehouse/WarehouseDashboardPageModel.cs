@@ -1,12 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Headquartz.Models;
 using Headquartz.Models.Warehouse;
 using Headquartz.Models.Sales;
 using Headquartz.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Headquartz.Models.Domain;
 
 namespace Headquartz.PageModels.Warehouse
 {

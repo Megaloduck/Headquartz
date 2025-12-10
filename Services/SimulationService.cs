@@ -1,4 +1,4 @@
-﻿using Headquartz.Models;
+﻿using Headquartz.Models.Domain;
 using Headquartz.Modules;
 using Headquartz.Services.Headquartz.Services;
 using Headquartz.Simulation;

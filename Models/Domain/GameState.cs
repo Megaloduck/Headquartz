@@ -1,5 +1,4 @@
-﻿// Models/GameState.cs
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -8,8 +7,10 @@ using Headquartz.Models.HumanResource;
 using Headquartz.Models.Production;
 using Headquartz.Models.Sales;
 using Headquartz.Models.Warehouse;
+using Headquartz;
 
-namespace Headquartz.Models
+
+namespace Headquartz.Models.Domain
 {
     /// <summary>
     /// Central game state shared across all players in LAN multiplayer
