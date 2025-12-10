@@ -12,12 +12,12 @@
             Margin="0,5">
 
         <VerticalStackLayout Spacing="15">
-            
+
             <!-- Network Section -->
             <Border StrokeThickness="0" Background="#22FFFFFF" Padding="10" StrokeShape="RoundRectangle 10">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Multiplayer Setup" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    
+
                     <Label Text="{Binding ConnectionStatus}" 
                            TextColor="Orange" 
                            HorizontalOptions="Center"
@@ -26,11 +26,11 @@
                     <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
                         <Button Text="Host Game" 
                                 Command="{Binding HostCommand}">
-                                <Button.IsEnabled>
-                                    <Binding Path="IsConnected" Converter="{toolkit:InvertedBoolConverter}"/>
-                                </Button.IsEnabled>
+                            <Button.IsEnabled>
+                                <Binding Path="IsConnected" Converter="{toolkit:InvertedBoolConverter}"/>
+                            </Button.IsEnabled>
                         </Button>
-                        
+
                         <VerticalStackLayout Grid.Column="1" Spacing="5">
                             <Entry Text="{Binding IpAddress}" Placeholder="IP Address"/>
                             <Button Text="Join Game" Command="{Binding JoinCommand}"/>

@@ -11,24 +11,26 @@ namespace Headquartz.Services
     {
         public static void Seed(GameState state)
         {
-            if (state.Warehouse.Products.Count == 0)
+            if (state.Inventory.Count == 0)
             {
-                state.Warehouse.Products.Add(new Product("Basic Widget", 10)
-                {
-                    Stock = 50,
-                    ProductionRate = 5
-                });
+                // Seeding initial inventory
 
-                state.Warehouse.Products.Add(new Product("Premium Widget", 20)
+                var p1 = new Headquartz.Models.Warehouse.InventoryItem
                 {
-                    Stock = 25,
-                    ProductionRate = 2
-                });
-            }
+                    ProductId = "P-001",
+                    Quantity = 50,
+                    LastRestocked = state.CurrentGameDate
+                };
+                state.Inventory.Add(p1.ProductId, p1);
 
-            if (state.Market.Products.Count == 0)
-            {
-                state.Market.Products.AddRange(state.Warehouse.Products);
+
+                var p2 = new Headquartz.Models.Warehouse.InventoryItem
+                {
+                    ProductId = "P-002",
+                    Quantity = 25,
+                    LastRestocked = state.CurrentGameDate
+                };
+                state.Inventory.Add(p2.ProductId, p2);
             }
         }
     }

@@ -14,6 +14,7 @@ using Headquartz.Pages.Sales;
 using Headquartz.Pages.System;
 using Headquartz.Pages.Warehouse;
 using Headquartz.Services;
+using Headquartz.Services.Networking;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
 
@@ -49,7 +50,6 @@ namespace Headquartz
             builder.Services.AddSingleton<RoleService>();
 
             // Sidebar - must stay alive during the entire app lifetime
-            builder.Services.AddSingleton<SidebarPageModel>();
            // builder.Services.AddSingleton<SidebarPage>();
             builder.Services.AddSingleton<SidebarCEOPage>();
             builder.Services.AddSingleton<SidebarHRPage>();

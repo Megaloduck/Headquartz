@@ -13,7 +13,7 @@ namespace Headquartz.PageModels
         private readonly GameState _state;
         private readonly ISaveService _saveService;
 
-        public OverviewPageModel (ISimulationEngine engine, GameState state, ISaveService saveService)
+        public OverviewPageModel(ISimulationEngine engine, GameState state, ISaveService saveService)
         {
             _engine = engine;
             _state = state;
@@ -73,12 +73,10 @@ namespace Headquartz.PageModels
                 if (loaded != null)
                 {
                     // merge loaded state
-                    _state.SimTime = loaded.SimTime;
-                    _state.Company = loaded.Company;
-                    _state.Market = loaded.Market;
-                    _state.Warehouse = loaded.Warehouse;
-                    //  _state.HumanResource = loaded.HumanResource;
-                    _state.Finance = loaded.Finance;
+                    _state.CurrentGameDate = loaded.CurrentGameDate;
+                    _state.CashBalance = loaded.CashBalance;
+                    // _state.Inventory = loaded.Inventory; // Deep copy needed in real app, simplified for now
+
                     // Then update UI
                     UpdateBindings();
                 }
@@ -92,18 +90,18 @@ namespace Headquartz.PageModels
         private void OnEngineTicked(GameState state)
         {
             // Update properties that UI binds to
-            SimTime = state.SimTime.ToString("HH:mm:ss");
-            Cash = state.Finance.Cash.ToString("F2");
-            CurrentDemand = state.Market.CurrentDemand;
-            TotalStock = state.Warehouse.Products?.Sum(p => p.Stock) ?? 0;
+            SimTime = state.CurrentGameDate.ToString("yyyy-MM-dd");
+            Cash = state.CashBalance.ToString("F2");
+            // CurrentDemand = state.Market.CurrentDemand; // Market module logic not exposed in State yet
+            // TotalStock = state.Inventory.Count; 
         }
 
         private void UpdateBindings()
         {
-            SimTime = _state.SimTime.ToString("HH:mm:ss");
-            Cash = _state.Finance.Cash.ToString("F2");
-            CurrentDemand = _state.Market.CurrentDemand;
-            TotalStock = _state.Warehouse.Products?.Sum(p => p.Stock) ?? 0;
+            SimTime = _state.CurrentGameDate.ToString("yyyy-MM-dd");
+            Cash = _state.CashBalance.ToString("F2");
+            // CurrentDemand = _state.Market.CurrentDemand;
+            // TotalStock = _state.Warehouse.Products?.Sum(p => p.Stock) ?? 0;
         }
 
         private string FileNameForSave()

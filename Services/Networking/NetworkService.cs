@@ -12,7 +12,7 @@ namespace Headquartz.Services.Networking
         private EventBasedNetListener _listener;
         private NetManager _netManager;
         private NetPeer? _serverPeer; // For client
-        
+
         public bool IsHost { get; private set; }
         public bool IsConnected => _netManager != null && _netManager.IsRunning;
 
@@ -104,18 +104,18 @@ namespace Headquartz.Services.Networking
                     // Handle join request
                     break;
             }
-            
+
             reader.Recycle();
         }
 
         private void OnPeerConnected(NetPeer peer)
         {
-            Log($"Peer connected: {peer.EndPoint}");
+            Log($"Peer connected: {peer}");
         }
 
         private void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
         {
-             Log($"Peer disconnected: {disconnectInfo.Reason}");
+            Log($"Peer disconnected: {disconnectInfo.Reason}");
         }
 
         private void Log(string message)

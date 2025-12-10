@@ -4,9 +4,9 @@ namespace Headquartz.Pages;
 
 public partial class LoginPage : ContentPage
 {
-    public LoginPage(RoleService roleService)
+    public LoginPage(LoginPageModel model)
     {
         InitializeComponent();
-        BindingContext = new LoginPageModel(roleService);
+        BindingContext = model;
     }
 }
