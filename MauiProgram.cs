@@ -42,6 +42,7 @@ namespace Headquartz
             builder.Services.AddSingleton<GameState>();
             builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>();
             builder.Services.AddSingleton<ISaveService, JsonSaveService>();
+            builder.Services.AddSingleton<TickManager>();
 
             // Networking
             builder.Services.AddSingleton<INetworkService, NetworkService>();
@@ -169,6 +170,7 @@ namespace Headquartz
 
             // Seed initial game data
             var gameState = app.Services.GetRequiredService<GameState>();
+            var tickManager = app.Services.GetRequiredService<TickManager>();
             SeedService.Seed(gameState);
 
             return app;

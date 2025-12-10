@@ -1,4 +1,4 @@
-﻿// Models/GameState.cs
+﻿// Models/GameState.cs - Enhanced for MonsoonSIM-like tick mechanism
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,59 +12,23 @@ using Headquartz.Models.Warehouse;
 namespace Headquartz.Models
 {
     /// <summary>
-    /// Central game state shared across all players in LAN multiplayer
-    /// This should be synchronized via network
+    /// Central game state with enhanced tick-based processing
+    /// Synchronized across all players in multiplayer mode
     /// </summary>
     public class GameState : INotifyPropertyChanged
     {
         private static GameState _instance;
         public static GameState Instance => _instance ??= new GameState();
 
-        // Time Management
+        #region Time Management
+
         private DateTime _currentGameDate = new DateTime(2025, 1, 1);
         private int _gameDay = 1;
         private int _gameWeek = 1;
         private int _gameMonth = 1;
         private int _gameYear = 1;
-        private TimeSpan _gameSpeed = TimeSpan.FromSeconds(10); // 1 game day = 10 real seconds
+        private int _gameQuarter = 1;
 
-        // Financial Metrics
-        private decimal _cashBalance = 1000000m; // Starting capital
-        private decimal _monthlyRevenue = 0m;
-        private decimal _monthlyExpenses = 0m;
-        private decimal _totalAssets = 1000000m;
-        private decimal _totalLiabilities = 0m;
-
-        // Company Performance
-        private decimal _companyValue = 1000000m;
-        private int _customerSatisfaction = 80;
-        private int _employeeSatisfaction = 75;
-        private int _marketShare = 5;
-
-        // Inventory
-        private Dictionary<string, InventoryItem> _inventory = new();
-        private Dictionary<string, RawMaterial> _rawMaterials = new();
-
-        // Orders & Production
-        private List<SalesOrder> _activeSalesOrders = new();
-        private List<WorkOrder> _activeWorkOrders = new();
-        private Queue<PurchaseOrder> _pendingPurchaseOrders = new();
-
-        // Employees
-        private List<Employee> _employees = new();
-        private int _totalEmployees = 50; // Starting workforce
-        private decimal _monthlyPayroll = 250000m;
-
-        // Market Conditions
-        private decimal _marketDemandMultiplier = 1.0m;
-        private decimal _competitorPriceIndex = 1.0m;
-        private Dictionary<string, decimal> _productDemand = new();
-
-        // Events & Notifications
-        public event Action<GameEvent> OnGameEvent;
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        // Properties with notification
         public DateTime CurrentGameDate
         {
             get => _currentGameDate;
@@ -95,6 +59,26 @@ namespace Headquartz.Models
             set { _gameYear = value; OnPropertyChanged(); }
         }
 
+        public int GameQuarter
+        {
+            get => _gameQuarter;
+            set { _gameQuarter = value; OnPropertyChanged(); }
+        }
+
+        #endregion
+
+        #region Financial Metrics
+
+        private decimal _cashBalance = 1000000m;
+        private decimal _monthlyRevenue = 0m;
+        private decimal _monthlyExpenses = 0m;
+        private decimal _totalAssets = 1000000m;
+        private decimal _totalLiabilities = 0m;
+        private decimal _quarterlyRevenue = 0m;
+        private decimal _quarterlyExpenses = 0m;
+        private decimal _yearlyRevenue = 0m;
+        private decimal _yearlyExpenses = 0m;
+
         public decimal CashBalance
         {
             get => _cashBalance;
@@ -118,14 +102,128 @@ namespace Headquartz.Models
             set { _monthlyExpenses = value; OnPropertyChanged(); }
         }
 
-        public decimal NetProfit => MonthlyRevenue - MonthlyExpenses;
+        public decimal QuarterlyRevenue
+        {
+            get => _quarterlyRevenue;
+            set { _quarterlyRevenue = value; OnPropertyChanged(); }
+        }
 
+        public decimal QuarterlyExpenses
+        {
+            get => _quarterlyExpenses;
+            set { _quarterlyExpenses = value; OnPropertyChanged(); }
+        }
+
+        public decimal YearlyRevenue
+        {
+            get => _yearlyRevenue;
+            set { _yearlyRevenue = value; OnPropertyChanged(); }
+        }
+
+        public decimal YearlyExpenses
+        {
+            get => _yearlyExpenses;
+            set { _yearlyExpenses = value; OnPropertyChanged(); }
+        }
+
+        public decimal NetProfit => MonthlyRevenue - MonthlyExpenses;
+        public decimal QuarterlyProfit => QuarterlyRevenue - QuarterlyExpenses;
+        public decimal YearlyProfit => YearlyRevenue - YearlyExpenses;
+
+        #endregion
+
+        #region Company Performance
+
+        private decimal _companyValue = 1000000m;
+        private int _customerSatisfaction = 80;
+        private int _employeeSatisfaction = 75;
+        private int _marketShare = 5;
+        private decimal _productionEfficiency = 100m;
+        private decimal _qualityScore = 95m;
+
+        public decimal CompanyValue
+        {
+            get => _companyValue;
+            set { _companyValue = value; OnPropertyChanged(); }
+        }
+
+        public int CustomerSatisfaction
+        {
+            get => _customerSatisfaction;
+            set { _customerSatisfaction = Math.Max(0, Math.Min(100, value)); OnPropertyChanged(); }
+        }
+
+        public int EmployeeSatisfaction
+        {
+            get => _employeeSatisfaction;
+            set { _employeeSatisfaction = Math.Max(0, Math.Min(100, value)); OnPropertyChanged(); }
+        }
+
+        public int MarketShare
+        {
+            get => _marketShare;
+            set { _marketShare = Math.Max(0, Math.Min(100, value)); OnPropertyChanged(); }
+        }
+
+        public decimal ProductionEfficiency
+        {
+            get => _productionEfficiency;
+            set { _productionEfficiency = value; OnPropertyChanged(); }
+        }
+
+        public decimal QualityScore
+        {
+            get => _qualityScore;
+            set { _qualityScore = value; OnPropertyChanged(); }
+        }
+
+        #endregion
+
+        #region Collections
+
+        private Dictionary<string, InventoryItem> _inventory = new();
+        private Dictionary<string, RawMaterial> _rawMaterials = new();
+        private List<SalesOrder> _activeSalesOrders = new();
+        private List<WorkOrder> _activeWorkOrders = new();
+        private Queue<PurchaseOrder> _pendingPurchaseOrders = new();
+        private List<Employee> _employees = new();
+        private List<GameEvent> _eventHistory = new();
+
+        public Dictionary<string, InventoryItem> Inventory => _inventory;
+        public Dictionary<string, RawMaterial> RawMaterials => _rawMaterials;
         public List<SalesOrder> ActiveSalesOrders => _activeSalesOrders;
         public List<WorkOrder> ActiveWorkOrders => _activeWorkOrders;
-        public Dictionary<string, InventoryItem> Inventory => _inventory;
         public List<Employee> Employees => _employees;
+        public List<GameEvent> EventHistory => _eventHistory;
 
-        // Methods
+        #endregion
+
+        #region Market Conditions
+
+        private decimal _marketDemandMultiplier = 1.0m;
+        private decimal _competitorPriceIndex = 1.0m;
+        private Dictionary<string, decimal> _productDemand = new();
+
+        public decimal MarketDemandMultiplier
+        {
+            get => _marketDemandMultiplier;
+            set { _marketDemandMultiplier = value; OnPropertyChanged(); }
+        }
+
+        #endregion
+
+        #region Events
+
+        public event Action<GameEvent> OnGameEvent;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
+        #region Tick Processing Methods
+
+        /// <summary>
+        /// Main tick method - advances game by 1 day
+        /// </summary>
         public void AdvanceGameTime()
         {
             GameDay++;
@@ -134,20 +232,38 @@ namespace Headquartz.Models
             // Daily processes
             ProcessDailyOperations();
 
-            // Weekly processes
+            // Weekly processes (every 7 days)
             if (GameDay % 7 == 0)
             {
                 GameWeek++;
                 ProcessWeeklyOperations();
             }
 
-            // Monthly processes
+            // Monthly processes (every 30 days)
             if (GameDay % 30 == 0)
             {
                 GameMonth++;
                 ProcessMonthlyOperations();
             }
+
+            // Quarterly processes (every 90 days)
+            if (GameDay % 90 == 0)
+            {
+                GameQuarter++;
+                ProcessQuarterlyOperations();
+            }
+
+            // Yearly processes (every 360 days)
+            if (GameDay % 360 == 0)
+            {
+                GameYear++;
+                ProcessYearlyOperations();
+            }
         }
+
+        #endregion
+
+        #region Daily Operations
 
         private void ProcessDailyOperations()
         {
@@ -160,9 +276,62 @@ namespace Headquartz.Models
             // Sales operations
             ProcessNewOrders();
 
-            // Random events
+            // Employee productivity
+            ProcessEmployeeDailyWork();
+
+            // Quality control
+            ProcessQualityChecks();
+
+            // Random events (5% chance per day)
             TriggerRandomEvents();
+
+            // Update performance metrics
+            UpdateDailyMetrics();
         }
+
+        private void ProcessEmployeeDailyWork()
+        {
+            foreach (var employee in _employees)
+            {
+                // Productivity impacts performance
+                if (employee.SatisfactionLevel > 80)
+                {
+                    employee.PerformanceRating = Math.Min(100, employee.PerformanceRating + 1);
+                }
+                else if (employee.SatisfactionLevel < 40)
+                {
+                    employee.PerformanceRating = Math.Max(0, employee.PerformanceRating - 1);
+                }
+            }
+        }
+
+        private void ProcessQualityChecks()
+        {
+            // Random quality variations
+            var random = new Random();
+            var qualityChange = (decimal)(random.NextDouble() * 2 - 1); // ±1%
+            QualityScore = Math.Max(0, Math.Min(100, QualityScore + qualityChange));
+        }
+
+        private void UpdateDailyMetrics()
+        {
+            // Update company value based on assets
+            _totalAssets = CashBalance + _inventory.Sum(i => i.Value.Quantity * 50m);
+            CompanyValue = _totalAssets - _totalLiabilities;
+
+            // Update production efficiency
+            if (_activeWorkOrders.Any())
+            {
+                var avgProgress = _activeWorkOrders
+                    .Where(w => w.Status == WorkOrderStatus.InProgress)
+                    .Average(w => (decimal?)w.ProgressPercentage) ?? 100m;
+                ProductionEfficiency = avgProgress;
+            }
+        }
+
+        #endregion
+
+        #region Weekly Operations
 
         private void ProcessWeeklyOperations()
         {
@@ -174,7 +343,44 @@ namespace Headquartz.Models
 
             // Employee performance reviews
             UpdateEmployeePerformance();
+
+            // Customer satisfaction updates
+            UpdateCustomerSatisfaction();
+
+            TriggerEvent(new GameEvent
+            {
+                Type = EventType.MarketChange,
+                Message = $"Week {GameWeek} completed - Market analysis updated",
+                Severity = EventSeverity.Info
+            });
         }
+
+        private void UpdateCustomerSatisfaction()
+        {
+            var random = new Random();
+
+            // Quality impacts satisfaction
+            if (QualityScore > 90)
+            {
+                CustomerSatisfaction += random.Next(1, 3);
+            }
+            else if (QualityScore < 70)
+            {
+                CustomerSatisfaction -= random.Next(1, 3);
+            }
+
+            // Delivery performance impacts satisfaction
+            var onTimeDeliveries = _activeSalesOrders
+                .Count(o => o.Status == OrderStatus.Shipped);
+            if (onTimeDeliveries > 5)
+            {
+                CustomerSatisfaction += 1;
+            }
+        }
+
+        #endregion
+
+        #region Monthly Operations
 
         private void ProcessMonthlyOperations()
         {
@@ -187,101 +393,136 @@ namespace Headquartz.Models
             // Budget reviews
             ReviewDepartmentBudgets();
 
+            // Accumulate to quarterly
+            QuarterlyRevenue += MonthlyRevenue;
+            QuarterlyExpenses += MonthlyExpenses;
+
             // Clear monthly counters
             MonthlyRevenue = 0;
             MonthlyExpenses = 0;
-        }
-
-        public bool ProcessTransaction(Transaction transaction)
-        {
-            if (transaction.Type == TransactionType.Expense)
-            {
-                if (CashBalance < transaction.Amount)
-                {
-                    TriggerEvent(new GameEvent
-                    {
-                        Type = EventType.InsufficientFunds,
-                        Message = $"Insufficient funds for {transaction.Description}",
-                        Severity = EventSeverity.High
-                    });
-                    return false;
-                }
-
-                CashBalance -= transaction.Amount;
-                MonthlyExpenses += transaction.Amount;
-            }
-            else if (transaction.Type == TransactionType.Revenue)
-            {
-                CashBalance += transaction.Amount;
-                MonthlyRevenue += transaction.Amount;
-            }
-
-            return true;
-        }
-
-        public SalesOrder CreateSalesOrder(string customerId, List<OrderLine> items)
-        {
-            var order = new SalesOrder
-            {
-                Id = Guid.NewGuid().ToString(),
-                CustomerId = customerId,
-                OrderDate = CurrentGameDate,
-                Items = items,
-                Status = OrderStatus.Pending,
-                TotalAmount = items.Sum(i => i.Quantity * i.UnitPrice)
-            };
-
-            _activeSalesOrders.Add(order);
 
             TriggerEvent(new GameEvent
             {
-                Type = EventType.NewSalesOrder,
-                Message = $"New sales order #{order.Id} - ${order.TotalAmount:N2}",
+                Type = EventType.FinancialReport,
+                Message = $"Month {GameMonth} closed - Financial reports generated",
+                Severity = EventSeverity.Info
+            });
+        }
+
+        #endregion
+
+        #region Quarterly Operations
+
+        private void ProcessQuarterlyOperations()
+        {
+            // Quarterly performance review
+            TriggerEvent(new GameEvent
+            {
+                Type = EventType.BudgetReview,
+                Message = $"Q{GameQuarter} Results: Revenue ${QuarterlyRevenue:N0}, Profit ${QuarterlyProfit:N0}",
                 Severity = EventSeverity.Info
             });
 
-            return order;
+            // Strategic planning for next quarter
+            AdjustMarketStrategy();
+
+            // Accumulate to yearly
+            YearlyRevenue += QuarterlyRevenue;
+            YearlyExpenses += QuarterlyExpenses;
+
+            // Clear quarterly counters
+            QuarterlyRevenue = 0;
+            QuarterlyExpenses = 0;
         }
 
-        public WorkOrder CreateWorkOrder(string productId, int quantity)
+        private void AdjustMarketStrategy()
         {
-            var workOrder = new WorkOrder
+            // AI-driven market strategy adjustments
+            if (MarketShare < 10 && CashBalance > 500000m)
             {
-                Id = Guid.NewGuid().ToString(),
-                ProductId = productId,
-                Quantity = quantity,
-                StartDate = CurrentGameDate,
-                Status = WorkOrderStatus.Scheduled,
-                RequiredMaterials = GetRequiredMaterials(productId, quantity)
-            };
-
-            // Check material availability
-            bool materialsAvailable = CheckMaterialAvailability(workOrder.RequiredMaterials);
-
-            if (!materialsAvailable)
-            {
-                workOrder.Status = WorkOrderStatus.WaitingMaterials;
                 TriggerEvent(new GameEvent
                 {
-                    Type = EventType.MaterialShortage,
-                    Message = $"Work Order {workOrder.Id} waiting for materials",
-                    Severity = EventSeverity.Medium
+                    Type = EventType.MarketOpportunity,
+                    Message = "Market opportunity detected - Consider increasing marketing budget",
+                    Severity = EventSeverity.Info
                 });
             }
-
-            _activeWorkOrders.Add(workOrder);
-            return workOrder;
         }
+
+        #endregion
+
+        #region Yearly Operations
+
+        private void ProcessYearlyOperations()
+        {
+            // Annual report
+            TriggerEvent(new GameEvent
+            {
+                Type = EventType.FinancialReport,
+                Message = $"Year {GameYear} Complete! Annual Revenue: ${YearlyRevenue:N0}, Profit: ${YearlyProfit:N0}",
+                Severity = EventSeverity.Info
+            });
+
+            // Employee annual reviews
+            foreach (var employee in _employees)
+            {
+                if (employee.PerformanceRating > 85)
+                {
+                    employee.MonthlySalary *= 1.05m; // 5% raise for high performers
+                }
+            }
+
+            // Clear yearly counters
+            YearlyRevenue = 0;
+            YearlyExpenses = 0;
+        }
+
+        #endregion
+
+        #region Production & Logistics (Existing Enhanced Methods)
 
         public void ProcessProduction()
         {
-            foreach (var workOrder in _activeWorkOrders.Where(w => w.Status == WorkOrderStatus.InProgress))
+            foreach (var workOrder in _activeWorkOrders.Where(w => w.Status == WorkOrderStatus.InProgress).ToList())
             {
-                workOrder.ProgressPercentage += 10; // 10% per day (complete in 10 days)
+                // Progress based on employee skill and satisfaction
+                var productionRate = CalculateProductionRate();
+                workOrder.ProgressPercentage += (int)(10 * productionRate);
 
                 if (workOrder.ProgressPercentage >= 100)
                 {
                     CompleteWorkOrder(workOrder);
+                }
+            }
+
+            // Start scheduled work orders
+            foreach (var workOrder in _activeWorkOrders.Where(w => w.Status == WorkOrderStatus.Scheduled).ToList())
+            {
+                if (CheckMaterialAvailability(workOrder.RequiredMaterials))
+                {
+                    workOrder.Status = WorkOrderStatus.InProgress;
+                    ConsumeRawMaterials(workOrder.RequiredMaterials);
+                }
+            }
+        }
+
+        private decimal CalculateProductionRate()
+        {
+            if (!_employees.Any()) return 1.0m;
+
+            var avgPerformance = (decimal)_employees.Average(e => e.PerformanceRating) / 100m;
+            var avgSatisfaction = (decimal)_employees.Average(e => e.SatisfactionLevel) / 100m;
+
+            return (avgPerformance + avgSatisfaction) / 2m;
+        }
+
+        private void ConsumeRawMaterials(Dictionary<string, int> requiredMaterials)
+        {
+            foreach (var material in requiredMaterials)
+            {
+                if (_rawMaterials.ContainsKey(material.Key))
+                {
+                    _rawMaterials[material.Key].Quantity -= material.Value;
                 }
             }
         }
@@ -322,7 +563,6 @@ namespace Headquartz.Models
 
             foreach (var order in readyOrders)
             {
-                // Check if inventory available
                 bool canFulfill = order.Items.All(item =>
                     _inventory.ContainsKey(item.ProductId) &&
                     _inventory[item.ProductId].Quantity >= item.Quantity);
@@ -341,19 +581,26 @@ namespace Headquartz.Models
                     TriggerEvent(new GameEvent
                     {
                         Type = EventType.OrderShipped,
-                        Message = $"Order {order.Id} shipped",
+                        Message = $"Order {order.Id} shipped - ${order.TotalAmount:N2}",
                         Severity = EventSeverity.Info
                     });
+
+                    // Customer satisfaction boost
+                    CustomerSatisfaction += 1;
                 }
             }
         }
 
+        #endregion
+
+        #region Sales & Orders (Enhanced)
+
         private void ProcessNewOrders()
         {
-            // Simulate random customer orders based on market demand
             var random = new Random();
+            double orderChance = 0.3 * (double)_marketDemandMultiplier * (CustomerSatisfaction / 100.0);
 
-            if (random.NextDouble() < 0.3 * (double)_marketDemandMultiplier) // 30% chance per day
+            if (random.NextDouble() < orderChance)
             {
                 GenerateRandomSalesOrder();
             }
@@ -362,15 +609,20 @@ namespace Headquartz.Models
         private void GenerateRandomSalesOrder()
         {
             var random = new Random();
+
+            // Ensure we have product demand data
+            if (_productDemand.Count == 0)
+            {
+                _productDemand["P-001"] = 1.0m;
+                _productDemand["P-002"] = 1.2m;
+            }
+
             var products = _productDemand.Keys.ToList();
-
-            if (products.Count == 0) return;
-
             var selectedProduct = products[random.Next(products.Count)];
             var quantity = random.Next(10, 100);
-            var basePrice = 100m; // Base price per unit
+            var basePrice = 100m * _competitorPriceIndex;
 
-            var order = CreateSalesOrder(
+            CreateSalesOrder(
                 customerId: $"CUST-{random.Next(1000, 9999)}",
                 items: new List<OrderLine>
                 {
@@ -384,31 +636,113 @@ namespace Headquartz.Models
             );
         }
 
+        public SalesOrder CreateSalesOrder(string customerId, List<OrderLine> items)
+        {
+            var order = new SalesOrder
+            {
+                Id = Guid.NewGuid().ToString(),
+                CustomerId = customerId,
+                OrderDate = CurrentGameDate,
+                Items = items,
+                Status = OrderStatus.Pending,
+                TotalAmount = items.Sum(i => i.Quantity * i.UnitPrice)
+            };
+
+            _activeSalesOrders.Add(order);
+
+            TriggerEvent(new GameEvent
+            {
+                Type = EventType.NewSalesOrder,
+                Message = $"New order from {customerId} - ${order.TotalAmount:N2}",
+                Severity = EventSeverity.Info
+            });
+
+            return order;
+        }
+
+        public WorkOrder CreateWorkOrder(string productId, int quantity)
+        {
+            var workOrder = new WorkOrder
+            {
+                Id = Guid.NewGuid().ToString(),
+                ProductId = productId,
+                Quantity = quantity,
+                StartDate = CurrentGameDate,
+                Status = WorkOrderStatus.Scheduled,
+                RequiredMaterials = GetRequiredMaterials(productId, quantity)
+            };
+
+            _activeWorkOrders.Add(workOrder);
+            return workOrder;
+        }
+
+        #endregion
+
+        #region Financial Operations
+
+        public bool ProcessTransaction(Transaction transaction)
+        {
+            if (transaction.Type == TransactionType.Expense)
+            {
+                if (CashBalance < transaction.Amount)
+                {
+                    TriggerEvent(new GameEvent
+                    {
+                        Type = EventType.InsufficientFunds,
+                        Message = $"Insufficient funds for {transaction.Description}",
+                        Severity = EventSeverity.High
+                    });
+                    return false;
+                }
+
+                CashBalance -= transaction.Amount;
+                MonthlyExpenses += transaction.Amount;
+            }
+            else if (transaction.Type == TransactionType.Revenue)
+            {
+                CashBalance += transaction.Amount;
+                MonthlyRevenue += transaction.Amount;
+            }
+
+            return true;
+        }
+
         private void ProcessPayroll()
         {
             var payrollAmount = _employees.Sum(e => e.MonthlySalary);
 
-            ProcessTransaction(new Transaction
+            if (ProcessTransaction(new Transaction
             {
                 Type = TransactionType.Expense,
                 Amount = payrollAmount,
                 Description = "Monthly Payroll",
                 Category = "Salaries",
                 Date = CurrentGameDate
-            });
-
-            TriggerEvent(new GameEvent
+            }))
             {
-                Type = EventType.PayrollProcessed,
-                Message = $"Payroll processed: ${payrollAmount:N2}",
-                Severity = EventSeverity.Info
-            });
+                TriggerEvent(new GameEvent
+                {
+                    Type = EventType.PayrollProcessed,
+                    Message = $"Payroll processed: ${payrollAmount:N2}",
+                    Severity = EventSeverity.Info
+                });
+
+                // Employee satisfaction boost after payroll
+                foreach (var employee in _employees)
+                {
+                    employee.SatisfactionLevel = Math.Min(100, employee.SatisfactionLevel + 2);
+                }
+            }
         }
+
+        #endregion
+
+        #region Market & Competition
 
         private void UpdateMarketDemand()
         {
             var random = new Random();
-            var change = (decimal)(random.NextDouble() * 0.2 - 0.1); // +/- 10%
+            var change = (decimal)(random.NextDouble() * 0.2 - 0.1); // ±10%
 
             _marketDemandMultiplier = Math.Max(0.5m, Math.Min(2.0m, _marketDemandMultiplier + change));
 
@@ -426,8 +760,7 @@ namespace Headquartz.Models
         private void UpdateCompetitorPricing()
         {
             var random = new Random();
-            var change = (decimal)(random.NextDouble() * 0.1 - 0.05); // +/- 5%
-
+            var change = (decimal)(random.NextDouble() * 0.1 - 0.05); // ±5%
             _competitorPriceIndex += change;
         }
 
@@ -437,16 +770,85 @@ namespace Headquartz.Models
 
             foreach (var employee in _employees)
             {
-                var performanceChange = random.Next(-5, 10); // Performance can improve more than decline
+                var performanceChange = random.Next(-5, 10);
                 employee.PerformanceRating = Math.Max(0, Math.Min(100, employee.PerformanceRating + performanceChange));
 
-                // Satisfaction affects performance
                 if (employee.SatisfactionLevel < 50)
                 {
                     employee.PerformanceRating -= 2;
                 }
             }
         }
+
+        #endregion
+
+        #region Random Events
+
+        private void TriggerRandomEvents()
+        {
+            var random = new Random();
+
+            if (random.NextDouble() < 0.05) // 5% chance
+            {
+                var eventType = random.Next(0, 5);
+
+                switch (eventType)
+                {
+                    case 0:
+                        TriggerEvent(new GameEvent
+                        {
+                            Type = EventType.MachineBreakdown,
+                            Message = "Production equipment malfunction - efficiency reduced",
+                            Severity = EventSeverity.Medium
+                        });
+                        ProductionEfficiency *= 0.8m;
+                        break;
+
+                    case 1:
+                        GenerateRandomSalesOrder();
+                        TriggerEvent(new GameEvent
+                        {
+                            Type = EventType.MajorOrder,
+                            Message = "Major customer placed large order!",
+                            Severity = EventSeverity.Info
+                        });
+                        break;
+
+                    case 2:
+                        TriggerEvent(new GameEvent
+                        {
+                            Type = EventType.SupplierDelay,
+                            Message = "Supplier delivery delayed",
+                            Severity = EventSeverity.Medium
+                        });
+                        break;
+
+                    case 3:
+                        QualityScore -= 5;
+                        TriggerEvent(new GameEvent
+                        {
+                            Type = EventType.QualityIssue,
+                            Message = "Quality control found defects",
+                            Severity = EventSeverity.High
+                        });
+                        break;
+
+                    case 4:
+                        _marketDemandMultiplier += 0.1m;
+                        TriggerEvent(new GameEvent
+                        {
+                            Type = EventType.MarketOpportunity,
+                            Message = "Favorable market conditions!",
+                            Severity = EventSeverity.Info
+                        });
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Helper Methods
 
         private void CheckCashFlowAlerts()
         {
@@ -455,7 +857,7 @@ namespace Headquartz.Models
                 TriggerEvent(new GameEvent
                 {
                     Type = EventType.LowCashFlow,
-                    Message = "Warning: Cash balance is critically low!",
+                    Message = "CRITICAL: Cash balance critically low!",
                     Severity = EventSeverity.High
                 });
             }
@@ -464,79 +866,18 @@ namespace Headquartz.Models
                 TriggerEvent(new GameEvent
                 {
                     Type = EventType.LowCashFlow,
-                    Message = "Caution: Cash balance is running low",
+                    Message = "Warning: Cash balance running low",
                     Severity = EventSeverity.Medium
                 });
             }
         }
 
-        private void TriggerRandomEvents()
-        {
-            var random = new Random();
-
-            if (random.NextDouble() < 0.05) // 5% chance per day
-            {
-                var eventType = random.Next(0, 5);
-
-                switch (eventType)
-                {
-                    case 0: // Machine breakdown
-                        TriggerEvent(new GameEvent
-                        {
-                            Type = EventType.MachineBreakdown,
-                            Message = "Machine breakdown in production - delays expected",
-                            Severity = EventSeverity.Medium
-                        });
-                        break;
-
-                    case 1: // Major customer order
-                        TriggerEvent(new GameEvent
-                        {
-                            Type = EventType.MajorOrder,
-                            Message = "Major customer placed large order!",
-                            Severity = EventSeverity.Info
-                        });
-                        GenerateRandomSalesOrder();
-                        break;
-
-                    case 2: // Supplier delay
-                        TriggerEvent(new GameEvent
-                        {
-                            Type = EventType.SupplierDelay,
-                            Message = "Supplier delivery delayed by 3 days",
-                            Severity = EventSeverity.Medium
-                        });
-                        break;
-
-                    case 3: // Quality issue
-                        TriggerEvent(new GameEvent
-                        {
-                            Type = EventType.QualityIssue,
-                            Message = "Quality control found defects in recent production",
-                            Severity = EventSeverity.High
-                        });
-                        break;
-
-                    case 4: // Positive market trend
-                        _marketDemandMultiplier += 0.1m;
-                        TriggerEvent(new GameEvent
-                        {
-                            Type = EventType.MarketOpportunity,
-                            Message = "Market conditions favorable - demand increasing!",
-                            Severity = EventSeverity.Info
-                        });
-                        break;
-                }
-            }
-        }
-
         private Dictionary<string, int> GetRequiredMaterials(string productId, int quantity)
         {
-            // Simplified Bill of Materials
             return new Dictionary<string, int>
             {
-                { "RM-001", quantity * 2 },  // 2 units of raw material per product
-                { "RM-002", quantity * 1 }   // 1 unit of component per product
+                { "RM-001", quantity * 2 },
+                { "RM-002", quantity * 1 }
             };
         }
 
@@ -555,31 +896,30 @@ namespace Headquartz.Models
 
         private void ReviewDepartmentBudgets()
         {
-            // Each department gets monthly budget review
             TriggerEvent(new GameEvent
             {
                 Type = EventType.BudgetReview,
-                Message = "Monthly budget review - department performance assessed",
+                Message = "Department budget review completed",
                 Severity = EventSeverity.Info
             });
         }
 
         private void GenerateFinancialStatements()
         {
-            // Calculate financial metrics
-            _totalAssets = CashBalance + _inventory.Sum(i => i.Value.Quantity * 50m); // Simplified
+            _totalAssets = CashBalance + _inventory.Sum(i => i.Value.Quantity * 50m);
             _companyValue = _totalAssets - _totalLiabilities;
-
-            TriggerEvent(new GameEvent
-            {
-                Type = EventType.FinancialReport,
-                Message = $"Monthly report: Revenue ${MonthlyRevenue:N0}, Expenses ${MonthlyExpenses:N0}, Net ${NetProfit:N0}",
-                Severity = EventSeverity.Info
-            });
         }
 
         private void TriggerEvent(GameEvent gameEvent)
         {
+            _eventHistory.Add(gameEvent);
+
+            // Keep only last 100 events
+            if (_eventHistory.Count > 100)
+            {
+                _eventHistory.RemoveAt(0);
+            }
+
             OnGameEvent?.Invoke(gameEvent);
         }
 
@@ -587,10 +927,9 @@ namespace Headquartz.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        #endregion
     }
-
-    // Supporting Models
-
     public class RawMaterial
     {
         public string MaterialId { get; set; }
