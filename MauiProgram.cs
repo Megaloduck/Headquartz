@@ -79,10 +79,15 @@ namespace Headquartz
             builder.Services.AddTransient<InventoryPage>();
             builder.Services.AddTransient<InventoryPageModel>();
             builder.Services.AddTransient<StockInPage>();
+            builder.Services.AddTransient<StockInPageModel>();
             builder.Services.AddTransient<StockOutPage>();
+            builder.Services.AddTransient<StockOutPageModel>();
             builder.Services.AddTransient<ShipmentsPage>();
+            builder.Services.AddTransient<ShipmentsPageModel>();
             builder.Services.AddTransient<StorageAllocationPage>();
-            builder.Services.AddTransient<WarehouseReportsPage>();               
+            builder.Services.AddTransient<StorageAllocationPageModel>();
+            builder.Services.AddTransient<WarehouseReportsPage>();
+            builder.Services.AddTransient<WarehouseReportsPageModel>();
 
             // ────────────────────────────────────────────────
             // PRODUCTION MODULE
