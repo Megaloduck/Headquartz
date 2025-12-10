@@ -9,7 +9,7 @@ namespace Headquartz.Services
 {
     public interface ISaveService
     {
-        Task SaveAsync(GameState state, string path, CancellationToken ct = default);
-        Task<GameState?> LoadAsync(string path, CancellationToken ct = default);
+        Task SaveAsync(GameState state, string path);
+        Task<GameState> LoadAsync(string path);
     }
 }

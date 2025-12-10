@@ -70,6 +70,7 @@ namespace Headquartz
             // ────────────────────────────────────────────────
             builder.Services.AddTransient<CompanyDashboardPage>();
             builder.Services.AddTransient<OverviewPage>();
+            builder.Services.AddTransient<OverviewPageModel>();
 
             // ────────────────────────────────────────────────
             // WAREHOUSE MODULE

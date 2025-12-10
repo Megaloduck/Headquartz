@@ -3,8 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pageModels="clr-namespace:Headquartz.PageModels"
              x:Class="Headquartz.Pages.Dashboard.OverviewPage"
+             xmlns:converters="clr-namespace:Headquartz.Converters"
              x:DataType="pageModels:OverviewPageModel"
              Title="Simulation Overview">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToSpeedButtonColorConverter x:Key="BoolToSpeedButtonColorConverter" />
+            <converters:BoolToSpeedButtonTextColorConverter x:Key="BoolToSpeedButtonTextColorConverter" />
+            <converters:BoolToPhaseColorConverter x:Key="BoolToPhaseColorConverter" />
+            <converters:BoolToTextColorConverter x:Key="BoolToTextColorConverter" />
+            <converters:ProgressToXConverter x:Key="ProgressToXConverter" />
+            <converters:BoolToEventIndicatorColorConverter x:Key="BoolToEventIndicatorColorConverter" />
+            <converters:BoolToDayTextColorConverter x:Key="BoolToDayTextColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">

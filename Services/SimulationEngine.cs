@@ -1,108 +1,77 @@
 ﻿using Headquartz.Models;
-using Headquartz.Modules;
-using Microsoft.Maui.Dispatching;
-using System;
-using System.Reflection;
-using System.Threading;
+using System.Timers;
 
 namespace Headquartz.Services
 {
-    public class SimulationEngine : ISimulationEngine, IDisposable
+    public class SimulationEngine : ISimulationEngine
     {
-        private readonly GameState _state;
-        private readonly INetworkService _networkService;
-        private Timer? _timer;
-        private readonly object _lock = new();
+        private readonly GameState _gameState;
+        private System.Timers.Timer _timer;
+        private double _speedMultiplier = 1.0;
+        private bool _isRunning = false;
 
-        public event Action<GameState>? OnTicked;
-        public GameState State => _state;
+        public event Action<GameState> OnTicked;
+        public bool IsRunning => _isRunning;
+        public double CurrentSpeed => _speedMultiplier;
 
-        public TimeSpan TickRate { get; set; } = TimeSpan.FromSeconds(1); 
-        public bool IsRunning { get; private set; }
-
-        public SimulationEngine(GameState state, INetworkService networkService)
+        public SimulationEngine(GameState gameState)
         {
-            _state = state;
-            _networkService = networkService;
-            
-            // Listen for state updates if we are a client
-            _networkService.OnGameStateReceived += HandleNetworkStateUpdate;
+            _gameState = gameState;
+
+            // Initialize timer (tick every second, adjusted by speed)
+            _timer = new System.Timers.Timer(1000);
+            _timer.Elapsed += OnTimerElapsed;
         }
 
         public void Start()
         {
-            if (IsRunning) return;
-
-            _timer = new Timer(Tick, null, TimeSpan.Zero, TickRate);
-            IsRunning = true;
+            if (!_isRunning)
+            {
+                _isRunning = true;
+                _timer.Start();
+            }
         }
 
         public void Stop()
         {
-            if (!IsRunning) return;
-
-            _timer?.Change(Timeout.Infinite, Timeout.Infinite);
-            _timer?.Dispose();
-            _timer = null;
-
-            IsRunning = false;
-        }
-
-        private void Tick(object? _)
-        {
-            lock (_lock)
+            if (_isRunning)
             {
-                // 1. Process Network Events (Send/Receive)
-                _networkService.PollEvents();
-
-                // 2. If we are HOST, run the simulation
-                if (_networkService.IsHost)
-                {
-                    // Advance simulation time (1 Tick = 1 Day for simplicity in this demo)
-                    _state.AdvanceGameTime();
-
-                    // Update modules (if they have additional logic outside GameState internal logic)
-                    MarketModule.Update(_state);
-                    WarehouseModule.Update(_state);
-                    HumanResourceModule.Update(_state);
-                    FinanceModule.Update(_state);
-
-                    // Broadcast new state to clients
-                    _networkService.BroadcastGameState(_state);
-                }
-                
-                // 3. Notify UI (Both Host and Client need to update UI)
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    OnTicked?.Invoke(_state);
-                });
+                _isRunning = false;
+                _timer.Stop();
             }
         }
 
-        private void HandleNetworkStateUpdate(GameState newState)
+        public void SetSpeed(double multiplier)
         {
-            lock (_lock)
+            _speedMultiplier = Math.Max(0.1, Math.Min(10.0, multiplier));
+
+            // Adjust timer interval based on speed
+            // Base interval is 1000ms, so at 2x speed it should be 500ms
+            _timer.Interval = 1000 / _speedMultiplier;
+        }
+
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (!_isRunning) return;
+
+            try
             {
-                // We are a client, so we overwrite our local state with the server's state
-                
-                _state.CurrentGameDate = newState.CurrentGameDate;
-                _state.GameDay = newState.GameDay;
-                _state.GameMonth = newState.GameMonth;
-                _state.GameYear = newState.GameYear;
-                
-                _state.CashBalance = newState.CashBalance;
-                _state.MonthlyRevenue = newState.MonthlyRevenue;
-                _state.MonthlyExpenses = newState.MonthlyExpenses;
-                
-                // Note: Collections (Inventory, Orders) are harder to sync via simple JSON assignment 
-                // without full deep copy logic, but for now this covers the main dashboard stats.
+                // Advance game time
+                _gameState.AdvanceGameTime();
+
+                // Notify listeners
+                OnTicked?.Invoke(_gameState);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Simulation tick error: {ex.Message}");
             }
         }
 
         public void Dispose()
         {
-            _networkService.OnGameStateReceived -= HandleNetworkStateUpdate;
-            Stop();
+            _timer?.Stop();
+            _timer?.Dispose();
         }
     }
 }

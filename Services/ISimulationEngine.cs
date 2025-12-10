@@ -9,11 +9,12 @@ namespace Headquartz.Services
 {
     public interface ISimulationEngine
     {
-        bool IsRunning { get; }
-        TimeSpan TickRate { get; set; }
-        GameState State { get; } // Add this
+        event Action<GameState> OnTicked;
+
         void Start();
         void Stop();
-        event Action<GameState>? OnTicked;
+        void SetSpeed(double multiplier);
+        bool IsRunning { get; }
+        double CurrentSpeed { get; }
     }
 }
