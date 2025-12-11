@@ -10,7 +10,7 @@
         <!-- Reports Header -->
         <Border Grid.Row="0" 
                 Background="{DynamicResource HeaderBackgroundColor}"
-                Padding="20,15"
+                Padding="20,10"
                 StrokeThickness="0">
             <VerticalStackLayout Spacing="15">
                 <HorizontalStackLayout>
@@ -19,7 +19,7 @@
                                FontSize="24" 
                                FontAttributes="Bold"
                                TextColor="{DynamicResource PrimaryTextColor}"/>
-                        <Label Text="Setting, Manage and Maintain the headquartz server" 
+                        <Label Text="Configure, manage and maintain the Headquartz server"
                                FontSize="14"
                                TextColor="{DynamicResource SecondaryTextColor}"/>
                     </VerticalStackLayout>
@@ -27,7 +27,7 @@
 
                 </HorizontalStackLayout>
 
-                <!-- Report Period -->
+                <!-- SERVER CONTROL PANEL -->
                 <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="15">
                     <Border Grid.Column="0" 
                             Background="{DynamicResource CardBackgroundColor}"
@@ -35,7 +35,7 @@
                             StrokeShape="RoundRectangle 10">
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
                             <VerticalStackLayout Grid.Column="0" Spacing="2">
-                                <Label Text="Server IP Adress" 
+                                <Label Text="Server Adress" 
                                        FontSize="12"
                                        TextColor="{DynamicResource TertiaryTextColor}"/>
                                 <Entry Placeholder="IP adrress here"
@@ -54,22 +54,25 @@
                             </VerticalStackLayout>
                         </Grid>
                     </Border>
-
-                    <Button Grid.Column="1" 
-                            Text="📊 Start Server"
-                            BackgroundColor="{DynamicResource PrimaryColor}"
-                            TextColor="White"
-                            Padding="20,12"
-                            CornerRadius="10"
-                            Command="{Binding GenerateReportCommand}"/>
-
-                    <Button Grid.Column="2" 
-                            Text="📥 Stop Server"
-                            BackgroundColor="{DynamicResource CardBackgroundColor}"
-                            TextColor="{DynamicResource PrimaryTextColor}"
-                            Padding="20,12"
-                            CornerRadius="10"
-                            Command="{Binding ExportAllCommand}"/>
+                    
+                    <!-- SERVER BUTTON -->
+                    <Button Grid.Column="1"
+                                Text="▶ Start Server"
+                                BackgroundColor="#4CAF50"
+                                TextColor="White"
+                                Padding="25,14"
+                                CornerRadius="8"
+                                FontAttributes="Bold"
+                                Command="{Binding StartServerCommand}" />   
+                    <Button Grid.Column="2"
+                                Text="⏹ Stop Server"
+                                BackgroundColor="#F44336"
+                                TextColor="White"
+                                Padding="25,14"
+                                CornerRadius="8"
+                                FontAttributes="Bold"
+                                Command="{Binding StopServerCommand}" />
+    
                 </Grid>
             </VerticalStackLayout>
         </Border>
@@ -82,15 +85,17 @@
                 <Border Background="{DynamicResource CardBackgroundColor}"
                         Padding="20"
                         StrokeShape="RoundRectangle 10">
-                    <VerticalStackLayout Spacing="15">
-                        <Label Text="Events Dictionary" 
-                               FontSize="18" 
-                               FontAttributes="Bold"
-                               TextColor="{DynamicResource PrimaryTextColor}"/>
-
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Events Dictionary"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}" />
+                        <Label Text="Manage seasonal events and configurations"
+                                       FontSize="13"
+                                       TextColor="{DynamicResource SecondaryTextColor}" />
                         <!-- Events Configuration -->
-                        <ScrollView HorizontalScrollBarVisibility="Default">
-                            <HorizontalStackLayout>
+                        <ScrollView HorizontalScrollBarVisibility="Default" Padding="-8,0">
+                            <HorizontalStackLayout >
 
                                 <!-- Summer Season -->
                                 <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource CardStyle}">
@@ -101,7 +106,7 @@
                                                     WidthRequest="40"
                                                     HeightRequest="40"
                                                     StrokeShape="RoundRectangle 8">
-                                                <Label Text="📦" 
+                                                <Label Text="☀️"
                                                        FontSize="20"
                                                        HorizontalOptions="Center"
                                                        VerticalOptions="Center"/>
@@ -111,17 +116,18 @@
                                                        FontSize="16" 
                                                        FontAttributes="Bold"
                                                        TextColor="{DynamicResource PrimaryTextColor}"/>
-                                                <Label Text="subtitle here" 
+                                                <Label Text="June - August"
                                                        FontSize="12"
                                                        TextColor="{DynamicResource SecondaryTextColor}"/>
                                             </VerticalStackLayout>
                                         </HorizontalStackLayout>
-                                        <Label Text="Description here" 
+                                        <Label Text="Beach events, outdoor activities"
                                                FontSize="14"
                                                FontAttributes="Italic"
                                                TextColor="{DynamicResource AccentColor}"/>
                                         <Button Text="View Details"                      
                                                 CornerRadius="8"
+                                                Style="{DynamicResource PrimaryButton}"
                                                 HeightRequest="40"/>
                                     </VerticalStackLayout>
                                 </Border>
@@ -135,7 +141,7 @@
                                                      WidthRequest="40"
                                                      HeightRequest="40"
                                                      StrokeShape="RoundRectangle 8">
-                                                <Label Text="📦" 
+                                                <Label Text="🍂" 
                                                         FontSize="20"
                                                         HorizontalOptions="Center"
                                                         VerticalOptions="Center"/>
@@ -145,17 +151,18 @@
                                                         FontSize="16" 
                                                         FontAttributes="Bold"
                                                         TextColor="{DynamicResource PrimaryTextColor}"/>
-                                                <Label Text="subtitle here" 
+                                                <Label Text="September - November"
                                                         FontSize="12"
                                                         TextColor="{DynamicResource SecondaryTextColor}"/>
                                             </VerticalStackLayout>
                                         </HorizontalStackLayout>
-                                        <Label Text="Description here" 
+                                        <Label Text="Harvest festivals, indoor events"
                                                 FontSize="14"
                                                 FontAttributes="Italic"
                                                 TextColor="{DynamicResource AccentColor}"/>
                                         <Button Text="View Details"                      
                                                  CornerRadius="8"
+                                                Style="{DynamicResource PrimaryButton}"
                                                  HeightRequest="40"/>
 
                                     </VerticalStackLayout>
@@ -170,7 +177,7 @@
                                                     WidthRequest="40"
                                                     HeightRequest="40"
                                                     StrokeShape="RoundRectangle 8">
-                                                <Label Text="📦" 
+                                                <Label Text="❄️" 
                                                        FontSize="20"
                                                        HorizontalOptions="Center"
                                                        VerticalOptions="Center"/>
@@ -180,17 +187,18 @@
                                                        FontSize="16" 
                                                        FontAttributes="Bold"
                                                        TextColor="{DynamicResource PrimaryTextColor}"/>
-                                                <Label Text="subtitle here" 
+                                                <Label Text="December - February"
                                                        FontSize="12"
                                                        TextColor="{DynamicResource SecondaryTextColor}"/>
                                             </VerticalStackLayout>
                                         </HorizontalStackLayout>
-                                        <Label Text="Description here" 
+                                        <Label Text="Holiday events, winter sports"
                                                FontSize="14"
                                                FontAttributes="Italic"
                                                TextColor="{DynamicResource AccentColor}"/>
                                         <Button Text="View Details"                      
                                                 CornerRadius="8"
+                                                Style="{DynamicResource PrimaryButton}"
                                                 HeightRequest="40"/>
                                     </VerticalStackLayout>
                                 </Border>
@@ -204,7 +212,7 @@
                                                      WidthRequest="40"
                                                      HeightRequest="40"
                                                      StrokeShape="RoundRectangle 8">
-                                                <Label Text="📦" 
+                                                <Label Text="🌸" 
                                                         FontSize="20"
                                                         HorizontalOptions="Center"
                                                         VerticalOptions="Center"/>
@@ -214,17 +222,18 @@
                                                         FontSize="16" 
                                                         FontAttributes="Bold"
                                                         TextColor="{DynamicResource PrimaryTextColor}"/>
-                                                <Label Text="subtitle here" 
+                                                <Label Text="March - May" 
                                                         FontSize="12"
                                                         TextColor="{DynamicResource SecondaryTextColor}"/>
                                             </VerticalStackLayout>
                                         </HorizontalStackLayout>
-                                        <Label Text="Description here" 
+                                        <Label Text="Spring festivals, renewal events"
                                                 FontSize="14"
                                                 FontAttributes="Italic"
                                                 TextColor="{DynamicResource AccentColor}"/>
                                         <Button Text="View Details"                      
                                                  CornerRadius="8"
+                                                Style="{DynamicResource PrimaryButton}"
                                                  HeightRequest="40"/>
 
                                     </VerticalStackLayout>
@@ -235,26 +244,33 @@
                             </HorizontalStackLayout>
                         </ScrollView>
 
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                            <!-- Events Button -->
-                            <Button Text="🚀 Create Custom Events"
+                        <!-- ACTION BUTTONS -->
+                        <Grid ColumnDefinitions="*,*"
+                              ColumnSpacing="10">
+
+                            <Button Text="＋ Create Custom Event"
+                                    BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                    BorderColor="{DynamicResource PrimaryColor}"
+                                    BorderWidth="1"
+                                    TextColor="{DynamicResource PrimaryColor}"
+                                    CornerRadius="8"
+                                    HeightRequest="46"
+                                    FontSize="14"
+                                    FontAttributes="Bold"
+                                    Command="{Binding CreateCustomEventsCommand}" />
+
+                            <Button Grid.Column="1"
+                                    Text="✎ Manage All Events"
                                     BackgroundColor="{DynamicResource PrimaryColor}"
                                     TextColor="White"
-                                    CornerRadius="10"
-                                    HeightRequest="50"                                    
-                                    FontSize="16"               
-                                    Command="{Binding CreateCustomEventsCommand}"/>
-
-                            <!-- Events Button -->
-                            <Button Grid.Column="1" Text="🚀 Edit Events"
-                                    BackgroundColor="{DynamicResource PrimaryColor}"    
-                                    TextColor="White"      
-                                    CornerRadius="10"
-                                    HeightRequest="50"
-                                    FontSize="16"               
-                                    Command="{Binding EditEventsCommand}"/>
+                                    CornerRadius="8"
+                                    HeightRequest="46"
+                                    FontSize="14"
+                                    FontAttributes="Bold"
+                                    Command="{Binding EditEventsCommand}" />
 
                         </Grid>
+
 
 
 
@@ -266,11 +282,14 @@
                 <Border Background="{DynamicResource CardBackgroundColor}"
                         Padding="20"
                         StrokeShape="RoundRectangle 10">
-                    <VerticalStackLayout Spacing="15">
-                        <Label Text="Custom Session Generator" 
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Session Generator" 
                                FontSize="18" 
                                FontAttributes="Bold"
                                TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Create custom sessions with specific events and departments"
+                                   FontSize="13"
+                                   TextColor="{DynamicResource SecondaryTextColor}" />
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
                             <!-- Session Code Configuration -->
@@ -495,13 +514,16 @@
                         StrokeShape="RoundRectangle 10">
                     <VerticalStackLayout Spacing="15">
 
-                        <HorizontalStackLayout>
+                        <VerticalStackLayout Spacing="5">
                             <Label Text="📁 Session Created"
                                    FontSize="18"
                                    FontAttributes="Bold"
                                    TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <Label Text="Recently created and active sessions"
+                                   FontSize="13"
+                                   TextColor="{DynamicResource SecondaryTextColor}" />
 
-                        </HorizontalStackLayout>
+                        </VerticalStackLayout>
 
                         <CollectionView ItemsSource="{Binding SessionCreated}">
                             <CollectionView.ItemTemplate>
@@ -511,7 +533,7 @@
                                             StrokeShape="RoundRectangle 10">
                                         <Grid ColumnDefinitions="40,*,Auto" ColumnSpacing="15">
 
-                                            <Border Background="{Binding ReportColor}"
+                                            <Border Background="{DynamicResource CardBackgroundColor}"
                                                     WidthRequest="40"
                                                     HeightRequest="40"
                                                     StrokeShape="RoundRectangle 8">
