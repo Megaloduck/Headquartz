@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pageModels="clr-namespace:Headquartz.PageModels"
+             x:Class="Headquartz.Pages.AdministratorPage"
+             Title="Administrator Panel">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Reports Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource HeaderBackgroundColor}"
+                Padding="20,15"
+                StrokeThickness="0">
+            <VerticalStackLayout Spacing="15">
+                <HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Administrator Panel"
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+                        <Label Text="Setting, Manage and Maintain the headquartz server" 
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"/>
+                    </VerticalStackLayout>
+
+
+                </HorizontalStackLayout>
+
+                <!-- Report Period -->
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="15">
+                    <Border Grid.Column="0" 
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Padding="15,12"
+                            StrokeShape="RoundRectangle 10">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="Server IP Adress" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Entry Placeholder="IP adrress here"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="Port runs on status" 
+                                       FontSize="12"
+                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                <Label Text="Binding port and status (offline, online)" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{Binding EfficiencyColor}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Button Grid.Column="1" 
+                            Text="📊 Start Server"
+                            BackgroundColor="{DynamicResource PrimaryColor}"
+                            TextColor="White"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding GenerateReportCommand}"/>
+
+                    <Button Grid.Column="2" 
+                            Text="📥 Stop Server"
+                            BackgroundColor="{DynamicResource CardBackgroundColor}"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            Padding="20,12"
+                            CornerRadius="10"
+                            Command="{Binding ExportAllCommand}"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Administrator Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Events dictionary -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Events Dictionary" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <!-- Events Configuration -->
+                        <ScrollView HorizontalScrollBarVisibility="Default">
+                            <HorizontalStackLayout>
+
+                                <!-- Summer Season -->
+                                <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource CardStyle}">
+                                    <VerticalStackLayout Spacing="10">
+                                        <HorizontalStackLayout Spacing="10">
+                                            <!-- Events Icon-->
+                                            <Border Background="#4ECDC4"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"
+                                                    StrokeShape="RoundRectangle 8">
+                                                <Label Text="📦" 
+                                                       FontSize="20"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+                                            <VerticalStackLayout Spacing="2">
+                                                <Label Text="Summer Season" 
+                                                       FontSize="16" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="subtitle here" 
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+                                        </HorizontalStackLayout>
+                                        <Label Text="Description here" 
+                                               FontSize="14"
+                                               FontAttributes="Italic"
+                                               TextColor="{DynamicResource AccentColor}"/>
+                                        <Button Text="View Details"                      
+                                                CornerRadius="8"
+                                                HeightRequest="40"/>
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <!-- Fall Season -->
+                                <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource CardStyle}">
+                                    <VerticalStackLayout Spacing="10">
+                                        <HorizontalStackLayout Spacing="10">
+                                            <!-- Events Icon-->
+                                            <Border Background="#4ECDC4"
+                                                     WidthRequest="40"
+                                                     HeightRequest="40"
+                                                     StrokeShape="RoundRectangle 8">
+                                                <Label Text="📦" 
+                                                        FontSize="20"
+                                                        HorizontalOptions="Center"
+                                                        VerticalOptions="Center"/>
+                                            </Border>
+                                            <VerticalStackLayout Spacing="2">
+                                                <Label Text="Fall Season" 
+                                                        FontSize="16" 
+                                                        FontAttributes="Bold"
+                                                        TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="subtitle here" 
+                                                        FontSize="12"
+                                                        TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+                                        </HorizontalStackLayout>
+                                        <Label Text="Description here" 
+                                                FontSize="14"
+                                                FontAttributes="Italic"
+                                                TextColor="{DynamicResource AccentColor}"/>
+                                        <Button Text="View Details"                      
+                                                 CornerRadius="8"
+                                                 HeightRequest="40"/>
+
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <!-- Winter Season -->
+                                <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource CardStyle}">
+                                    <VerticalStackLayout Spacing="10">
+                                        <HorizontalStackLayout Spacing="10">
+                                            <!-- Events Icon-->
+                                            <Border Background="#4ECDC4"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"
+                                                    StrokeShape="RoundRectangle 8">
+                                                <Label Text="📦" 
+                                                       FontSize="20"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+                                            <VerticalStackLayout Spacing="2">
+                                                <Label Text="Winter Season" 
+                                                       FontSize="16" 
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="subtitle here" 
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+                                        </HorizontalStackLayout>
+                                        <Label Text="Description here" 
+                                               FontSize="14"
+                                               FontAttributes="Italic"
+                                               TextColor="{DynamicResource AccentColor}"/>
+                                        <Button Text="View Details"                      
+                                                CornerRadius="8"
+                                                HeightRequest="40"/>
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <!-- Spring Season -->
+                                <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource CardStyle}">
+                                    <VerticalStackLayout Spacing="10">
+                                        <HorizontalStackLayout Spacing="10">
+                                            <!-- Events Icon-->
+                                            <Border Background="#4ECDC4"
+                                                     WidthRequest="40"
+                                                     HeightRequest="40"
+                                                     StrokeShape="RoundRectangle 8">
+                                                <Label Text="📦" 
+                                                        FontSize="20"
+                                                        HorizontalOptions="Center"
+                                                        VerticalOptions="Center"/>
+                                            </Border>
+                                            <VerticalStackLayout Spacing="2">
+                                                <Label Text="Spring Season" 
+                                                        FontSize="16" 
+                                                        FontAttributes="Bold"
+                                                        TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="subtitle here" 
+                                                        FontSize="12"
+                                                        TextColor="{DynamicResource SecondaryTextColor}"/>
+                                            </VerticalStackLayout>
+                                        </HorizontalStackLayout>
+                                        <Label Text="Description here" 
+                                                FontSize="14"
+                                                FontAttributes="Italic"
+                                                TextColor="{DynamicResource AccentColor}"/>
+                                        <Button Text="View Details"                      
+                                                 CornerRadius="8"
+                                                 HeightRequest="40"/>
+
+                                    </VerticalStackLayout>
+                                </Border>
+
+
+
+                            </HorizontalStackLayout>
+                        </ScrollView>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <!-- Events Button -->
+                            <Button Text="🚀 Create Custom Events"
+                                    BackgroundColor="{DynamicResource PrimaryColor}"
+                                    TextColor="White"
+                                    CornerRadius="10"
+                                    HeightRequest="50"                                    
+                                    FontSize="16"               
+                                    Command="{Binding CreateCustomEventsCommand}"/>
+
+                            <!-- Events Button -->
+                            <Button Grid.Column="1" Text="🚀 Edit Events"
+                                    BackgroundColor="{DynamicResource PrimaryColor}"    
+                                    TextColor="White"      
+                                    CornerRadius="10"
+                                    HeightRequest="50"
+                                    FontSize="16"               
+                                    Command="{Binding EditEventsCommand}"/>
+
+                        </Grid>
+
+
+
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Custom Session Generator -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Custom Session Generator" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                            <!-- Session Code Configuration -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="15">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="Generate Session Code" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Entry Placeholder="6 alpha-numerics code"
+                                           PlaceholderColor="{DynamicResource SecondaryTextColor}"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="Session Password" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <Entry Placeholder="8 characters minimal"
+                                           PlaceholderColor="{DynamicResource SecondaryTextColor}"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="Start timeline from" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <HorizontalStackLayout Spacing="5">
+                                        <DatePicker/>
+                                        <Label Text="-- "/>
+                                        <DatePicker/>
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="Include Departments" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+                                    <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="Start">
+                                        <Border Style="{DynamicResource CardStyle}"
+                                                Padding="15,10"
+                                                StrokeShape="RoundRectangle 8"
+                                                Margin="0,0,10,5">
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="📄" FontSize="16"/>
+                                                <Label Text="Human Resource" 
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                        <Border Style="{DynamicResource CardStyle}"
+                                               Padding="15,10"
+                                               StrokeShape="RoundRectangle 8"
+                                               Margin="0,0,10,5">
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="📄" FontSize="16"/>
+                                                <Label Text="Finance" 
+                                                      FontSize="13"
+                                                      FontAttributes="Bold"
+                                                      TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                        <Border Style="{DynamicResource CardStyle}"
+                                               Padding="15,10"
+                                               StrokeShape="RoundRectangle 8"
+                                               Margin="0,0,10,5">
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="📄" FontSize="16"/>
+                                                <Label Text="Marketing" 
+                                                      FontSize="13"
+                                                      FontAttributes="Bold"
+                                                      TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                        <Border Style="{DynamicResource CardStyle}"
+                                               Padding="15,10"
+                                               StrokeShape="RoundRectangle 8"
+                                               Margin="0,0,10,5">
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="📄" FontSize="16"/>
+                                                <Label Text="Production" 
+                                                      FontSize="13"
+                                                      FontAttributes="Bold"
+                                                      TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                        <Border Style="{DynamicResource CardStyle}"
+                                               Padding="15,10"
+                                               StrokeShape="RoundRectangle 8"
+                                               Margin="0,0,10,5">
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="📄" FontSize="16"/>
+                                                <Label Text="Sales" 
+                                                      FontSize="13"
+                                                      FontAttributes="Bold"
+                                                      TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </HorizontalStackLayout>
+
+                                        </Border>
+                                        <Border Style="{DynamicResource CardStyle}"
+                                               Padding="15,10"
+                                               StrokeShape="RoundRectangle 8"
+                                               Margin="0,0,10,5">
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="📄" FontSize="16"/>
+                                                <Label Text="Warehouse" 
+                                                      FontSize="13"
+                                                      FontAttributes="Bold"
+                                                      TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                        <Border Style="{DynamicResource CardStyle}"
+                                               Padding="15,10"
+                                               StrokeShape="RoundRectangle 8"
+                                               Margin="0,0,10,5">
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="📄" FontSize="16"/>
+                                                <Label Text="Logistics" 
+                                                      FontSize="13"
+                                                      FontAttributes="Bold"
+                                                      TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                        <Border Style="{DynamicResource CardStyle}"
+                                               Padding="15,10"
+                                               StrokeShape="RoundRectangle 8"
+                                               Margin="0,0,10,5">
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="📄" FontSize="16"/>
+                                                <Label Text="CEO" 
+                                                      FontSize="13"
+                                                      FontAttributes="Bold"
+                                                      TextColor="{DynamicResource PrimaryTextColor}"/>
+                                            </HorizontalStackLayout>
+                                        </Border>
+
+                                    </FlexLayout>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+
+                            <!-- Preview Session Card -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="15">
+
+                                <VerticalStackLayout Spacing="15">
+                                    <Label Text="Events Included" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                                    <!-- Events included -->
+                                    <Border Background="{DynamicResource HeaderBackgroundColor}"
+                                            Padding="20"
+                                            StrokeShape="RoundRectangle 10">
+
+                                        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                            <Label Text="📊" 
+                                                   FontSize="32"
+                                                   HorizontalOptions="Center"/>
+                                            <Label Text="Binding Events" 
+                                                   FontSize="16" 
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                   HorizontalOptions="Center"/>
+                                            <Label Text="Binding Events Selected" 
+                                                   FontSize="14"
+                                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                                   HorizontalOptions="Center"/>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </VerticalStackLayout>
+                                <Label Text="Preview Session Card" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                                <!-- Preview -->
+                                <Border Background="{DynamicResource HeaderBackgroundColor}"
+                                        Padding="20"
+                                        StrokeShape="RoundRectangle 10">
+
+                                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                        <Label Text="📊" 
+                                               FontSize="32"
+                                               HorizontalOptions="Center"/>
+                                        <Label Text="Binding session" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                               HorizontalOptions="Center"/>
+                                        <Label Text="Binding Session Department" 
+                                               FontSize="14"
+                                               TextColor="{DynamicResource SecondaryTextColor}"
+                                               HorizontalOptions="Center"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </VerticalStackLayout>
+
+
+                        </Grid>
+
+                        <!-- Create Session Button -->
+                        <Button Text="🚀 Create Session"
+                                BackgroundColor="{DynamicResource PrimaryColor}"
+                                TextColor="White"
+                                CornerRadius="10"
+                                HeightRequest="50"
+                                FontSize="16"
+                                Command="{Binding CreateSessionCommand}"/>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Recent Reports -->
+                <Border Background="{DynamicResource CardBackgroundColor}"
+                        Padding="20"
+                        StrokeShape="RoundRectangle 10">
+                    <VerticalStackLayout Spacing="15">
+
+                        <HorizontalStackLayout>
+                            <Label Text="📁 Session Created"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}"/>
+
+                        </HorizontalStackLayout>
+
+                        <CollectionView ItemsSource="{Binding SessionCreated}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+
+                                    <Border Padding="15" Margin="0,0,0,10"
+                                            StrokeShape="RoundRectangle 10">
+                                        <Grid ColumnDefinitions="40,*,Auto" ColumnSpacing="15">
+
+                                            <Border Background="{Binding ReportColor}"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"
+                                                    StrokeShape="RoundRectangle 8">
+                                                <Label Text="{Binding Icon}"
+                                                       FontSize="20"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                                <Label Text="{Binding Name}"
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}"/>
+                                                <Label Text="{Binding GeneratedDate, StringFormat='Generated {0:MMM dd, yyyy HH:mm}'}"
+                                                       FontSize="11"
+                                                       TextColor="{DynamicResource TertiaryTextColor}"/>
+                                            </VerticalStackLayout>
+
+                                            <Button Grid.Column="2"
+                                                    Text="Open"
+                                                    BackgroundColor="{DynamicResource PrimaryColor}"
+                                                    TextColor="White"
+                                                    CornerRadius="8"
+                                                    HeightRequest="36"
+                                                    Command="{Binding OpenSessionCommand}"
+                                                    CommandParameter="{Binding Id}"/>
+                                        </Grid>
+                                    </Border>
+
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+
+
+    </Grid>
+</ContentPage>

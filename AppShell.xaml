@@ -19,6 +19,10 @@
     <!-- LOGIN PAGE -->
     <ShellContent Route="LoginPage"
                   ContentTemplate="{DataTemplate pages:LoginPage}" />
+    
+    <!-- ADMINISTRATOR PAGE -->
+    <ShellContent Route="AdministratorPage"
+              ContentTemplate="{DataTemplate pages:AdministratorPage}" />
 
     <!-- CEO -->
     <ShellContent Route="SidebarCEOPage"

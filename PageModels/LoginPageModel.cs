@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Headquartz.Pages;
 using Headquartz.Pages.CEO;
 using Headquartz.Pages.Finance;
 using Headquartz.Pages.HumanResource;
@@ -40,6 +41,7 @@ namespace Headquartz.PageModels
         public IRelayCommand LoginCommand { get; }
         public IRelayCommand HostCommand { get; }
         public IRelayCommand JoinCommand { get; }
+        public IRelayCommand AdminCommand { get; }
 
         public LoginPageModel(RoleService roleService, INetworkService networkService, ISimulationEngine simulationEngine)
         {
@@ -53,6 +55,7 @@ namespace Headquartz.PageModels
             LoginCommand = new RelayCommand(OnLogin);
             HostCommand = new RelayCommand(OnHost);
             JoinCommand = new RelayCommand(OnJoin);
+            AdminCommand = new RelayCommand(OnAdmin);
         }
 
         private void OnHost()
@@ -87,6 +90,11 @@ namespace Headquartz.PageModels
             {
                 ConnectionStatus = $"Error: {ex.Message}";
             }
+        }
+        private async void OnAdmin()
+        {
+            await Shell.Current.GoToAsync($"//{nameof(AdministratorPage)}");
+
         }
 
         private async void OnLogin()

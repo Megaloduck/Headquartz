@@ -79,8 +79,10 @@
                                     <Label Text="Start New Session"
                                            TextColor="{DynamicResource SecondaryTextColor}"
                                            FontSize="12" />
+                                    <!-- Command="{Binding HostCommand}" -->
                                     <Button Text="Host Game" 
-                                            Command="{Binding HostCommand}"
+                                         
+                                            Command="{Binding AdminCommand}"
                                             BackgroundColor="{DynamicResource PrimaryColor}"
                                             TextColor="White"
                                             CornerRadius="8"

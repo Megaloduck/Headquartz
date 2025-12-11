@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Headquartz.Pages.Warehouse.WarehouseReportsPage"
              Title="WarehouseReportsPage">
+    
     <Grid RowDefinitions="Auto,*,Auto">
 
         <!-- Reports Header -->
@@ -459,7 +460,6 @@
                             <Button Text="View All"
                                     BackgroundColor="Transparent"
                                     TextColor="{DynamicResource PrimaryColor}"
-                                    HorizontalOptions="EndAndExpand"
                                     Command="{Binding ViewAllReportsCommand}"/>
                         </HorizontalStackLayout>
 

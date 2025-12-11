@@ -109,6 +109,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\AdministratorPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\BasePlatePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

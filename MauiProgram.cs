@@ -64,6 +64,7 @@ namespace Headquartz
             // Core Fundamental Pages
             builder.Services.AddSingleton<LoginPage>();
             builder.Services.AddSingleton<LoginPageModel>();
+            builder.Services.AddSingleton<AdministratorPage>();
             builder.Services.AddSingleton<BasePlatePage>();
 
             // ────────────────────────────────────────────────
